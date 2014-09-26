@@ -98,11 +98,18 @@ named portable.conf and insert it into the /lib folder.
 Running Nimbus on OS X
 ======
 
-There is currently no procedure for installing Nimbus on OS X, since I don't
-own a Mac and have no way of testing it. However, if you can install Python
-3.2+ and PyQt5, you should (theoretically) be able to start it from the
-command line. If you own a Mac and can manage this, please let me know how
-it turns out; I'd be very curious.
+First, install
+[Python 3.2.3 for OS X](https://www.python.org/download/releases/3.2.3/).
+After that, install PyQtX from
+[here](http://sourceforge.net/projects/pyqtx/files/Complete/). Keep in mind to
+download the Python 3 version, not the Python 2 version. Once that's done,
+open a terminal emulator and enter the following:
+
+    cd <insert path to /lib folder here>
+    python3.2 ./nimbus.py
+
+Nimbus will look terrible, and it probably won't work very well, but it should
+be functional.
 
 Translations
 ======
