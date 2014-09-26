@@ -23,6 +23,8 @@ else:
     if confirm == QMessageBox.YesToAll:
         settings.settings.setValue("settings/NoPromptForGitRepo", True)
     if len(fnames) > 0 and confirm in (QMessageBox.Yes, QMessageBox.YesToAll):
+        if type(fnames[0]) is list:
+            fnames = fnames[0]
         for fname in fnames:
             os.system("cp %s %s" % (fname, common.git_repo))
         os.system("cd %s && git add . && git commit -m \"Added %s new file%s.\"" % (common.git_repo, len(fnames), ("s" if len(fnames) > 1 else "")))
