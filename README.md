@@ -52,6 +52,9 @@ Alternatively, you can try the following:
 
     ./lib/nimbus.py
 
+![Nimbus running on Debian](https://raw.githubusercontent.com/foxhead128/fh-images/master/nimbus-current.png)<br>
+*Nimbus running on Debian*
+
 Installing Nimbus on Linux
 ======
 
@@ -110,6 +113,9 @@ open a terminal emulator and enter the following:
 
 Nimbus will look terrible, and it probably won't work very well, but it should
 be functional.
+
+![Nimbus running on OS X](https://raw.githubusercontent.com/foxhead128/fh-images/master/nimbus-mac.png)<br>
+*Nimbus running on OS X*
 
 Translations
 ======
