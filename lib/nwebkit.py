@@ -407,9 +407,7 @@ delete __NimbusAdRemoverQueries;""" % (settings.adremover_filters,))
             return QWebPage.userAgentForUrl(self, url)
         elif override and not self._userAgent:
             return override
-        elif ("app.box" in url.authority() or "ppirc" in url.authority() or "google" in url.authority() or "blackboard" in url.authority()) and not "android" in str(self._userAgent).lower():
-            return QWebPage.userAgentForUrl(self, url) + " Chrome/22." + common.qt_version + " Nimbus/" + common.app_version
-        elif not "github" in url.authority() and self._userAgent:
+        elif self._userAgent:
             return self._userAgent
         # This is a workaround for GitHub not loading properly
         # with the default Nimbus user agent.
