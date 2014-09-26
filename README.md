@@ -7,9 +7,8 @@ use case, but I have open-sourced it due to 1) personal ideology, and
 2) personal convenience. Maybe someone will find it useful for something.
 
 Features include:
-* Tabbed browsing
-* Browser history, including a cache
-* Very limited support for loading pages offline
+* Tabbed browsing, support for cookies, browsing history - all the basics
+* There used to be a cache, but it caused stability problems
 * Incognito (private browsing) tabs
 * Printing pages
 * Automatic saving/loading of the user's browsing session, reducing the damage
@@ -26,8 +25,6 @@ Features include:
   Windows, where QtWebKit doesn't support audio and video tags)
 * Options to toggle features such as JavaScript, Netscape plugins, DNS
   prefetching, and XSS auditing, among others
-* A tank you can enable and use to "wreck up" sites you don't like (no,
-  seriously. It's in the Settings dialog, under the Extensions tab)
 
 Dependencies
 ======
