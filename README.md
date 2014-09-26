@@ -89,6 +89,9 @@ Nimbus** for more details.
 The compile_windows.py script is deprecated and has been broken for quite some
 time now. It will likely be removed in the near future.
 
+![Nimbus running on Windows 7](http://i.imgur.com/fGP5bkz.png)<br>
+*Nimbus running on Windows 7*
+
 Enabling portable mode
 ======
 
