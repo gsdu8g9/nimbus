@@ -52,6 +52,9 @@ Alternatively, you can try the following:
 
     ./lib/nimbus.py
 
+![Nimbus running on Debian](https://raw.githubusercontent.com/foxhead128/fh-images/master/nimbus-current.png)<br>
+*Nimbus running on Debian*
+
 Installing Nimbus on Linux
 ======
 
@@ -86,6 +89,9 @@ Nimbus** for more details.
 The compile_windows.py script is deprecated and has been broken for quite some
 time now. It will likely be removed in the near future.
 
+![Nimbus running on Windows 7](http://i.imgur.com/fGP5bkz.png)<br>
+*Nimbus running on Windows 7*
+
 Enabling portable mode
 ======
 
@@ -110,6 +116,9 @@ open a terminal emulator and enter the following:
 
 Nimbus will look terrible, and it probably won't work very well, but it should
 be functional.
+
+![Nimbus running on OS X](https://raw.githubusercontent.com/foxhead128/fh-images/master/nimbus-mac.png)<br>
+*Nimbus running on OS X*
 
 Translations
 ======
