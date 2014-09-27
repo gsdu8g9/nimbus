@@ -62,6 +62,31 @@ def addHistoryItem(url, title=None):
         if len(url) <= settings.setting_to_int("data/MaximumURLLength"):
             data.history[url] = {"title": title, "last_visited" : QDateTime.currentDateTime().toMSecsSinceEpoch()}
 
+mtype_associations = (("python", "py"),
+                      ("html", "html"),
+                      ("xml", "xml"),
+                      ("zip", "zip"),
+                      ("ttf", "ttf"),
+                      ("otf", "otf"),
+                      ("ogg", "ogg"),
+                      ("xcf", "xcf"),
+                      ("x-rar", "rar"),
+                      ("mpeg", "mpeg"),
+                      ("plain", "txt"),
+                      ("svg+xml", "svg"),
+                      ("xml", "xml"),
+                      ("pdf", "pdf"),
+                      ("dosexec", "exe"),
+                      ("debian", "deb"),
+                      ("msword", "doc"),
+                      ("tar", "tar"),
+                      ("octet-stream", "iso"),
+                      ("opendocument.presentation", "odp"),
+                      ("java-archive", "jar"),
+                      ("gzip", "gz"),
+                      ("bzip", "bz"),
+                      ("7zip", "7z"))
+
 # Progress bar used for downloads.
 # This was ripped off of Ryouko.
 class DownloadProgressBar(QProgressBar):
@@ -88,6 +113,27 @@ class DownloadProgressBar(QProgressBar):
             f.close()
             self.progress = [0, 0]
             common.trayIcon.showMessage(tr("Download complete"), os.path.split(self.destination)[1])
+        if sys.platform.startswith("linux"):    
+            stdout_handle = os.popen("file --mime-type -b %s" % self.destination,)
+            mtype = stdout_handle.read().replace("\n", "")
+            ext = ""
+            if mtype.startswith("image"):
+                ext = mtype.split("/")[-1]
+            elif mtype.startswith("text") or mtype.startswith("application"):
+                for association in mtype_associations:
+                    if association[0] in mtype:
+                        ext = association[1]
+                        break
+            if not self.destination.lower().endswith(ext):
+                confirm = QMessageBox.question(self, tr("Extension corrector"), tr("It appears that the file extension for %s is wrong. Would you like Nimbus to try and correct it?") % self.destination.split("/")[-1], QMessageBox.Yes | QMessageBox.No)
+                if confirm == QMessageBox.Yes:
+                    if os.path.exists(self.destination + "." + ext):
+                        c2 = QMessageBox.question(self, "", tr("%s already exists. Would you like to overwrite it?") % (self.destination.split("/")[-1] + "." + ext,), QMessageBox.Yes | QMessageBox.No)
+                        if c2 == QMessageBox.No:
+                            return
+                    try: os.rename(self.destination, self.destination + "." + ext)
+                    except: pass
+            
 
     # Updates the progress bar.
     def updateProgress(self, received, total):
@@ -1191,10 +1237,10 @@ class WebView(QWebView):
                     pass
 
         self.downloadFile(reply.request())
+        reply.deleteLater()
 
     # Downloads a file.
     def downloadFile(self, request):
-
         if request.url() == self.url():
 
             # If the file type can be converted to plain text, use savePage
