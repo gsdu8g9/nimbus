@@ -127,7 +127,8 @@ class ToolBarAction(QWidgetAction):
         return self._toolBar
     def addAction(self, action):
         self._toolBar.addAction(action)
-        action.setToolTip(action.text().replace("&", "") + "<br>" + action.shortcut().toString())
+        if action.shortcut().toString() > "":
+            action.setToolTip(action.text().replace("&", "") + "<br>" + action.shortcut().toString())
     def widgetForAction(self, *args, **kwargs):
         return self._toolBar.widgetForAction(*args, **kwargs)
     def addWidget(self, *args, **kwargs):

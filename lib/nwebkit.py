@@ -124,7 +124,7 @@ class DownloadProgressBar(QProgressBar):
                     if association[0] in mtype:
                         ext = association[1]
                         break
-            if not self.destination.lower().endswith(ext):
+            if not self.destination.lower().endswith(ext) and not (self.destination.lower().endswith("jpg") and ext == "jpeg"):
                 confirm = QMessageBox.question(self, tr("Extension corrector"), tr("It appears that the file extension for %s is wrong. Would you like Nimbus to try and correct it?") % self.destination.split("/")[-1], QMessageBox.Yes | QMessageBox.No)
                 if confirm == QMessageBox.Yes:
                     if os.path.exists(self.destination + "." + ext):

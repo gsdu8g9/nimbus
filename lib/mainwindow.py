@@ -452,6 +452,26 @@ class MainWindow(QMainWindow):
         viewMenu = custom_widgets.ToolBarAction(self)
         self.mainMenu.addAction(viewMenu)
 
+        # Add find text action.
+        findAction = QAction(common.complete_icon("edit-find"), tr("&Find..."), self)
+        findAction.setShortcut("Ctrl+F")
+        findAction.triggered.connect(self.find)
+        viewMenu.addAction(findAction)
+
+        # Add find previous action.
+        findPreviousAction = QAction(style.standardIcon(style.SP_MediaSkipBackward), tr("Find Pre&vious"), self)
+        findPreviousAction.setShortcut("Ctrl+Shift+G")
+        findPreviousAction.triggered.connect(self.findPrevious)
+        viewMenu.addAction(findPreviousAction)
+
+        # Add find next action.
+        findNextAction = QAction(style.standardIcon(style.SP_MediaSkipForward), tr("Find Ne&xt"), self)
+        findNextAction.setShortcut("Ctrl+G")
+        findNextAction.triggered.connect(self.findNext)
+        viewMenu.addAction(findNextAction)
+        
+        viewMenu.addSeparator()
+
         # Zoom actions.
         zoomOutAction = QAction(common.complete_icon("zoom-out"), tr("Zoom Out"), self)
         zoomOutAction.triggered.connect(lambda: self.tabs.currentWidget().setZoomFactor(self.tabs.currentWidget().zoomFactor() - 0.1))
@@ -535,29 +555,8 @@ class MainWindow(QMainWindow):
 
         self.mainMenu.addSeparator()
 
-        # Add find text action.
-        findAction = QAction(common.complete_icon("edit-find"), tr("&Find..."), self)
-        findAction.setShortcut("Ctrl+F")
-        findAction.triggered.connect(self.find)
-        self.mainMenu.addAction(findAction)
-
-        # Add find next action.
-        findNextAction = QAction(style.standardIcon(style.SP_MediaSkipForward), tr("Find Ne&xt"), self)
-        findNextAction.setShortcut("Ctrl+G")
-        findNextAction.triggered.connect(self.findNext)
-        self.mainMenu.addAction(findNextAction)
-
-        # Add find previous action.
-        findPreviousAction = QAction(style.standardIcon(style.SP_MediaSkipBackward), tr("Find Pre&vious"), self)
-        findPreviousAction.setShortcut("Ctrl+Shift+G")
-        findPreviousAction.triggered.connect(self.findPrevious)
-        self.mainMenu.addAction(findPreviousAction)
-
-        self.mainMenu.addSeparator()
-
-        historyMenu = QMenu(tr("&History"), self)
-        historyMenu.setIcon(common.complete_icon("office-calendar"))
-        self.mainMenu.addMenu(historyMenu)
+        historyMenu = custom_widgets.ToolBarAction(self)
+        self.mainMenu.addAction(historyMenu)
 
         # Add reopen tab action.
         reopenTabAction = QAction(common.complete_icon("edit-undo"), tr("&Reopen Tab"), self)
@@ -593,8 +592,7 @@ class MainWindow(QMainWindow):
         self.mainMenu.addAction(downloadAction)
 
         # Add user agent picker.
-        self.userAgentMenu = QMenu(tr("Set &User Agent For Site"), self)
-        self.userAgentMenu.setIcon(common.complete_icon("user-agents"))
+        self.userAgentMenu = custom_widgets.ToolBarAction(self)
         for browser_ in sorted(tuple(common.user_agents.keys()), key=lambda x: x.replace("&", "")):
             ua = common.user_agents[browser_]
             icon = common.complete_icon(browser_.lower().replace(" ", "-").replace("&", ""))
@@ -602,7 +600,7 @@ class MainWindow(QMainWindow):
             action.triggered2.connect(lambda x: data.setUserAgentForUrl(x, self.currentWidget().url()))
             action.triggered2.connect(self.reload)
             self.userAgentMenu.addAction(action)
-        self.mainMenu.addMenu(self.userAgentMenu)
+        self.mainMenu.addAction(self.userAgentMenu)
 
         # Add settings dialog action.
         settingsAction = QAction(common.complete_icon("preferences-system"), tr("&Settings..."), self)
