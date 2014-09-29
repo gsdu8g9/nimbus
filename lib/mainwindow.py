@@ -456,6 +456,7 @@ class MainWindow(QMainWindow):
         findAction = QAction(common.complete_icon("edit-find"), tr("&Find..."), self)
         findAction.setShortcut("Ctrl+F")
         findAction.triggered.connect(self.find)
+        self.addAction(findAction)
         viewMenu.addAction(findAction)
 
         # Add find previous action.
@@ -580,16 +581,18 @@ class MainWindow(QMainWindow):
         clearHistoryAction.triggered.connect(self.clearHistory)
         historyMenu.addAction(clearHistoryAction)
 
-        # Add view source dialog action.
-        viewSourceAction = QAction(tr("Page S&ource"), self)
-        viewSourceAction.setShortcut("Ctrl+Alt+U")
-        viewSourceAction.triggered.connect(lambda: self.tabWidget().currentWidget().viewSource())
-        self.mainMenu.addAction(viewSourceAction)
+        historyMenu.addSeparator()
 
         downloadAction = QAction(style.standardIcon(style.SP_ArrowDown), tr("&Downloads"), self)
         downloadAction.setShortcuts(["Ctrl+J", "Ctrl+Shift+Y"])
         downloadAction.triggered.connect(common.downloadManager.show)
         self.mainMenu.addAction(downloadAction)
+
+        # Add view source dialog action.
+        viewSourceAction = QAction(tr("Page S&ource"), self)
+        viewSourceAction.setShortcut("Ctrl+Alt+U")
+        viewSourceAction.triggered.connect(lambda: self.tabWidget().currentWidget().viewSource())
+        self.mainMenu.addAction(viewSourceAction)
 
         # Add user agent picker.
         self.userAgentMenu = custom_widgets.ToolBarAction(self)
