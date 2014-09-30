@@ -711,9 +711,9 @@ class WebView(QWebView):
         self.loadStarted.connect(self.resetContentType)
         self.loadFinished.connect(self.replaceAVTags)
         self.loadFinished.connect(self.setCanGoNext)
-        self.loadFinished.connect(self.savePageToCache)
+        #self.loadFinished.connect(self.savePageToCache)
         self.loadStarted.connect(self.checkIfUsingContentViewer)
-        self.loadFinished.connect(self.finishLoad)
+        #self.loadFinished.connect(self.finishLoad)
 
     def setJavaScriptEnabled(self):
         if not self.url().authority() in settings.js_exceptions and not self.url().authority().replace("www.", "") in settings.js_exceptions:
@@ -1304,18 +1304,14 @@ class WebView(QWebView):
     # but this is pretty hacky and doesn't work all the time.
     def savePage(self):
         content = self.page().mainFrame().toHtml()
-        if self.url().toString() in ("about:blank", "", QUrl.fromUserInput(settings.new_tab_page).toString(),) and not self._cacheLoaded:
+        url = self.url().toString()
+        print(url)
+        if url in ("about:blank", "", QUrl.fromUserInput(settings.new_tab_page).toString(),):
             fname = settings.new_tab_page
             content = content.replace("&lt;", "<").replace("&gt;", ">").replace("<body contenteditable=\"true\">", "<body>")
         else:
-            fileName = self.url().toString().split("?")[0].split("/")
-            fileName = fileName[-1 if fileName[-1] != "" else -2]
+            fileName = self.windowTitle().lower().replace(" ", "") + ".html"
             upperFileName = fileName.upper()
-            for extension in common.tlds:
-                if upperFileName.endswith(extension):
-                    fileName = fileName + ".html"
-            try: ext = "." + self._contentTypes[self.url().toString()].split("/")[-1].split(";")[0]
-            except: ext = ".html"
             fname = QFileDialog.getSaveFileName(None, tr("Save As..."), os.path.join(self.saveDirectory, fileName + (ext if not "." in fileName else "")), tr("All files (*)"))
         if type(fname) is tuple:
             fname = fname[0]
