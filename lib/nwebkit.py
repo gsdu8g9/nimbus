@@ -1229,8 +1229,15 @@ class WebView(QWebView):
                     return
 
         # Get file name for destination.
-        fileName = request.url().toString().split("#")[0].split("?")[0].split("/")
-        fileName = fileName[-1 if fileName[-1] != "" else -2]
+        fnameList = request.url().toString().split("#")[0].split("?")[0].split("/")
+        counter = -1
+        fileName = ""
+        while fileName == "":
+            try:
+                fileName = fnameList[counter]
+                counter -= 1
+            except:
+                fileName = "omgus"
         upperFileName = fileName.upper()
         for extension in common.tlds:
             if upperFileName.endswith(extension):
@@ -1249,7 +1256,7 @@ class WebView(QWebView):
                 ext = mtype.split("/")[-1]
             ext = "." + ext
         else:
-            try: ext = request.url().toString().split(".")[-1].split("#")[0].split("?")[0]
+            try: ext = "." + request.url().toString().split(".")[-1].split("#")[0].split("?")[0]
             except: ext = ".html"
         fname = QFileDialog.getSaveFileName(None, tr("Save As..."), os.path.join(self.saveDirectory, fileName + (ext if not "." in fileName else "")), tr("All files (*)"))
         if type(fname) is tuple:
@@ -1303,12 +1310,15 @@ class WebView(QWebView):
     def savePage(self):
         content = self.page().mainFrame().toHtml()
         url = self.url().toString()
-        print(url)
+        #print(url)
         if url in ("about:blank", "", QUrl.fromUserInput(settings.new_tab_page).toString(),):
             fname = settings.new_tab_page
             content = content.replace("&lt;", "<").replace("&gt;", ">").replace("<body contenteditable=\"true\">", "<body>")
         else:
-            fileName = self.windowTitle().lower().replace(" ", "") + ".html"
+            fileName = self.windowTitle().lower()
+            for r in (" ", "/", "\\", "_", "!", "?", "|"):
+                fileName = fileName.replace(r, "-")
+            fileName += ".html"
             upperFileName = fileName.upper()
             fname = QFileDialog.getSaveFileName(None, tr("Save As..."), os.path.join(self.saveDirectory, fileName + (ext if not "." in fileName else "")), tr("All files (*)"))
         if type(fname) is tuple:
