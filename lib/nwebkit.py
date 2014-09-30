@@ -1247,6 +1247,8 @@ class WebView(QWebView):
                     if association[0] in mtype:
                         ext = association[1]
                         break
+            if ext == "":
+                ext = mtype.split("/")[-1]
             ext = "." + ext
         else:
             try: ext = "." + self._contentTypes[request.url().toString()].split("/")[-1].split(";")[0]
