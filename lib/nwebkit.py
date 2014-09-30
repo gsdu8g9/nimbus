@@ -581,7 +581,6 @@ class WebView(QWebView):
 
         # Stores the mime type of the current page.
         self._contentType = None
-        self._contentTypes = {}
 
         # This is used to store the text entered in using WebView.find(),
         # so that WebView.findNext() and WebView.findPrevious() work.
@@ -1032,7 +1031,6 @@ class WebView(QWebView):
     def resetContentType(self):
         self._contentType = None
         if self._oldURL != self._url:
-            self._contentTypes = {}
             self._oldURL = self._url
 
     # Custom implementation of deleteLater that also removes
@@ -1231,7 +1229,7 @@ class WebView(QWebView):
                     return
 
         # Get file name for destination.
-        fileName = request.url().toString().split("?")[0].split("/")
+        fileName = request.url().toString().split("#")[0].split("?")[0].split("/")
         fileName = fileName[-1 if fileName[-1] != "" else -2]
         upperFileName = fileName.upper()
         for extension in common.tlds:
@@ -1251,7 +1249,7 @@ class WebView(QWebView):
                 ext = mtype.split("/")[-1]
             ext = "." + ext
         else:
-            try: ext = "." + self._contentTypes[request.url().toString()].split("/")[-1].split(";")[0]
+            try: ext = request.url().toString().split(".")[-1].split("#")[0].split("?")[0]
             except: ext = ".html"
         fname = QFileDialog.getSaveFileName(None, tr("Save As..."), os.path.join(self.saveDirectory, fileName + (ext if not "." in fileName else "")), tr("All files (*)"))
         if type(fname) is tuple:
