@@ -113,26 +113,6 @@ class DownloadProgressBar(QProgressBar):
             f.close()
             self.progress = [0, 0]
             common.trayIcon.showMessage(tr("Download complete"), os.path.split(self.destination)[1])
-        if sys.platform.startswith("linux"):    
-            stdout_handle = os.popen("file --mime-type -b %s" % self.destination,)
-            mtype = stdout_handle.read().replace("\n", "")
-            ext = ""
-            if mtype.startswith("image"):
-                ext = mtype.split("/")[-1]
-            elif mtype.startswith("text") or mtype.startswith("application"):
-                for association in mtype_associations:
-                    if association[0] in mtype:
-                        ext = association[1]
-                        break
-            if not self.destination.lower().endswith(ext) and not (self.destination.lower().endswith("jpg") and ext == "jpeg"):
-                confirm = QMessageBox.question(self, tr("Extension corrector"), tr("It appears that the file extension for %s is wrong. Would you like Nimbus to try and correct it?") % self.destination.split("/")[-1], QMessageBox.Yes | QMessageBox.No)
-                if confirm == QMessageBox.Yes:
-                    if os.path.exists(self.destination + "." + ext):
-                        c2 = QMessageBox.question(self, "", tr("%s already exists. Would you like to overwrite it?") % (self.destination.split("/")[-1] + "." + ext,), QMessageBox.Yes | QMessageBox.No)
-                        if c2 == QMessageBox.No:
-                            return
-                    try: os.rename(self.destination, self.destination + "." + ext)
-                    except: pass
             
 
     # Updates the progress bar.
@@ -1236,11 +1216,11 @@ class WebView(QWebView):
                 except:
                     pass
 
-        self.downloadFile(reply.request())
+        self.downloadFile(reply.request(), reply.header(QNetworkRequest.ContentTypeHeader))
         reply.deleteLater()
 
     # Downloads a file.
-    def downloadFile(self, request):
+    def downloadFile(self, request, contentType=None):
         if request.url() == self.url():
 
             # If the file type can be converted to plain text, use savePage
@@ -1257,8 +1237,20 @@ class WebView(QWebView):
         for extension in common.tlds:
             if upperFileName.endswith(extension):
                 fileName = fileName + ".html"
-        try: ext = "." + self._contentTypes[request.url().toString()].split("/")[-1].split(";")[0]
-        except: ext = ".html"
+        if contentType:
+            mtype = contentType
+            ext = ""
+            if mtype.startswith("image"):
+                ext = mtype.split("/")[-1]
+            elif mtype.startswith("text") or mtype.startswith("application"):
+                for association in mtype_associations:
+                    if association[0] in mtype:
+                        ext = association[1]
+                        break
+            ext = "." + ext
+        else:
+            try: ext = "." + self._contentTypes[request.url().toString()].split("/")[-1].split(";")[0]
+            except: ext = ".html"
         fname = QFileDialog.getSaveFileName(None, tr("Save As..."), os.path.join(self.saveDirectory, fileName + (ext if not "." in fileName else "")), tr("All files (*)"))
         if type(fname) is tuple:
             fname = fname[0]
