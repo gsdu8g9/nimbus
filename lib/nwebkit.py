@@ -976,7 +976,7 @@ class WebView(QWebView):
                 except:
                     pass
         for anchor in anchors:
-            if "next" in anchor.toPlainText().lower():
+            if "next" in anchor.toPlainText().lower() or "older" in anchor.toPlainText().lower():
                 try:
                     self._canGoNext = anchor.attribute("href")
                     return
