@@ -10,6 +10,7 @@
 
 from common import pyqt4
 import urllib.request
+import json
 import time
 
 if not pyqt4:
@@ -23,7 +24,8 @@ else:
         from PySide.QtCore import QObject, Slot
 
 def geolocate():
-    response = eval(urllib.request.urlopen('http://freegeoip.net/json/').read())
+    data = urllib.request.urlopen('http://freegeoip.net/json/').read().decode("utf-8")
+    response = json.loads(data)
     return response
 
 def getCurrentPosition():

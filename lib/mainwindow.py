@@ -586,7 +586,7 @@ class MainWindow(QMainWindow):
         downloadAction = QAction(style.standardIcon(style.SP_ArrowDown), tr("&Downloads"), self)
         downloadAction.setShortcuts(["Ctrl+J", "Ctrl+Shift+Y"])
         downloadAction.triggered.connect(common.downloadManager.show)
-        self.mainMenu.addAction(downloadAction)
+        historyMenu.addAction(downloadAction)
 
         # Add view source dialog action.
         viewSourceAction = QAction(tr("Page S&ource"), self)
