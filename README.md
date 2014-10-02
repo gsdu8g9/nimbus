@@ -14,6 +14,7 @@ Nimbus more or less covers the following use case:
 * Long periods of time spent in fullscreen mode.
 * Limited use of bookmarks and history.
 * Lots of forum browsing.
+* General dislike of ads.
 * Some basic desire to add features to the browser.
 * Use of GitHub as an image hosting service.
 
