@@ -1,30 +1,21 @@
 nimbus
 ======
 
-Nimbus is a somewhat hacky Web browser coded in Python 3, using either Qt 5 via
-PyQt5, or Qt 4 via either PyQt4 or PySide. It is tailored specifically for my
-use case, but I have open-sourced it due to 1) personal ideology, and
-2) personal convenience. Maybe someone will find it useful for something.
+Nimbus is a somewhat hacky Web browser coded in Python 3, using either Qt 5
+via PyQt5, or Qt 4 via either PyQt4 or PySide. It is tailored specifically
+for my use case, but I have open-sourced it due to 1) personal ideology, and
+2) personal convenience. Maybe someone will find it useful for something. Be
+warned that there are no claims of stability, security, or usability in
+Nimbus, since it is being made for no one but myself.
 
-Features include:
-* Tabbed browsing, support for cookies, browsing history - all the basics
-* There used to be a cache, but it caused stability problems
-* Incognito (private browsing) tabs
-* Printing pages
-* Automatic saving/loading of the user's browsing session, reducing the damage
-  done by a crash
-* Ad blocking via either Adblock Plus filters or a modified *hosts* file
-* Basic support for extensions and user scripts
-* YouTube video downloads via user script (you can enable this in the Settings
-  dialog under the Extensions tab)
-* Support for HTTP and Socks5 proxies
-* Partial support for the HTML5 geolocation, fullscreen and offline mode APIs
-* Really hacky support for RSS and Atom feeds, if feedparser is installed. You
-  can enable the feed button in the Settings dialog under the General tab.
-* Using Netscape plugins to handle some HTML5 audio and video (useful on
-  Windows, where QtWebKit doesn't support audio and video tags)
-* Options to toggle features such as JavaScript, Netscape plugins, DNS
-  prefetching, and XSS auditing, among others
+Nimbus more or less covers the following use case:
+* X11 user.
+* Heavy use of keyboard shortcuts.
+* Long periods of time spent in fullscreen mode.
+* Limited use of bookmarks and history.
+* Lots of forum browsing.
+* Some basic desire to add features to the browser.
+* Use of GitHub as an image hosting service.
 
 Dependencies
 ======
