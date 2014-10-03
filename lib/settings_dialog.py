@@ -480,17 +480,23 @@ class ClippingsPanel(SettingsPanel):
         super(ClippingsPanel, self).__init__(parent)
         self.setWindowTitle(tr("Clippings Manager"))
 
+        coreColumn = custom_widgets.Column(self)
+        self.layout().addWidget(coreColumn)
+        
+        # Title
+        self.title = QLabel(tr("<b>Clippings</b>"), self)
+        coreColumn.addWidget(self.title)
+        
+        howToUse = QLabel(tr("To use Clippings, Shift+right click a textbox on the page."), self)
+        coreColumn.addWidget(howToUse)
+
         row1 = custom_widgets.Row(self)
-        self.layout().addWidget(row1)
+        coreColumn.addWidget(row1)
 
         column1 = custom_widgets.Column(self)
         column2 = custom_widgets.Column(self)
         row1.addWidget(column1)
         row1.addWidget(column2)
-
-        # Title
-        self.title = QLabel(tr("<b>Clippings</b>"), self)
-        column1.addWidget(self.title)
 
         # Clipping list.
         self.clippingList = QListWidget(self)
