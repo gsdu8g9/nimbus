@@ -18,9 +18,9 @@ Nimbus more or less covers the following use case:
 * Some basic desire to add features to the browser.
 * Use of GitHub as an image hosting service.
 
-[The wiki](https://github.com/foxhead128/nimbus/wiki) contains info on
-security advisories, extensions, and some questions and statements you may
-have.
+[The wiki](https://github.com/foxhead128/nimbus/wiki) contains information
+on security advisories, extensions, and some questions and statements you
+may have.
 
 Dependencies
 ======
