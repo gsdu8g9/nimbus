@@ -579,6 +579,7 @@ class MainWindow(QMainWindow):
         clearHistoryAction = QAction(common.complete_icon("edit-clear"), tr("&Clear Data..."), self)
         clearHistoryAction.setShortcut("Ctrl+Shift+Del")
         clearHistoryAction.triggered.connect(self.clearHistory)
+        self.addAction(clearHistoryAction)
         historyMenu.addAction(clearHistoryAction)
 
         historyMenu.addSeparator()
@@ -586,6 +587,7 @@ class MainWindow(QMainWindow):
         downloadAction = QAction(style.standardIcon(style.SP_ArrowDown), tr("&Downloads"), self)
         downloadAction.setShortcuts(["Ctrl+J", "Ctrl+Shift+Y"])
         downloadAction.triggered.connect(common.downloadManager.show)
+        self.addAction(downloadAction)
         historyMenu.addAction(downloadAction)
 
         # Add view source dialog action.
