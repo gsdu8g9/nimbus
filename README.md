@@ -18,6 +18,10 @@ Nimbus more or less covers the following use case:
 * Some basic desire to add features to the browser.
 * Use of GitHub as an image hosting service.
 
+[The wiki](https://github.com/foxhead128/nimbus/wiki) contains info on
+security advisories, extensions, and some questions and statements you may
+have.
+
 Dependencies
 ======
 
@@ -69,48 +73,10 @@ Simply run the following:
 
     ./uninstall.sh
 
-Running Nimbus on Windows
+Running Nimbus on other platforms
 ======
-
-Nimbus also works using [Portable Python](http://portablepython.com/); this is
-currently the recommended way of running it on Windows. To start Nimbus, open
-the /lib folder and run nimbus.py. Unfortunately, this is not a long-term 
-solution unless Portable Python starts bundling PyQt5; see **The future of
-Nimbus** for more details.
-
-The compile_windows.py script is deprecated and has been broken for quite some
-time now. It will likely be removed in the near future.
-
-![Nimbus running on Windows 7](http://i.imgur.com/fGP5bkz.png)<br>
-*Nimbus running on Windows 7*
-
-Enabling portable mode
-======
-
-Portable Python makes it possible to run Nimbus off a flash drive. For true
-portability, Nimbus also supports a portable mode in which settings are saved
-to whatever folder Nimbus itself is contained in, as opposed to the user's
-home folder on the local hard drive. To enable this mode, simply create a file
-named portable.conf and insert it into the /lib folder.
-
-Running Nimbus on OS X
-======
-
-First, install
-[Python 3.2.3 for OS X](https://www.python.org/download/releases/3.2.3/).
-After that, install PyQtX from
-[here](http://sourceforge.net/projects/pyqtx/files/Complete/). Keep in mind to
-download the Python 3 version, not the Python 2 version. Once that's done,
-open a terminal emulator and enter the following:
-
-    cd <insert path to /lib folder here>
-    python3.2 ./nimbus.py
-
-Nimbus will look terrible, and it probably won't work very well, but it should
-be functional.
-
-![Nimbus running on OS X](https://raw.githubusercontent.com/foxhead128/fh-images/master/nimbus-mac.png)<br>
-*Nimbus running on OS X*
+[The wiki](https://github.com/foxhead128/nimbus/wiki) contains instructions on
+getting Nimbus to run on Windows and OS X.
 
 Translations
 ======
