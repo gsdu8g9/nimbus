@@ -1,0 +1,4 @@
+build
+dist
+nimbus.egg-info
+lib/__pycache__
