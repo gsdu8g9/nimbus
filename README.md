@@ -78,25 +78,6 @@ Running Nimbus on other platforms
 [The wiki](https://github.com/foxhead128/nimbus/wiki) contains instructions on
 getting Nimbus to run on Windows and OS X.
 
-Translations
-======
-
-Nimbus supports translations by way of QTranslator. To write a new
-translation for Nimbus, make a copy of translations/en_US.ts, rename it to the
-ISO code for the desired locale, and edit away. Once you're done, run
-compile_translations.py on Linux/OS X/Unix, or lrelease on Windows. You will
-need lrelease to be installed. Do note that the translation files are badly
-out of date.
-
-The future of Nimbus
-======
-
-In the long run, PyQt5 will drop support for QtWebKit in favor of QtWebEngine.
-Supporting both of them at once will be infeasible, meaning that Nimbus will
-only support QtWebEngine in the future. This also means dropping support for
-both PyQt4 and PySide, unless PySide actually picks up the slack and starts
-supporting Qt 5.
-
 Licensing information
 ======
 
