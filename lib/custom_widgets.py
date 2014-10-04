@@ -69,19 +69,19 @@ class BatteryAction(QAction):
     energyFull = 0
     energyNow = 0
     hasBattery = True
+    power_supplies = "/sys/class/power_supply/"
     def __init__(self, *args, **kwargs):
         super(BatteryAction, self).__init__(*args, **kwargs)
         self.setToolTip(tr("Power"))
         if not self.battery and self.hasBattery:
-            power_supplies = "/sys/class/power_supply/"
             try:
-                psups = os.listdir(power_supplies)
+                psups = os.listdir(self.power_supplies)
             except:
                 self.hasBattery = False
             else:
                 for fname in psups:
                     if fname.lower().startswith("bat"):
-                        self.battery = os.path.join(power_supplies, fname)
+                        self.battery = os.path.join(self.power_supplies, fname)
                         try:
                             f = open(os.path.join(self.battery, "energy_full"))
                             self.energyFull = int(f.read())
@@ -98,6 +98,14 @@ class BatteryAction(QAction):
             except:
                 self.timer = QTimer(timeout=self.updateLife, parent=self)
                 self.timer.start(20000)
+        elif os.path.isdir(self.power_supplies):
+            self.setIcon(complete_icon("battery"))
+            self.setText(tr("AC"))
+            self.setToolTip(tr("System is running on AC power"))
+        else:
+            self.setIcon(complete_icon("dialog-warning"))
+            self.setText(tr("N/A"))
+            self.setToolTip(tr("Battery not detected"))
     def updateLife(self):
         if os.path.isdir(self.battery):
             try:
@@ -108,7 +116,9 @@ class BatteryAction(QAction):
                 pass
             else:
                 percentage = round(self.energyNow/self.energyFull*100, 1)
-                self.setText(str(percentage) + "%")
+                text_percentage = str(percentage) + "%"
+                self.setText(text_percentage)
+                self.setToolTip("Power remaining: " + text_percentage)
                 if percentage >= 40:
                     self.setIcon(complete_icon("battery"))
                 elif percentage >= 10:
