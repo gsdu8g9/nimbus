@@ -353,31 +353,32 @@ class LicenseDialog(QMainWindow):
         self.authors = ""
         self.tabWidget = QTabWidget(self)
         self.setCentralWidget(self.tabWidget)
-        for fname in os.listdir(app_folder):
-            if fname.startswith("LICENSE"):
-                try: f = open(os.path.join(app_folder, fname), "r")
-                except: pass
-                else:
-                    self.license = f.read()
-                    f.close()
-            elif fname.startswith("THANKS"):
-                try: f = open(os.path.join(app_folder, fname), "r")
-                except: pass
-                else:
-                    self.thanks = f.read()
-                    f.close()
-            elif fname.startswith("AUTHORS"):
-                try: f = open(os.path.join(app_folder, fname), "r")
-                except: pass
-                else:
-                    self.authors = f.read()
-                    f.close()
-            elif fname.startswith("README"):
-                try: f = open(os.path.join(app_folder, fname), "r")
-                except: pass
-                else:
-                    self.readme = f.read()
-                    f.close()
+        for folder in (app_folder, os.path.dirname(app_folder)):
+            for fname in os.listdir(folder):
+                if fname.startswith("LICENSE"):
+                    try: f = open(os.path.join(folder, fname), "r")
+                    except: pass
+                    else:
+                        self.license = f.read()
+                        f.close()
+                elif fname.startswith("THANKS"):
+                    try: f = open(os.path.join(folder, fname), "r")
+                    except: pass
+                    else:
+                        self.thanks = f.read()
+                        f.close()
+                elif fname.startswith("AUTHORS"):
+                    try: f = open(os.path.join(folder, fname), "r")
+                    except: pass
+                    else:
+                        self.authors = f.read()
+                        f.close()
+                elif fname.startswith("README"):
+                    try: f = open(os.path.join(folder, fname), "r")
+                    except: pass
+                    else:
+                        self.readme = f.read()
+                        f.close()
         self.readmeView = ReadOnlyTextEdit(self)
         self.readmeView.setText(self.readme)
         self.tabWidget.addTab(self.readmeView, tr("&README"))
