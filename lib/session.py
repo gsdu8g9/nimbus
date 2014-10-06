@@ -96,8 +96,10 @@ def loadSession(session_file=settings.session_file):
                     try:
                         closed_tabs = window["closed_tabs"]
                         appMode = window["app_mode"]
+                        current_tab = window["current_tab"]
                         window = window["tabs"]
-                    except: window = []
+                    except:
+                        window = []
                 if len(window) == 0:
                     continue
                 win = MainWindow(appMode=appMode)
@@ -117,6 +119,10 @@ def loadSession(session_file=settings.session_file):
                             win.tabWidget().widget(tab).loadHistory(window[tab][0], window[tab][1])
                     else:
                         win.tabWidget().widget(tab).loadHistory(window[tab])
+                try:
+                    win.tabWidget().setCurrentIndex(current_tab)
+                except:
+                    pass
                 win.show()
     except:
         pass
@@ -142,7 +148,7 @@ def saveSession(session_file=settings.session_file):
         session_full = {}
         session = []
         for window in browser.windows:
-            session.append({"tabs": [], "closed_tabs": window.closedTabs, "app_mode": window.appMode})
+            session.append({"tabs": [], "closed_tabs": window.closedTabs, "app_mode": window.appMode, "current_tab": window.tabWidget().currentIndex()})
             for tab in range(window.tabWidget().count()):
                 session[-1]["tabs"].append((window.tabWidget().widget(tab).\
                                    saveHistory() if not\
