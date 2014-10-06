@@ -186,6 +186,7 @@ NO
 NP
 NR
 NU
+NYC
 NZ
 OM
 ORG

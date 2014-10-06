@@ -122,6 +122,7 @@ def topLevelDomains():
 
 # Qt version.
 qt_version = qVersion()
+qt_version_info = [int(seg) for seg in qt_version.split(".")]
 
 defaultUserAgent = "%(app_name)s/%(app_version)s (%(system)s %(machine)s) AppleWebKit/%(webkit_version)s (KHTML, like Gecko) Chrome/22.%(qt_version)s" % {"app_name": app_name, "app_version": app_version, "system": platform.system(), "qt_version": qt_version, "webkit_version": qWebKitVersion(), "machine": platform.machine()}
 mobileUserAgent = "Mozilla/5.0 (Linux; U; Android 2.3.5; en-us) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1"

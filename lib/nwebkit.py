@@ -293,6 +293,9 @@ class WebPage(QWebPage):
         return self.jsConfirm
 
     def javaScriptPrompt(self, frame, msg, defaultValue, result=None):
+        if common.qt_version_info[0] == 5 and common.qt_version_info[1] < 3 and common.qt_version_info[2] < 1:
+            super(WebPage, self).javaScriptPrompt(frame, msg, defaultValue, result)
+            return
         pause = QEventLoop()
         tb = QToolBar(parent=self.parent(), movable=False)
         toolBar = QWidget(parent=self.parent())
