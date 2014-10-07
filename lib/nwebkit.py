@@ -1062,10 +1062,10 @@ class WebView(QWebView):
     # new tabs.
     def mousePressEvent(self, ev):
         if self._statusBarMessage != "" and (((QCoreApplication.instance().keyboardModifiers() == Qt.ControlModifier) and not ev.button() == Qt.RightButton) or ev.button() == Qt.MidButton or ev.button() == Qt.MiddleButton):
-            url = urllib.parse.unquote(self._statusBarMessage)
+            url = self._statusBarMessage
             ev.ignore()
             newWindow = self.createWindow(QWebPage.WebBrowserWindow)
-            newWindow.load(QUrl(url))
+            newWindow.load(QUrl.fromUserInput(url))
         elif self._statusBarMessage != "" and (((QCoreApplication.instance().keyboardModifiers() == Qt.ShiftModifier) and not ev.button() == Qt.RightButton)):
             self.openInDefaultBrowser(urllib.parse.unquote(self._statusBarMessage))
         else:
