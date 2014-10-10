@@ -344,7 +344,7 @@ def main(argv):
         win.show()
 
     # Start app.
-    app.exec_()
+    sys.exit(app.exec_())
 
 # Start program
 if __name__ == "__main__":
