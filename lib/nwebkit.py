@@ -776,7 +776,7 @@ class WebView(QWebView):
             menu.addSeparator()
             row = custom_widgets.RowAction(menu)
             menu.addAction(row)
-            array = list(data.clippings.items())
+            array = sorted(list(data.clippings.items()), key=lambda x: x[0])
             for i in range(0, len(array), 20):
                 chunk = array[i:i+20]
                 submenu = QToolBar(row.row(), orientation=Qt.Vertical)

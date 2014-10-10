@@ -531,7 +531,7 @@ class ClippingsPanel(SettingsPanel):
     def loadSettings(self):
         data.load_clippings()
         self.clippingList.clear()
-        for item in data.clippings.keys():
+        for item in sorted(list(data.clippings.keys())):
             self.clippingList.addItem(item)
 
     def saveSettings(self):
