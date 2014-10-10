@@ -87,6 +87,10 @@ mtype_associations = (("python", "py"),
                       ("bzip", "bz"),
                       ("7zip", "7z"))
 
+def chunks(l, n):
+    for i in range(0, len(l), n):
+        yield l[i:i+n]
+
 # Progress bar used for downloads.
 # This was ripped off of Ryouko.
 class DownloadProgressBar(QProgressBar):
@@ -770,11 +774,18 @@ class WebView(QWebView):
             if self._statusBarMessage == "":
                 openInDefaultBrowserAction.setEnabled(False)
             menu.addSeparator()
-            for clipping in data.clippings:
-                a = custom_widgets.LinkAction(data.clippings[clipping], clipping, menu)
-                a.triggered2.connect(common.copyToClipboard)
-                a.triggered2.connect(lambda: self.page().action(QWebPage.Paste).trigger())
-                menu.addAction(a)
+            row = custom_widgets.RowAction(menu)
+            menu.addAction(row)
+            array = list(data.clippings.items())
+            for i in range(0, len(array), 20):
+                chunk = array[i:i+20]
+                submenu = QToolBar(row.row(), orientation=Qt.Vertical)
+                row.addWidget(submenu)
+                for clipping in chunk:
+                    a = custom_widgets.LinkAction(clipping[1], clipping[0], menu)
+                    a.triggered2.connect(common.copyToClipboard)
+                    a.triggered2.connect(lambda: self.page().action(QWebPage.Paste).trigger())
+                    submenu.addAction(a)
             menu.show()
             y = QDesktopWidget()
             menu.move(min(ev.globalX(), y.width()-menu.width()), min(ev.globalY(), y.height()-menu.height()))

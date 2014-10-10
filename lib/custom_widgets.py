@@ -179,6 +179,17 @@ class Row(QWidget):
     def addWidget(self, widget):
         self.layout().addWidget(widget)
 
+# This toolbar can be shoved into a menu.
+class RowAction(QWidgetAction):
+    def __init__(self, *args, **kwargs):
+        super(RowAction, self).__init__(*args, **kwargs)
+        self._row = Row()
+        self.setDefaultWidget(self._row)
+    def row(self):
+        return self._row
+    def addWidget(self, widget):
+        self._row.addWidget(widget)
+
 # This is a row with a label and a QLineEdit.
 class LineEditRow(Row):
     def __init__(self, text="Enter something here:", parent=None):
