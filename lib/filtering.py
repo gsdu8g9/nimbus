@@ -48,8 +48,8 @@ def download_rules():
     for folder, urls in ((adblock_folder, adblock_urls), (hosts_folder, hosts_urls)):
         if not os.path.isdir(folder):
             os.makedirs(folder)
-        for url in urls:
-            urllib.request.urlretrieve(url, os.path.join(folder, url.split("/")[-1]))
+        for i in range(len(urls)):
+            urllib.request.urlretrieve(urls[i], os.path.join(folder, str(i) + ".txt"))
 
 # Load adblock rules.
 def load_adblock_rules():
