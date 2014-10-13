@@ -163,11 +163,14 @@ class MainWindow(QMainWindow):
         self.tabsToolBar.layout().setContentsMargins(0,0,0,0)
     
         # Tab widget for tabbed browsing.
-        self.tabs = custom_widgets.TabWidget(self)
+        self.tabs = custom_widgets.TabWidget(self,
+                                             styleSheet="""QTabWidget::pane{border:0;}
+                                                           QTabBar::tab{min-width:256px;max-width:256px;padding:2px;margin:0;background:transparent;border:0;}
+                                                           QTabBar::tab:selected{background:palette(highlight);color:palette(highlighted-text);}""")
         self.tabs.setCornerWidget(self.tabsToolBar, Qt.TopRightCorner)
 
         # Remove border around tabs.
-        self.tabs.setDocumentMode(True)
+        #self.tabs.setDocumentMode(True)
 
         # Allow rearranging of tabs.
         self.tabs.setMovable(True)
