@@ -40,7 +40,8 @@ adblock_rules = []
 adblock_urls = ["https://easylist-downloads.adblockplus.org/easylist.txt",
                 "https://easylist-downloads.adblockplus.org/easyprivacy.txt"]
 hosts_urls = ["http://www.malwaredomainlist.com/hostslist/hosts.txt",
-              "http://someonewhocares.org/hosts/hosts"]
+              "http://someonewhocares.org/hosts/hosts",
+              "http://winhelp2002.mvps.org/hosts.txt"]
 
 # Update everything.
 def download_rules():
