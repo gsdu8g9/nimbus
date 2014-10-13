@@ -165,8 +165,11 @@ class MainWindow(QMainWindow):
         # Tab widget for tabbed browsing.
         self.tabs = custom_widgets.TabWidget(self,
                                              styleSheet="""QTabWidget::pane{border:0;}
-                                                           QTabBar::tab{min-width:224px;max-width:224px;padding:2px;margin:0;background:palette(window);border:0;border-right:1px solid palette(midlight);}
-                                                           QTabBar::tab:selected{background:palette(highlight);color:palette(highlighted-text);}""")
+                                                           QTabBar{background:qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #d3d7cf, stop: 1 #eeeeec);border: 1px solid #888a85;}
+                                                           QTabBar::tab{min-width:224px;max-width:224px;padding:2px;margin:0;background:qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #d3d7cf, stop: 1 #eeeeec);border:0;border-top: 1px solid #888a85;border-bottom: 1px solid #888a85;color:#2e3436;}
+                                                           QTabBar::tab:selected{background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #729FCF, stop: 1 #3465A4);color:#EEEEEC;}
+                                                           QTabBar::tab:first,QTabBar::tab:only-one{border-left: 1px solid #888a85;}
+                                                           QTabBar::tab:last,QTabBar::tab:only-one{border-right: 1px solid #888a85;}""")
         self.tabs.setCornerWidget(self.tabsToolBar, Qt.TopRightCorner)
 
         # Remove border around tabs.
