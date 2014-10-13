@@ -165,7 +165,7 @@ class MainWindow(QMainWindow):
         # Tab widget for tabbed browsing.
         self.tabs = custom_widgets.TabWidget(self,
                                              styleSheet="""QTabWidget::pane{border:0;}
-                                                           QTabBar::tab{min-width:256px;max-width:256px;padding:2px;margin:0;background:transparent;border:0;}
+                                                           QTabBar::tab{min-width:256px;max-width:256px;padding:2px;margin:0;background:palette(window);border:0;border-right:1px solid palette(midlight);}
                                                            QTabBar::tab:selected{background:palette(highlight);color:palette(highlighted-text);}""")
         self.tabs.setCornerWidget(self.tabsToolBar, Qt.TopRightCorner)
 
