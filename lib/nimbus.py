@@ -54,6 +54,7 @@ except:
 # Extremely specific imports from PyQt/PySide.
 if not common.pyqt4:
     from PyQt5.QtCore import Qt, QCoreApplication, QUrl, QTimer
+    from PyQt5.QtGui import QPalette, QColor
     from PyQt5.QtWidgets import QApplication, QAction, QDesktopWidget, QMessageBox
     from PyQt5.QtWebKit import QWebSettings
     from PyQt5.QtWebKitWidgets import QWebPage
@@ -71,7 +72,7 @@ if not common.pyqt4:
 else:
     try:
         from PyQt4.QtCore import Qt, QCoreApplication, QUrl, QTimer
-        from PyQt4.QtGui import QApplication, QAction, QDesktopWidget, QMessageBox
+        from PyQt4.QtGui import QApplication, QAction, QDesktopWidget, QMessageBox, QPalette, QColor
         from PyQt4.QtWebKit import QWebPage, QWebSettings
 
         # Python DBus
@@ -86,7 +87,7 @@ else:
                 pass
     except ImportError:
         from PySide.QtCore import Qt, QCoreApplication, QUrl, QTimer
-        from PySide.QtGui import QApplication, QAction, QDesktopWidget, QMessageBox
+        from PySide.QtGui import QApplication, QAction, QDesktopWidget, QMessageBox, QPalette, QColor
         from PySide.QtWebKit import QWebPage, QWebSettings
 
 
@@ -185,6 +186,10 @@ def main(argv):
 
     # Create app.
     app = QApplication(argv)
+    palette = QPalette(QColor("#2e3436"), QColor("#eeeeec"), QColor("#eeeeec"), QColor("#555753"), QColor("#D3D7CF"), QColor("#2e3436"), QColor("#eeeeec"), QColor("#ffffff"), QColor("#eeeeec"))
+    palette.setColor(QPalette.Highlight, QColor("#5382BA"))
+    palette.setColor(QPalette.HighlightedText, QColor("#eeeeec"))
+    app.setPalette(palette)
     app.setApplicationName(common.app_name + "/" + common.app_version)
     app.installTranslator(translate.translator)
 
