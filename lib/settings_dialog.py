@@ -278,6 +278,10 @@ class ContentSettingsPanel(SettingsPanel):
 
         self.gifsToggle = QCheckBox(tr("Block GIF images"), self)
         contentFilteringRow.layout().addWidget(self.gifsToggle)
+        
+        self.updateFilteringButton = QPushButton(tr("Update content filters"), self.contentFilteringGroupBox)
+        self.updateFilteringButton.clicked.connect(self.updateFilters)
+        self.contentFilteringGroupBox.layout().addWidget(self.updateFilteringButton)
 
         # Checkbox to toggle tiled backing.
         self.tiledBackingStoreToggle = QCheckBox(tr("Enable tiled backing store"), self)
@@ -291,6 +295,10 @@ class ContentSettingsPanel(SettingsPanel):
         self.layout().addWidget(self.siteSpecificQuirksToggle)
 
         self.layout().addWidget(custom_widgets.Expander(self))
+
+    def updateFilters(self):
+        filtering.download_rules()
+        filtering.load_host_rules()
 
     def loadSettings(self):
         self.jsExceptionsPanel.loadSettings()

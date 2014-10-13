@@ -11,6 +11,7 @@ import os.path
 import abpy
 import common
 import settings
+import urllib.request
 if not common.pyqt4:
     from PyQt5.QtCore import QThread
 else:
@@ -26,12 +27,23 @@ class Filter(object):
         return None
 
 # Global stuff.
-adblock_folder = os.path.join(settings.settings_folder, "adblock")
-easylist = os.path.join(common.app_folder, "easylist.txt")
-adblock_css = os.path.join(common.app_folder, "adblock.css")
+adblock_folder = os.path.join(settings.settings_folder, "Adblock")
+hosts_folder = os.path.join(settings.settings_folder, "Hosts")
 adblock_filter = Filter([])
 shelved_filter = None
 adblock_rules = []
+
+# URLs for lists of rules.
+adblock_urls = ["https://easylist-downloads.adblockplus.org/easylist.txt"]
+hosts_urls = ["http://www.malwaredomainlist.com/hostslist/hosts.txt", "http://someonewhocares.org/hosts/hosts"]
+
+# Update everything.
+def download_rules():
+    for folder, urls in ((adblock_folder, adblock_urls), (hosts_folder, hosts_urls)):
+        if not os.path.isdir(folder):
+            os.makedirs(folder)
+        for url in urls:
+            urllib.request.urlretrieve(url, os.path.join(folder, url.split("/")[-1]))
 
 # Load adblock rules.
 def load_adblock_rules():
@@ -40,19 +52,15 @@ def load_adblock_rules():
     global shelved_filter
 
     if len(adblock_rules) < 1:
-        # Load easylist.
-        if os.path.exists(easylist):
-            f = open(easylist)
-            try: adblock_rules += [rule.rstrip("\n") for rule in f.readlines()]
-            except: pass
-            f.close()
-        # Load additional filters.
-        if os.path.exists(adblock_folder):
-           for fname in os.listdir(adblock_folder):
-               f = open(os.path.join(adblock_folder, fname))
-               try: adblock_rules += [rule.rstrip("\n") for rule in f.readlines()]
-               except: pass
-               f.close()
+        if os.path.isdir(adblock_folder):
+            for fname in os.listdir(adblock_folder):
+                try:
+                    f = open(os.path.join(adblock_folder, fname))
+                    try: adblock_rules += [rule.rstrip("\n") for rule in f.readlines()]
+                    except: pass
+                    f.close()
+                except:
+                    pass
 
     # Create instance of abpy.Filter.
     if shelved_filter:
@@ -85,15 +93,15 @@ host_rules = []
 
 def load_host_rules():
     global host_rules
-    if os.path.exists(hosts_file):
-        try: f = open(hosts_file, "r")
-        except: pass
-        else:
-            # This is a big hacky way of parsing the rules.
-            try:
-                host_rules = [line for line in [line.split(" ")[1].replace("\n", "") for line in f.readlines() if len(line.split(" ")) > 1 and not line.startswith("#") and len(line) > 1] if line != ""]
-            except:
-                pass
-            f.close()
-
-load_host_rules()
+    host_rules = []
+    if os.path.isdir(hosts_folder):
+        for fname in os.listdir(hosts_folder):
+            try: f = open(os.path.join(hosts_folder, fname), "r")
+            except: pass
+            else:
+                # This is a big hacky way of parsing the rules.
+                try:
+                    host_rules += [line for line in [line.split(" ")[1].replace("\n", "") for line in f.readlines() if len(line.split(" ")) > 1 and not line.startswith("#") and len(line) > 1] if line != ""]
+                except:
+                    pass
+                f.close()

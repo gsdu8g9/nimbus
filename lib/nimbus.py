@@ -343,6 +343,11 @@ def main(argv):
         win.addTab(url=settings.settings.value("general/Homepage"))
         win.show()
 
+    # Load filtering stuff.
+    if not os.path.isdir(filtering.hosts_folder):
+        filtering.download_rules()
+    filtering.load_host_rules()
+
     # Start app.
     sys.exit(app.exec_())
 
