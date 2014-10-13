@@ -769,10 +769,6 @@ class MainWindow(QMainWindow):
         else:
             currentWidget.downloadFile(QNetworkRequest(currentWidget.url()))
 
-    # Redefine show function.
-    def show(self):
-        self.setVisible(True)
-
     # Returns the tab widget.
     def tabWidget(self):
         return self.tabs
