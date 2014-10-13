@@ -11,6 +11,7 @@ import os.path
 import abpy
 import common
 import settings
+import traceback
 import urllib.request
 if not common.pyqt4:
     from PyQt5.QtCore import QThread
@@ -97,11 +98,11 @@ def load_host_rules():
     if os.path.isdir(hosts_folder):
         for fname in os.listdir(hosts_folder):
             try: f = open(os.path.join(hosts_folder, fname), "r")
-            except: pass
+            except: traceback.print_exc()
             else:
                 # This is a big hacky way of parsing the rules.
                 try:
-                    host_rules += [line for line in [line.split(" ")[1].replace("\n", "") for line in f.readlines() if len(line.split(" ")) > 1 and not line.startswith("#") and len(line) > 1] if line != ""]
+                    host_rules += [line for line in [line.split(" ")[-1].replace("\n", "") for line in f.readlines() if len(line.split(" ")) > 1 and not line.startswith("#") and len(line) > 1] if line != ""]
                 except:
-                    pass
+                    traceback.print_exc()
                 f.close()
