@@ -35,8 +35,10 @@ shelved_filter = None
 adblock_rules = []
 
 # URLs for lists of rules.
-adblock_urls = ["https://easylist-downloads.adblockplus.org/easylist.txt"]
-hosts_urls = ["http://www.malwaredomainlist.com/hostslist/hosts.txt", "http://someonewhocares.org/hosts/hosts"]
+adblock_urls = ["https://easylist-downloads.adblockplus.org/easylist.txt",
+                "https://easylist-downloads.adblockplus.org/easyprivacy.txt"]
+hosts_urls = ["http://www.malwaredomainlist.com/hostslist/hosts.txt",
+              "http://someonewhocares.org/hosts/hosts"]
 
 # Update everything.
 def download_rules():
@@ -57,7 +59,7 @@ def load_adblock_rules():
             for fname in os.listdir(adblock_folder):
                 try:
                     f = open(os.path.join(adblock_folder, fname))
-                    try: adblock_rules += [rule.rstrip("\n") for rule in f.readlines()]
+                    try: adblock_rules += f.read().split("\n")
                     except: pass
                     f.close()
                 except:

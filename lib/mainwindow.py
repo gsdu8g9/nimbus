@@ -154,14 +154,17 @@ class MainWindow(QMainWindow):
             self.toolBar.setVisible(False)
 
         # Tabs toolbar.
-        self.tabsToolBar = custom_widgets.MenuToolBar(movable=False,\
+        self.tabsToolBar = QToolBar(movable=False,\
                            contextMenuPolicy=Qt.CustomContextMenu,\
                            parent=self,
-                           windowTitle=tr("Tabs"))
-        self.addToolBar(self.tabsToolBar)
-
+                           windowTitle=tr("Tabs"),
+                           styleSheet="QToolBar {background: transparent; border: 0;}")
+        self.tabsToolBar.layout().setSpacing(0)
+        self.tabsToolBar.layout().setContentsMargins(0,0,0,0)
+    
         # Tab widget for tabbed browsing.
         self.tabs = custom_widgets.TabWidget(self)
+        self.tabs.setCornerWidget(self.tabsToolBar, Qt.TopRightCorner)
 
         # Remove border around tabs.
         self.tabs.setDocumentMode(True)
@@ -192,17 +195,6 @@ class MainWindow(QMainWindow):
         # Set tabs as central widget.
         self.setCentralWidget(self.tabs)
 
-        self.tabsWidget = QWidget(self)
-        tabsLayout = QHBoxLayout(self.tabsWidget)
-        self.tabsWidget.setLayout(tabsLayout)
-        self.tabsWidget.layout().setSpacing(0)
-        self.tabsWidget.layout().setContentsMargins(0,0,0,0)
-        self.tabsWidget.layout().addWidget(self.tabs.tabBar())
-        self.tabs.tabBar().setExpanding(False)
-        self.tabsToolBar.layout().setSpacing(0)
-        self.tabsToolBar.layout().setContentsMargins(0,0,0,0)
-        self.tabsToolBar.setStyleSheet("QToolBar { padding: 0; margin: 0; }")
-
         # New tab action.
         newTabAction = QAction(common.complete_icon("tab-new"), tr("New &Tab"), self)
         newTabAction.setShortcut("Ctrl+T")
@@ -220,12 +212,9 @@ class MainWindow(QMainWindow):
         self.tabsToolBar.setIconSize(QSize(16, 16))
 
         self.addAction(newTabAction)
-        self.tabsToolBar.addWidget(self.tabsWidget)
         self.tabsToolBar.addAction(newTabAction)
         self.newTabButton = self.tabsToolBar.widgetForAction(newTabAction)
         self.newTabButton.setIcon(common.complete_icon("list-add"))
-
-        self.tabsToolBar.addWidget(custom_widgets.HorizontalExpander(self.tabsToolBar))
 
         tabsMenuAction = QAction(self)
         self.tabsToolBar.addAction(tabsMenuAction)
@@ -780,8 +769,6 @@ class MainWindow(QMainWindow):
     # Redefine show function.
     def show(self):
         self.setVisible(True)
-        self.tabs.setStyleSheet("QTabWidget::pane { top: -%s; } " %\
-             (self.tabs.tabBar().height(),))
 
     # Returns the tab widget.
     def tabWidget(self):
@@ -1127,7 +1114,6 @@ self.origY + ev.globalY() - self.mouseY)
                 except: pass
                 self.toolBar.addAction(self.searchEditAction)
                 self.toolBar.addAction(self.mainMenuAction)
-                self.tabsToolBar.setIsMenuBar(False)
                 self.mainMenuButton = self.toolBar.widgetForAction(self.mainMenuAction)
                 self.searchEditButton = self.toolBar.widgetForAction(self.searchEditAction)
             else:
@@ -1137,7 +1123,6 @@ self.origY + ev.globalY() - self.mouseY)
                 except: pass
                 self.tabsToolBar.addAction(self.searchEditAction)
                 self.tabsToolBar.addAction(self.mainMenuAction)
-                self.tabsToolBar.setIsMenuBar(True)
                 self.mainMenuButton = self.tabsToolBar.widgetForAction(self.mainMenuAction)
                 self.mainMenuButton.setStyleSheet("QToolButton { border-radius: 4px; border-top-%(o)s-radius: 0; border-bottom-%(o)s-radius: 0; padding: 2px; background: palette(highlight); color: palette(highlighted-text); }" % {"o": "right" if self.layoutDirection() == Qt.LeftToRight else "left"})
                 self.mainMenuButton.setToolButtonStyle(Qt.ToolButtonTextBesideIcon)
