@@ -184,7 +184,7 @@ class SystemTrayIcon(QSystemTrayIcon):
 
     # About.
     def about(self):
-        try: parent = browser.windows[-1]
+        try: parent = browser.activeWindow()
         except:
             parent = self.widget
             self.widget.show()
