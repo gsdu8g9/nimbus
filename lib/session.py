@@ -22,7 +22,7 @@ else:
     try:
         from PyQt4.QtCore import Qt
         from PyQt4.QtGui import QAction, QMainWindow, QPushButton, QInputDialog, QListWidget, QToolBar
-    except:
+    except ImportError:
         from PySide.QtCore import Qt
         from PySide.QtGui import QAction, QMainWindow, QPushButton, QInputDialog, QListWidget, QToolBar
 

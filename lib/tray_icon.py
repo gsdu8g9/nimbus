@@ -30,7 +30,7 @@ else:
         from PyQt4.QtCore import pyqtSignal, Qt, QTimer, QSize
         Signal = pyqtSignal
         from PyQt4.QtGui import QWidget, QCursor, QApplication, QMenu, QAction, QSystemTrayIcon, QDesktopWidget, QMessageBox, QToolButton, QToolBar, QLabel
-    except:
+    except ImportError:
         from PySide.QtCore import Signal, Qt, QTimer, QSize
         from PySide.QtGui import QWidget, QCursor, QApplication, QMenu, QAction, QSystemTrayIcon, QDesktopWidget, QMessageBox, QToolButton, QToolBar, QLabel
 

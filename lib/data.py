@@ -20,7 +20,7 @@ else:
     try:
         from PyQt4.QtCore import QCoreApplication, QByteArray, QUrl
         from PyQt4.QtNetwork import QNetworkCookie
-    except:
+    except ImportError:
         from PySide.QtCore import QCoreApplication, QByteArray, QUrl
         from PySide.QtNetwork import QNetworkCookie
 

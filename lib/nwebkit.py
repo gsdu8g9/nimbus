@@ -49,7 +49,7 @@ else:
         from PyQt4.QtWebKit import QWebView, QWebPage, QWebHistory
         Signal = pyqtSignal
         Slot = pyqtSlot
-    except:
+    except ImportError:
         from PySide.QtCore import Qt, QSize, QObject, QCoreApplication, Signal, Slot, QUrl, QFile, QIODevice, QTimer, QByteArray, QDataStream, QDateTime, QPoint, QEventLoop
         from PySide.QtGui import QApplication, QListWidget, QSpinBox, QListWidgetItem, QMessageBox, QIcon, QAction, QToolBar, QLineEdit, QPrinter, QPrintDialog, QPrintPreviewDialog, QInputDialog, QFileDialog, QProgressBar, QLabel, QCalendarWidget, QSlider, QFontComboBox, QLCDNumber, QImage, QDateTimeEdit, QDial, QSystemTrayIcon, QPushButton, QMenu, QDesktopWidget, QClipboard, QWidgetAction, QToolTip, QCursor, QWidget, QToolButton, QVBoxLayout
         from PySide.QtNetwork import QNetworkProxy, QNetworkRequest

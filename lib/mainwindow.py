@@ -50,7 +50,7 @@ else:
                                 QLineEdit, QStatusBar, QProgressBar
         from PyQt4.QtNetwork import QNetworkRequest
         from PyQt4.QtWebKit import QWebPage
-    except:
+    except ImportError:
         from PySide.QtCore import Qt, QCoreApplication, QUrl, QTimer, QSize,\
                                   QDateTime, QPoint
         from PySide.QtGui import QApplication, QDockWidget, QWidget,\

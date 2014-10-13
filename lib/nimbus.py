@@ -15,10 +15,12 @@ import json
 import copy
 
 # This is a hack for installing Nimbus.
-try: import paths
-except:
-    try: import lib.paths as paths
-    except:
+try:
+    import paths
+except ImportError:
+    try:
+        import lib.paths as paths
+    except ImportError:
         import nimbus.paths as paths
 sys.path.append(paths.app_folder)
 
@@ -49,9 +51,8 @@ except:
     def exec(code):
         pass
 
-# Extremely specific imports from PyQt5/PySide.
-# We give PyQt5 priority because it supports Qt5.
-try:
+# Extremely specific imports from PyQt/PySide.
+if not common.pyqt4:
     from PyQt5.QtCore import Qt, QCoreApplication, QUrl, QTimer
     from PyQt5.QtWidgets import QApplication, QAction, QDesktopWidget, QMessageBox
     from PyQt5.QtWebKit import QWebSettings
@@ -65,9 +66,9 @@ try:
             import dbus.service
             from dbus.mainloop.pyqt5 import DBusQtMainLoop
             has_dbus = True
-        except:
+        except ImportError:
             pass
-except:
+else:
     try:
         from PyQt4.QtCore import Qt, QCoreApplication, QUrl, QTimer
         from PyQt4.QtGui import QApplication, QAction, QDesktopWidget, QMessageBox
@@ -83,7 +84,7 @@ except:
                 has_dbus = True
             except:
                 pass
-    except:
+    except ImportError:
         from PySide.QtCore import Qt, QCoreApplication, QUrl, QTimer
         from PySide.QtGui import QApplication, QAction, QDesktopWidget, QMessageBox
         from PySide.QtWebKit import QWebPage, QWebSettings

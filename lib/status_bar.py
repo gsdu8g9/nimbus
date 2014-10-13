@@ -16,7 +16,7 @@ else:
     try:
         from PyQt4.QtCore import Qt, QSize
         from PyQt4.QtGui import QToolBar, QStatusBar, QFrame, QMainWindow, QLineEdit, QProgressBar, QSizeGrip
-    except:
+    except ImportError:
         from PySide.QtCore import Qt, QSize
         from PySide.QtGui import QToolBar, QStatusBar, QFrame, QMainWindow, QLineEdit, QProgressBar, QSizeGrip
 

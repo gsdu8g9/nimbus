@@ -9,8 +9,10 @@
 
 import os
 import sys
-try: import settings
-except: pass
+try:
+    import settings
+except ImportError:
+    pass
 from common import app_folder, blank_toolbar, complete_icon, pyqt4
 from translate import tr
 
@@ -24,7 +26,7 @@ else:
         from PyQt4.QtCore import Qt, pyqtSignal, QPoint, QUrl, QSize, QTimer
         Signal = pyqtSignal
         from PyQt4.QtGui import QPixmap, QMainWindow, QAction, QToolButton, QPushButton, QIcon, QWidget, QComboBox, QHBoxLayout, QTabWidget, QTextEdit, QVBoxLayout, QLabel, QSizePolicy, QLineEdit, QSpinBox, QToolBar, QStyle, QStylePainter, QStyleOptionToolBar, QMenu, QTabBar, QWidgetAction, QListWidget
-    except:
+    except ImportError:
         from PySide.QtCore import Qt, Signal, QPoint, QUrl, QSize, QTimer
         from PySide.QtGui import QPixmap, QMainWindow, QAction, QToolButton, QPushButton, QIcon, QWidget, QComboBox, QHBoxLayout, QTabWidget, QTextEdit, QVBoxLayout, QLabel, QSizePolicy, QLineEdit, QSpinBox, QToolBar, QStyle, QStylePainter, QStyleOptionToolBar, QMenu, QTabBar, QWidgetAction, QListWidget
 

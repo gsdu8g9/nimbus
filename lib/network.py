@@ -26,7 +26,7 @@ else:
         from PyQt4.QtCore import QCoreApplication, QUrl, QTimer, SIGNAL
         from PyQt4.QtGui import QInputDialog, QLineEdit
         from PyQt4.QtNetwork import QNetworkInterface, QNetworkCookieJar, QNetworkAccessManager, QNetworkDiskCache, QNetworkRequest, QNetworkReply
-    except:
+    except ImportError:
         from PySide.QtCore import QCoreApplication, QUrl, QTimer, SIGNAL
         from PySide.QtGui import QInputDialog, QLineEdit
         from PySide.QtNetwork import QNetworkInterface, QNetworkCookieJar, QNetworkAccessManager, QNetworkDiskCache, QNetworkRequest, QNetworkReply

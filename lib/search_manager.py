@@ -25,7 +25,7 @@ else:
         from PyQt4.QtCore import Qt, pyqtSignal, QSize
         from PyQt4.QtGui import QMainWindow, QAction, QMessageBox, QToolBar, QLabel, QToolButton, QListWidget, QInputDialog, QCursor, QDesktopWidget
         Signal = pyqtSignal
-    except:
+    except ImportError:
         from PySide.QtCore import Qt, Signal, QSize
         from PySide.QtGui import QMainWindow, QAction, QMessageBox, QToolBar, QLabel, QToolButton, QListWidget, QInputDialog, QCursor, QDesktopWidget
 

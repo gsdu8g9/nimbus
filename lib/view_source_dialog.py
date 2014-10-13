@@ -23,7 +23,7 @@ else:
         from PyQt4.QtCore import pyqtSignal, QObject
         Signal = pyqtSignal
         from PyQt4.QtGui import QMainWindow, QMenuBar, QMenu, QAction, QTextEdit, QTextDocument, QFileDialog, QInputDialog, QLineEdit
-    except:
+    except ImportError:
         from PySide.QtCore import Signal, QObject
         from PySide.QtGui import QMainWindow, QMenuBar, QMenu, QAction, QTextEdit, QTextDocument, QFileDialog, QInputDialog, QLineEdit
 try:

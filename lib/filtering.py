@@ -16,8 +16,10 @@ import urllib.request
 if not common.pyqt4:
     from PyQt5.QtCore import QThread
 else:
-    try: from PyQt4.QtCore import QThread
-    except: from PySide.QtCore import QThread
+    try:
+        from PyQt4.QtCore import QThread
+    except ImportError:
+        from PySide.QtCore import QThread
 
 # Dummy adblock filter class.
 class Filter(object):

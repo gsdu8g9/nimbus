@@ -20,7 +20,7 @@ else:
     try:
         from PyQt4.QtCore import QObject, pyqtSlot
         Slot = pyqtSlot
-    except:
+    except ImportError:
         from PySide.QtCore import QObject, Slot
 
 def geolocate():

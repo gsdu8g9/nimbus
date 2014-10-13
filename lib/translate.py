@@ -14,8 +14,10 @@ from common import app_folder, app_locale, pyqt4
 if not pyqt4:
     from PyQt5.QtCore import QCoreApplication, QLocale, QTranslator, QObject
 else:
-    try: from PyQt4.QtCore import QCoreApplication, QLocale, QTranslator, QObject
-    except: from PySide.QtCore import QCoreApplication, QLocale, QTranslator, QObject
+    try:
+        from PyQt4.QtCore import QCoreApplication, QLocale, QTranslator, QObject
+    except ImportError:
+        from PySide.QtCore import QCoreApplication, QLocale, QTranslator, QObject
 
 # Translation.
 translations_folder = os.path.join(app_folder, "translations")

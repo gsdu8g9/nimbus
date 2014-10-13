@@ -20,7 +20,7 @@ else:
         from PyQt4.QtCore import pyqtSignal, Qt
         Signal = pyqtSignal
         from PyQt4.QtGui import QAction, QDoubleSpinBox, QToolBar
-    except:
+    except ImportError:
         from PySide.QtCore import Signal, Qt
         from PySide.QtGui import QAction, QDoubleSpinBox, QToolBar
 
