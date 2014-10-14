@@ -186,6 +186,10 @@ def main(argv):
 
     # Create app.
     app = QApplication(argv)
+    if not common.pyqt4:
+        app.setStyle("fusion")
+    else:
+        app.setStyle("cleanlooks")
     palette = QPalette(QColor("#2e3436"), QColor("#eeeeec"), QColor("#eeeeec"), QColor("#555753"), QColor("#D3D7CF"), QColor("#2e3436"), QColor("#eeeeec"), QColor("#ffffff"), QColor("#eeeeec"))
     palette.setColor(QPalette.Highlight, QColor("#5382BA"))
     palette.setColor(QPalette.HighlightedText, QColor("#eeeeec"))
