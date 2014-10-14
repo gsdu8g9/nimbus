@@ -261,7 +261,6 @@ class LocationBar(QComboBox):
             self.icon.setIcon(icon)
         self.icon.setFixedWidth(16)
         self.icon.setFixedHeight(16)
-        self.icon.hide()
         self.icon.setStyleSheet("QToolButton { border: 0; background: transparent; width: 16px; height: 16px; }")
         sz = self.icon
         fw = self.style().pixelMetric(QStyle.PM_DefaultFrameWidth)
@@ -275,24 +274,23 @@ class LocationBar(QComboBox):
     def setSavedText(self, text):
         self._savedText = str(text)
 
-    def paintEvent(self, ev):
+    def resizeEvent(self, ev):
+        super(LocationBar, self).resizeEvent(ev)
         sz = self.icon
         fw = self.style().pixelMetric(QStyle.PM_DefaultFrameWidth)
-        QComboBox.paintEvent(self, ev)
-        self.icon.render(self, QPoint(self.rect().left() + (self.height() + 1 - sz.width())/2, (self.height() + 1 - sz.height())/2))
+        self.icon.move(QPoint(self.rect().left() + (self.height() + 1 - sz.width())/2, (self.height() + 1 - sz.height())/2))
         if self.s == False:
-            self.lineEdit().setStyleSheet("QLineEdit { }".replace("{", "{ background: transparent; padding-left: %spx; ") % str(sz.width() + (self.height() + 1 - sz.width())/2))
+            self.lineEdit().setStyleSheet("QLineEdit { background: transparent; padding-left: %spx; }" % str(sz.width() + (self.height() + 1 - sz.width())/2))
             self.s = True
-            self.redefPaintEvent()
+            self.redefResizeEvent()
 
-    def redefPaintEvent(self):
-        self.paintEvent = self.shortPaintEvent
+    def redefResizeEvent(self):
+        self.resizeEvent = self.shortResizeEvent
 
-    def shortPaintEvent(self, ev):
+    def shortResizeEvent(self, ev):
         sz = self.icon
         fw = self.style().pixelMetric(QStyle.PM_DefaultFrameWidth)
-        QComboBox.paintEvent(self, ev)
-        self.icon.render(self, QPoint(self.rect().left() + (self.height() + 1 - sz.width())/2, (self.height() + 1 - sz.height())/2))
+        self.icon.move(QPoint(self.rect().left() + (self.height() + 1 - sz.width())/2, (self.height() + 1 - sz.height())/2))
 
     def setIcon(self, icon):
         self.icon.setIcon(icon)
