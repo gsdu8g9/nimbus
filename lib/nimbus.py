@@ -191,6 +191,7 @@ def main(argv):
     else:
         app.setStyle("cleanlooks")
     palette = QPalette(QColor("#2e3436"), QColor("#eeeeec"), QColor("#eeeeec"), QColor("#555753"), QColor("#D3D7CF"), QColor("#2e3436"), QColor("#eeeeec"), QColor("#ffffff"), QColor("#eeeeec"))
+    palette.setColor(QPalette.Disabled, QPalette.Button, QColor("#BABDB6"))
     palette.setColor(QPalette.Disabled, QPalette.Text, QColor("#BABDB6"))
     palette.setColor(QPalette.Highlight, QColor("#5382BA"))
     palette.setColor(QPalette.HighlightedText, QColor("#eeeeec"))
