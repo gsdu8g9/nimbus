@@ -288,6 +288,7 @@ class LocationBar(QComboBox):
         self.resizeEvent = self.shortResizeEvent
 
     def shortResizeEvent(self, ev):
+        super(LocationBar, self).resizeEvent(ev)
         sz = self.icon
         fw = self.style().pixelMetric(QStyle.PM_DefaultFrameWidth)
         self.icon.move(QPoint(self.rect().left() + (self.height() + 1 - sz.width())/2, (self.height() + 1 - sz.height())/2))
