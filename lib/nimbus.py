@@ -186,6 +186,7 @@ def main(argv):
 
     # Create app.
     app = QApplication(argv)
+    app.setStyleSheet("QMainWindow > QToolBar { background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #d3d7cf, stop: 1 #eeeeec); border: 0; } QMainWindow > QToolBar:bottom {border-top: 1px solid #888a85;}")
     if not common.pyqt4:
         app.setStyle("fusion")
     else:
