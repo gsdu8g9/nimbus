@@ -148,12 +148,17 @@ class DownloadBar(QToolBar):
         self.addWidget(self.progressBar)
         label.setText(os.path.split(self.progressBar.destination)[1])
         openFolderAction = QAction(common.complete_icon("document-open"), tr("Open containing folder"), self)
-        openFolderAction.triggered.connect(lambda: os.system("xdg-open %s &" % (os.path.split(self.progressBar.destination)[0].split("://")[-1],)))
+        openFolderAction.triggered.connect(self.openFolder)
         self.addAction(openFolderAction)
         abortAction = QAction(QIcon().fromTheme("process-stop", QIcon(common.icon("process-stop.png"))), tr("Abort/Remove"), self)
         abortAction.triggered.connect(self.progressBar.abort)
         abortAction.triggered.connect(self.deleteLater)
         self.addAction(abortAction)
+    def openFolder(self):
+        if sys.platform.startswith("linux"):
+            os.system("xdg-open %s &" % (os.path.split(self.progressBar.destination)[0].split("://")[-1],))
+        else:
+            os.system("explorer %s &" % (os.path.split(self.progressBar.destination)[0].split("://")[-1],))
 
 # Class for exposing fullscreen API to DOM.
 class FullScreenRequester(QObject):
