@@ -136,11 +136,12 @@ try: app_locale = str(locale.getlocale()[0])
 except: app_locale = str(QLocale.system().name())
 app_locale_h = app_locale.replace("_", "-")
 
-defaultUserAgent = "Mozilla/5.0 (Macintosh; U; Intel Mac OS X; %(locale)s) AppleWebKit/%(webkit_version_m1)s+ (KHTML, like Gecko) Version/5.0 Safari/%(webkit_version)s+ %(app_name)s/%(app_version)s" % {"app_name": app_name, "app_version": app_version, "webkit_version_m1": qWebKitVersion().split(".")[0], "webkit_version": qWebKitVersion(), "qt_version": qt_version, "locale": app_locale_h.lower()}
+format_string = {"system": platform.system(), "machine": platform.machine(), "app_name": app_name, "qt_version": qt_version, "app_version": app_version, "webkit_version_m1": qWebKitVersion().split(".")[0], "webkit_version": qWebKitVersion(), "qt_version": qt_version, "locale": app_locale_h.lower(), "release": platform.release()}
+defaultUserAgent = "Mozilla/5.0 (%(system)s %(machine)s; U; %(locale)s) AppleWebKit/%(webkit_version_m1)s+ (KHTML, like Gecko) Arora/%(qt_version)s Safari/%(webkit_version)s+ %(app_name)s/%(app_version)s" % format_string
 mobileUserAgent = "Mozilla/5.0 (Linux; U; Android 2.3.5; %s) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1" % (app_locale_h,)
-simpleUserAgent = "%(app_name)s/%(app_version)s (%(system)s; %(locale)s)" % {"app_name": app_name, "app_version": app_version, "system": platform.system(), "locale": app_locale_h}
-chromeUserAgent = "Mozilla/5.0 (%(system)s %(machine)s; U; %(locale)s) AppleWebKit/%(webkit_version)s (KHTML, like Gecko) Chrome/24.%(qt_version)s Safari/%(webkit_version)s" % {"system": platform.system(), "webkit_version": qWebKitVersion(), "qt_version": qt_version, "locale": app_locale_h, "machine": platform.machine()}
-elinksUserAgent = "ELinks/%(qt_version)s (textmode; %(system)s %(release)s %(machine)s; 80x24)" % {"system": platform.system(), "qt_version": qt_version, "machine": platform.machine(), "release": platform.release()}
+simpleUserAgent = "%(app_name)s/%(app_version)s (%(system)s; %(locale)s)" % format_string
+chromeUserAgent = "Mozilla/5.0 (%(system)s %(machine)s; U; %(locale)s) AppleWebKit/%(webkit_version)s (KHTML, like Gecko) Chrome/24.%(qt_version)s Safari/%(webkit_version)s" % format_string
+elinksUserAgent = "ELinks/%(qt_version)s (textmode; %(system)s %(release)s %(machine)s; 80x24)" % format_string
 dilloUserAgent = "Dillo/%s" % (qt_version,)
 
 user_agents = {"&Simplified": simpleUserAgent, "&Chromium": chromeUserAgent, "&Nimbus": defaultUserAgent, "&Qt": "nimbus_generic", "&Android": mobileUserAgent, "&ELinks": elinksUserAgent, "&Dillo": dilloUserAgent}
