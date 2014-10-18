@@ -180,9 +180,13 @@ def cleanJavaScriptBars():
 # Main function to load everything.
 def main(argv):
     # Start DBus loop
+    print("Starting Nimbus...")
     if has_dbus:
         mainloop = DBusQtMainLoop(set_as_default = True)
         dbus.set_default_main_loop(mainloop)
+        print("DBus available.")
+    else:
+        print("DBus unavailable.")
 
     # Create app.
     app = QApplication(argv)
@@ -217,6 +221,7 @@ def main(argv):
     # will send all the requested URLs to the existing process and
     # exit.
     if dbus_present:
+        print("An instance of Nimbus is already running. Passing arguments via DBus.")
         for arg in argv[1:]:
             proxy.addTab(arg)
         if len(argv) < 2:
@@ -236,10 +241,6 @@ def main(argv):
     closeWindowAction.setShortcuts(["Esc", "Ctrl+W", "Ctrl+J", "Ctrl+Shift+Y"])
     common.downloadManager.addAction(closeWindowAction)
 
-    # Build the browser's default user agent.
-    # This should be improved as well.
-    common.createUserAgent()
-
     # Create tray icon.
     common.trayIcon = SystemTrayIcon(QCoreApplication.instance())
     common.trayIcon.newWindowRequested.connect(addWindow)
@@ -256,8 +257,6 @@ def main(argv):
 
     uc = QUrl.fromUserInput(settings.user_css)
     QWebSettings.globalSettings().setUserStyleSheetUrl(uc)
-    print(QWebSettings.globalSettings().userStyleSheetUrl())
-    print("Nyahahaha!")
 
     # Set up settings dialog.
     settings.settingsDialog = settings_dialog.SettingsDialog()
@@ -278,17 +277,28 @@ def main(argv):
     # Create DBus server
     if has_dbus:
         server = DBusServer(bus)
+        print("DBus server created.")
 
     # Load adblock rules.
     filtering.adblock_filter_loader.start()
 
     if not os.path.isdir(settings.extensions_folder):
-        try: shutil.copytree(common.extensions_folder,\
+        try:
+            print("Copying extensions...", end=" ")
+            shutil.copytree(common.extensions_folder,\
                              settings.extensions_folder)
-        except: pass
+        except:
+            print("failed.")
+        else:
+            print("done.")
     if not os.path.isfile(settings.startpage):
-        try: shutil.copy2(common.startpage, settings.startpage)
-        except: pass
+        try:
+            print("Copying start page...", end=" ")
+            shutil.copy2(common.startpage, settings.startpage)
+        except:
+            print("failed.")
+        else:
+            print("done.")
 
     settings.reload_extensions()
     settings.reload_userscripts()
@@ -323,6 +333,12 @@ def main(argv):
         lostTabsTimer.start(500)
 
     if os.path.isfile(settings.crash_file):
+        print("Crash file detected.")
+        if not has_dbus:
+            multInstances = QMessageBox.question(None, tr("Hm."), tr("It's not good to run multiple instances of Nimbus. Is an instance of Nimbus already running?"), QMessageBox.Yes | QMessageBox.No)
+            if multInstances == QMessageBox.Yes:
+                print("Nimbus will now halt")
+                return
         clearCache = QMessageBox.question(None, tr("Ow."), tr("Nimbus seems to have crashed during your last session. Fortunately, your tabs were saved up to 30 seconds beforehand. Would you like to restore them?"), QMessageBox.Yes | QMessageBox.No)
         if clearCache == QMessageBox.No:
             try: os.remove(settings.session_file)
@@ -333,9 +349,12 @@ def main(argv):
         f.close()
 
     if not "--daemon" in argv and os.path.exists(settings.session_file):
+        print("Loading previous session...", end=" ")
         loadSession()
+        print("done.")
     if not "--daemon" in argv and len(argv[1:]) > 0:
         # Create instance of MainWindow.
+        print("Loading the URLs you requested...", end=" ")
         if len(browser.windows) > 0:
             win = browser.windows[-1]
         else:
@@ -352,6 +371,7 @@ def main(argv):
 
             # Show window.
         win.show()
+        print("done.")
     elif not "--daemon" in argv and len(argv[1:]) == 0 and len(browser.windows) == 0:
         win = MainWindow(appMode = ("--app" in argv))
         win.addTab(url=settings.settings.value("general/Homepage"))
@@ -363,6 +383,7 @@ def main(argv):
     filtering.load_host_rules()
 
     # Start app.
+    print("Nyahahaha!")
     sys.exit(app.exec_())
 
 # Start program
