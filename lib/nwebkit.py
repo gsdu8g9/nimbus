@@ -445,8 +445,6 @@ delete __NimbusAdRemoverQueries;""" % (settings.adremover_filters,))
             return override
         elif self._userAgent:
             return self._userAgent
-        # This is a workaround for GitHub not loading properly
-        # with the default Nimbus user agent.
         else:
             return common.defaultUserAgent
 
