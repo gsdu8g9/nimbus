@@ -179,17 +179,26 @@ def cleanJavaScriptBars():
 
 # Main function to load everything.
 def main(argv):
+    print("Starting %s %s..." % (common.app_name, common.app_version))
+    print("""         __
+        /  \_
+     __(     )_
+   _(          \_
+ _(              )_
+(__________________)
+""")
+    app = QApplication(argv)
+    
     # Start DBus loop
-    print("Starting Nimbus...")
     if has_dbus:
+        print("DBus available. Creating main loop...", end=" ")
         mainloop = DBusQtMainLoop(set_as_default = True)
         dbus.set_default_main_loop(mainloop)
-        print("DBus available.")
+        print("done.")
     else:
         print("DBus unavailable.")
 
     # Create app.
-    app = QApplication(argv)
     app.setStyleSheet("QMainWindow > QToolBar { background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #d3d7cf, stop: 1 #eeeeec); border: 0; } QMainWindow > QToolBar:bottom {border-top: 1px solid #888a85;}")
     if not common.pyqt4:
         app.setStyle("fusion")
@@ -211,11 +220,23 @@ def main(argv):
 
     # If D-Bus is present...
     if has_dbus:
-        bus = dbus.SessionBus()
+        print("Creating DBus session bus...", end=" ")
+        try:
+            bus = dbus.SessionBus()
+        except:
+            print("failed.")
+        else:
+            print("done.")
 
-    try: proxy = bus.get_object("org.nimbus.Nimbus", "/Nimbus")
-    except: dbus_present = False
-    else: dbus_present = True
+    try:
+        proxy = bus.get_object("org.nimbus.Nimbus", "/Nimbus")
+        print("Checking for running instances of Nimbus...", end=" ")
+    except:
+        dbus_present = False
+    else:
+        dbus_present = True
+    if has_dbus:
+        print("done.")
 
     # If Nimbus detects the existence of another Nimbus process, it
     # will send all the requested URLs to the existing process and
@@ -227,6 +248,8 @@ def main(argv):
         if len(argv) < 2:
             proxy.addWindow()
         return
+    elif has_dbus:
+        print("No prior instances found. Continuing on our merry way.")
 
     # Hack together the browser's icon. This needs to be improved.
     common.app_icon = common.complete_icon("nimbus")
@@ -276,8 +299,9 @@ def main(argv):
 
     # Create DBus server
     if has_dbus:
+        print("Creating DBus server...", end=" ")
         server = DBusServer(bus)
-        print("DBus server created.")
+        print("done.")
 
     # Load adblock rules.
     filtering.adblock_filter_loader.start()
@@ -333,12 +357,15 @@ def main(argv):
         lostTabsTimer.start(500)
 
     if os.path.isfile(settings.crash_file):
-        print("Crash file detected.")
+        print("Crash file detected.", end="")
         if not has_dbus:
+            print(" With no DBus, this may mean that Nimbus is already running.")
             multInstances = QMessageBox.question(None, tr("Hm."), tr("It's not good to run multiple instances of Nimbus. Is an instance of Nimbus already running?"), QMessageBox.Yes | QMessageBox.No)
             if multInstances == QMessageBox.Yes:
                 print("Nimbus will now halt")
                 return
+        else:
+            print()
         clearCache = QMessageBox.question(None, tr("Ow."), tr("Nimbus seems to have crashed during your last session. Fortunately, your tabs were saved up to 30 seconds beforehand. Would you like to restore them?"), QMessageBox.Yes | QMessageBox.No)
         if clearCache == QMessageBox.No:
             try: os.remove(settings.session_file)
@@ -383,7 +410,7 @@ def main(argv):
     filtering.load_host_rules()
 
     # Start app.
-    print("Nyahahaha!")
+    print("Kon~!")
     sys.exit(app.exec_())
 
 # Start program
