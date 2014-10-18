@@ -13,4 +13,6 @@ extensions_folder = os.path.join(app_folder, "extensions")
 
 app_icons_folder = os.path.join(app_folder, "icons")
 
+app_name_file = os.path.join(app_folder, "name.txt")
+
 app_version_file = os.path.join(app_folder, "version.txt")

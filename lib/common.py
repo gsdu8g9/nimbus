@@ -92,11 +92,22 @@ extensions_folder = paths.extensions_folder
 # Icons folder
 app_icons_folder = paths.app_icons_folder
 
+# App name info file
+app_name_file = paths.app_name_file
+
 # Version info file
 app_version_file = paths.app_version_file
 
 # Application name. Change this to change the name of the program everywhere.
 app_name = "Nimbus"
+if os.path.isfile(app_name_file):
+    try: f = open(app_name_file, "r")
+    except: pass
+    else:
+        try: app_name = f.read().replace("\n", "")
+        except: pass
+        f.close()
+
 # Application version
 app_version = "0.0.0pre"
 if os.path.isfile(app_version_file):
