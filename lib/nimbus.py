@@ -197,7 +197,8 @@ def main(argv):
     palette.setColor(QPalette.Highlight, QColor("#5382BA"))
     palette.setColor(QPalette.HighlightedText, QColor("#eeeeec"))
     app.setPalette(palette)
-    app.setApplicationName(common.app_name + "/" + common.app_version)
+    app.setApplicationName(common.app_name)
+    app.setApplicationVersion(common.app_version)
     app.installTranslator(translate.translator)
 
     # We want Nimbus to stay open when the last window is closed,
