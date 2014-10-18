@@ -145,7 +145,7 @@ class SystemTrayIcon(QSystemTrayIcon):
         self.menu.addSeparator()
 
         # About Nimbus action.
-        aboutAction = QAction(common.complete_icon("help-about"), tr("A&bout Nimbus"), self)
+        aboutAction = QAction(common.complete_icon("help-about"), tr("A&bout %s") % (common.app_name,), self)
         aboutAction.triggered.connect(self.about)
         self.menu.addAction(aboutAction)
 
@@ -188,7 +188,7 @@ class SystemTrayIcon(QSystemTrayIcon):
         except:
             parent = self.widget
             self.widget.show()
-        QMessageBox.about(parent, tr("About Nimbus"),\
+        QMessageBox.about(parent, tr("About %s") % (common.app_name,),\
                           "<h3>" + common.app_name + " " +\
                           common.app_version +\
                           "</h3>" +\

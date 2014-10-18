@@ -68,7 +68,7 @@ class ExtensionButton(QToolButton):
     def __init__(self, name=None, script="", etype="python", shortcut=None, aboutText=None, parent=None):
         super(ExtensionButton, self).__init__(parent)
         self.name = "new-extension"
-        self.aboutText = "This is a Nimbus extension."
+        self.aboutText = "This is a %s extension." % common.app_name,
         if aboutText:
             self.aboutText = aboutText
         if name:
@@ -620,7 +620,7 @@ class MainWindow(QMainWindow):
         self.mainMenu.addAction(aboutQtAction)
 
         # About Nimbus action.
-        aboutAction = QAction(common.complete_icon("help-about"), tr("A&bout Nimbus"), self)
+        aboutAction = QAction(common.complete_icon("help-about"), tr("A&bout %s") % (common.app_name,), self)
         aboutAction.triggered.connect(common.trayIcon.about)
         self.mainMenu.addAction(aboutAction)
 

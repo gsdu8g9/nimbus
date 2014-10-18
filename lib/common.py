@@ -95,8 +95,9 @@ app_icons_folder = paths.app_icons_folder
 # Version info file
 app_version_file = paths.app_version_file
 
-# Nimbus version
+# Application name. Change this to change the name of the program everywhere.
 app_name = "Nimbus"
+# Application version
 app_version = "0.0.0pre"
 if os.path.isfile(app_version_file):
     try: f = open(app_version_file, "r")

@@ -131,7 +131,7 @@ incognito_network_access_manager.setCookieJar(incognito_cookie_jar)
 
 # Clear cache.
 def clear_cache():
-    common.trayIcon.showMessage("What cache?", "Nimbus doesn't have a cache.")
+    common.trayIcon.showMessage("What cache?", "%s doesn't have a cache." % (common.app_name,))
 
 # This function checks whether the system is connected to a network interface.
 # It is used by Nimbus to determine whether the system is connected to the

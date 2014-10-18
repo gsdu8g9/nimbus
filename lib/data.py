@@ -12,6 +12,7 @@ import common
 import network
 import traceback
 import json
+import settings
 from qsettings import QSettings
 if not common.pyqt4:
     from PyQt5.QtCore import QCoreApplication, QByteArray, QUrl
@@ -27,7 +28,7 @@ else:
 # Global list to store history.
 history = {}
 
-data = QSettings("nimbus", "data", portable=common.portable)
+data = QSettings(settings.settings.dirname[1:], "data", portable=common.portable)
 
 # These store the geolocation whitelist and blacklist.
 geolocation_whitelist = []

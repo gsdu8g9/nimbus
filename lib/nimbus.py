@@ -125,16 +125,16 @@ def prepareQuit():
 if has_dbus:
     class DBusServer(dbus.service.Object):
         def __init__(self, bus=None):
-            busName = dbus.service.BusName("org.nimbus.Nimbus", bus=bus)
-            dbus.service.Object.__init__(self, busName, "/Nimbus")
+            busName = dbus.service.BusName("org.nimbus.%s" % (common.app_name,), bus=bus)
+            dbus.service.Object.__init__(self, busName, "/%s" % (common.app_name,))
 
-        @dbus.service.method("org.nimbus.Nimbus", in_signature="s",\
+        @dbus.service.method("org.nimbus.%s" % (common.app_name,), in_signature="s",\
                              out_signature="s")
         def addWindow(self, url=None):
             addWindow(url)
             return url
 
-        @dbus.service.method("org.nimbus.Nimbus", in_signature="s",\
+        @dbus.service.method("org.nimbus.%s" % (common.app_name,), in_signature="s",\
                              out_signature="s")
         def addTab(self, url="about:blank"):
             if url == "--app":
@@ -229,8 +229,8 @@ def main(argv):
             print("done.")
 
     try:
-        proxy = bus.get_object("org.nimbus.Nimbus", "/Nimbus")
-        print("Checking for running instances of Nimbus...", end=" ")
+        proxy = bus.get_object("org.nimbus.%s" % (common.app_name,), "/%s" % common.app_name,)
+        print("Checking for running instances of %s..." % (common.app_name,), end=" ")
     except:
         dbus_present = False
     else:
@@ -359,14 +359,14 @@ def main(argv):
     if os.path.isfile(settings.crash_file):
         print("Crash file detected.", end="")
         if not has_dbus:
-            print(" With no DBus, this may mean that Nimbus is already running.")
-            multInstances = QMessageBox.question(None, tr("Hm."), tr("It's not good to run multiple instances of Nimbus. Is an instance of Nimbus already running?"), QMessageBox.Yes | QMessageBox.No)
+            print(" With no DBus, %s may already be running." % common.app_name,)
+            multInstances = QMessageBox.question(None, tr("Hm."), tr("It's not good to run multiple instances of %(app_name)s. Is an instance of %(app_name)s already running?") % {"app_name", common.app_name}, QMessageBox.Yes | QMessageBox.No)
             if multInstances == QMessageBox.Yes:
-                print("Nimbus will now halt")
+                print("%s will now halt." % common.app_name,)
                 return
         else:
             print()
-        clearCache = QMessageBox.question(None, tr("Ow."), tr("Nimbus seems to have crashed during your last session. Fortunately, your tabs were saved up to 30 seconds beforehand. Would you like to restore them?"), QMessageBox.Yes | QMessageBox.No)
+        clearCache = QMessageBox.question(None, tr("Ow."), tr("%(app_name)s seems to have crashed during your last session. Fortunately, your tabs were saved up to 30 seconds beforehand. Would you like to restore them?") % {"app_name", common.app_name}, QMessageBox.Yes | QMessageBox.No)
         if clearCache == QMessageBox.No:
             try: os.remove(settings.session_file)
             except: pass
