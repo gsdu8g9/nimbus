@@ -15,7 +15,6 @@ import os
 from http.server import SimpleHTTPRequestHandler
 import http.server
 import time
-import traceback
 if not pyqt4:
     from PyQt5.QtCore import QThread
 else:
@@ -46,7 +45,6 @@ class ExtensionServerThread(QThread):
         while 1:
             try: self.httpd = ServerClass(server_address, HandlerClass)
             except:
-                traceback.print_exc()
                 print("Failed to start extension server! Retrying in %s seconds." % (counter,))
                 time.sleep(counter)
                 counter *= 2
