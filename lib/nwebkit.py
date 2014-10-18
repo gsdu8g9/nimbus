@@ -244,7 +244,7 @@ class WebPage(QWebPage):
         # Set user agent to default value.
         self.setUserAgent()
 
-    def javaScriptAlert(self, frame, msg):
+    def javaScriptAlert(self, frame, msg, title="JavaScript Alert:"):
         pause = QEventLoop()
         tb = QToolBar(parent=self.parent(), movable=False)
         toolBar = QWidget(parent=tb)
@@ -252,7 +252,7 @@ class WebPage(QWebPage):
         toolBar.setLayout(layout)
         w1 = custom_widgets.Expander(parent=toolBar)
         layout.addWidget(w1)
-        title = QLabel(parent=toolBar, text="<b>JavaScript Alert:</b>")
+        title = QLabel(parent=toolBar, text="<b>%s</b>" % title,)
         layout.addWidget(title)
         tb.label = QLabel(parent=toolBar, text=msg)
         layout.addWidget(tb.label)
@@ -270,7 +270,7 @@ class WebPage(QWebPage):
     def setJSConfirm(self, jsc):
         self.jsConfirm = jsc
 
-    def javaScriptConfirm(self, frame, msg):
+    def javaScriptConfirm(self, frame, msg, title="JavaScript Confirm:"):
         pause = QEventLoop()
         tb = QToolBar(parent=self.parent(), movable=False)
         toolBar = QWidget(parent=self.parent())
@@ -278,7 +278,7 @@ class WebPage(QWebPage):
         toolBar.setLayout(layout)
         w1 = custom_widgets.Expander(parent=toolBar)
         layout.addWidget(w1)
-        title = QLabel(parent=toolBar, text="<b>JavaScript Confirm:</b>")
+        title = QLabel(parent=toolBar, text="<b></b>" % title,)
         layout.addWidget(title)
         tb.label = QLabel(parent=toolBar, text=msg)
         layout.addWidget(tb.label)
@@ -302,7 +302,7 @@ class WebPage(QWebPage):
         return self.jsConfirm
 
     if (common.qt_version_info[0] == 5 and common.qt_version_info[1] > 2 and common.qt_version_info[2] > 0) or common.qt_version_info[0] != 5:
-        def javaScriptPrompt(self, frame, msg, defaultValue, result=None):
+        def javaScriptPrompt(self, frame, msg, defaultValue, result=None, title="JavaScript Prompt:"):
             pause = QEventLoop()
             tb = QToolBar(parent=self.parent(), movable=False)
             toolBar = QWidget(parent=self.parent())
@@ -310,7 +310,7 @@ class WebPage(QWebPage):
             toolBar.setLayout(layout)
             w1 = custom_widgets.Expander(parent=toolBar)
             layout.addWidget(w1)
-            title = QLabel(parent=toolBar, text="<b>JavaScript Prompt:</b>")
+            title = QLabel(parent=toolBar, text="<b>%s</b>" % title,)
             layout.addWidget(title)
             tb.label = QLabel(parent=toolBar, text=msg)
             layout.addWidget(tb.label)
@@ -689,6 +689,17 @@ class WebView(QWebView):
         except:
             pass
 
+    def clearJavaScriptBars(self):
+        for f in self.javaScriptBars:
+            try: f.deleteLater()
+            except: pass
+        for i in range(0, len(self.javaScriptBars), -1):
+            del self.javaScriptBars[i]
+
+    def reload(self):
+        super(WebView, self).reload()
+        self.clearJavaScriptBars()
+
     def resizeEvent(self, *args, **kwargs):
         super(WebView, self).resizeEvent(*args, **kwargs)
         self.setStyleSheet(self.baseStyleSheet % (self.size().width(), self.size().width(), self.size().height(), self.size().height()))
@@ -706,6 +717,7 @@ class WebView(QWebView):
     def init(self):
         self.urlChanged.connect(self.setUrlText)
         self.urlChanged.connect(self.setJavaScriptEnabled)
+        self.urlChanged.connect(self.clearJavaScriptBars)
         if not self.incognito:
             self.urlChanged.connect(self.addHistoryItem)
             self.urlChanged.connect(lambda: self.setChangeCanGoNext(True))
