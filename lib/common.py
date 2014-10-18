@@ -136,7 +136,7 @@ try: app_locale = str(locale.getlocale()[0])
 except: app_locale = str(QLocale.system().name())
 app_locale_h = app_locale.replace("_", "-")
 
-defaultUserAgent = "Mozilla/5.0 (Macintosh; U; Intel Mac OS X; %(locale)s) AppleWebKit/%(webkit_version_m1)s+ (KHTML, like Gecko) Version/5.0 Safari/%(webkit_version)s+ %(app_name)s/%(app_version)s" % {"app_name": app_name, "app_version": app_version, "webkit_version_m1": qWebKitVersion().split(".")[0], "webkit_version": qWebKitVersion(), "qt_version": qt_version, "locale": app_locale_h}
+defaultUserAgent = "Mozilla/5.0 (Macintosh; U; Intel Mac OS X; %(locale)s) AppleWebKit/%(webkit_version_m1)s+ (KHTML, like Gecko) Version/5.0 Safari/%(webkit_version)s+ %(app_name)s/%(app_version)s" % {"app_name": app_name, "app_version": app_version, "webkit_version_m1": qWebKitVersion().split(".")[0], "webkit_version": qWebKitVersion(), "qt_version": qt_version, "locale": app_locale_h.lower()}
 mobileUserAgent = "Mozilla/5.0 (Linux; U; Android 2.3.5; %s) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1" % (app_locale_h,)
 simpleUserAgent = "%(app_name)s/%(app_version)s (%(system)s; %(locale)s)" % {"app_name": app_name, "app_version": app_version, "system": platform.system(), "locale": app_locale_h}
 chromeUserAgent = "Mozilla/5.0 (%(system)s %(machine)s; U; %(locale)s) AppleWebKit/%(webkit_version)s (KHTML, like Gecko) Chrome/24.%(qt_version)s Safari/%(webkit_version)s" % {"system": platform.system(), "webkit_version": qWebKitVersion(), "qt_version": qt_version, "locale": app_locale_h, "machine": platform.machine()}
