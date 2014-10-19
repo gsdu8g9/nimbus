@@ -360,13 +360,13 @@ def main(argv):
         print("Crash file detected.", end="")
         if not has_dbus:
             print(" With no DBus, %s may already be running." % common.app_name,)
-            multInstances = QMessageBox.question(None, tr("Hm."), tr("It's not good to run multiple instances of %(app_name)s. Is an instance of %(app_name)s already running?") % {"app_name", common.app_name}, QMessageBox.Yes | QMessageBox.No)
+            multInstances = QMessageBox.question(None, tr("Hm."), tr("It's not good to run multiple instances of %(app_name)s. Is an instance of %(app_name)s already running?") % {"app_name": common.app_name}, QMessageBox.Yes | QMessageBox.No)
             if multInstances == QMessageBox.Yes:
                 print("%s will now halt." % common.app_name,)
                 return
         else:
             print()
-        clearCache = QMessageBox.question(None, tr("Ow."), tr("%(app_name)s seems to have crashed during your last session. Fortunately, your tabs were saved up to 30 seconds beforehand. Would you like to restore them?") % {"app_name", common.app_name}, QMessageBox.Yes | QMessageBox.No)
+        clearCache = QMessageBox.question(None, tr("Ow."), tr("%(app_name)s seems to have crashed during your last session. Fortunately, your tabs were saved up to 30 seconds beforehand. Would you like to restore them?") % {"app_name": common.app_name}, QMessageBox.Yes | QMessageBox.No)
         if clearCache == QMessageBox.No:
             try: os.remove(settings.session_file)
             except: pass
