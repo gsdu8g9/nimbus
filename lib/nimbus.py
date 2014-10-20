@@ -229,14 +229,13 @@ def main(argv):
             print("done.")
 
     try:
-        proxy = bus.get_object("org.nimbus.%s" % (common.app_name,), "/%s" % common.app_name,)
         print("Checking for running instances of %s..." % (common.app_name,), end=" ")
+        proxy = bus.get_object("org.nimbus.%s" % (common.app_name,), "/%s" % common.app_name,)
     except:
         dbus_present = False
     else:
         dbus_present = True
-    if has_dbus:
-        print("done.")
+    print("done.")
 
     # If Nimbus detects the existence of another Nimbus process, it
     # will send all the requested URLs to the existing process and
