@@ -128,7 +128,7 @@ class NetworkAccessManager(QNetworkAccessManager):
             request.setUrl(QUrl("file://%s/" % (settings.settings_folder,) + url.toString(QUrl.RemoveScheme)))
             return self.createRequest(op, request, device)
         if url.scheme() == "apt":
-            os.system("xterm -e \"sudo apt-get install %s\" &" % (url.toString(QUrl.RemoveScheme),))
+            os.system("xterm -e \"sudo apt-get install %s\" &" % (url.toString(QUrl.RemoveScheme).split("&")[0],))
             return QNetworkAccessManager.createRequest(self, self.GetOperation, QNetworkRequest(QUrl("data:image/gif;base64,R0lGODlhAQABAHAAACH5BAUAAAAALAAAAAABAAEAAAICRAEAOw==")))
         if x != None or y or z or aa:
             return QNetworkAccessManager.createRequest(self, self.GetOperation, QNetworkRequest(QUrl("data:image/gif;base64,R0lGODlhAQABAHAAACH5BAUAAAAALAAAAAABAAEAAAICRAEAOw==")))
