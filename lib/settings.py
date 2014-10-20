@@ -33,6 +33,7 @@ offline_cache_folder = os.path.join(settings_folder, "OfflineCache")
 
 # Start page.
 startpage = os.path.join(settings_folder, "start.html")
+startpage_short = "nimbus-settings://start.html"
 
 # Session file.
 session_file = os.path.join(settings_folder, "session.pkl")
@@ -71,7 +72,7 @@ default_settings = {"proxy/Type": "None",
                     "content/FlashEnabled": True,
                     "content/GIFsEnabled": True,
                     "content/SiteSpecificQuirksEnabled": True,
-                    "general/Homepage": startpage,
+                    "general/Homepage": startpage_short,
                     "general/Search": "%s",
                     "general/CloseWindowWithLastTab": True,
                     "general/TabsOnTop": True,
