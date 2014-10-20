@@ -95,7 +95,8 @@ default_settings = {"proxy/Type": "None",
 default_port = default_settings["proxy/Port"]
 
 # New tab page.
-new_tab_page = os.path.join(settings_folder, "new-tab-page.html")
+new_tab_page = os.path.join(settings_folder, "newtab.html")
+new_tab_page_short = "nimbus-settings://newtab.html"
 
 # Set up default values.
 for setting, value in default_settings.items():

@@ -676,7 +676,7 @@ class WebView(QWebView):
         self.init()
 
         if os.path.exists(settings.new_tab_page) and not forceBlankPage:
-            self.load(QUrl.fromUserInput(settings.new_tab_page))
+            self.load(QUrl.fromUserInput(settings.new_tab_page_short))
 
     def addJavaScriptBar(self, toolBar):
         self.javaScriptBars.append(toolBar)
@@ -1338,7 +1338,7 @@ class WebView(QWebView):
         content = self.page().mainFrame().toHtml()
         url = self.url().toString()
         #print(url)
-        if url in ("about:blank", "", QUrl.fromUserInput(settings.new_tab_page).toString(),):
+        if url in ("about:blank", "", QUrl.fromUserInput(settings.new_tab_page).toString(), settings.new_tab_page_short,):
             fname = settings.new_tab_page
             content = content.replace("&lt;", "<").replace("&gt;", ">").replace("<body contenteditable=\"true\">", "<body>")
         else:

@@ -766,7 +766,7 @@ class MainWindow(QMainWindow):
     def savePage(self):
         currentWidget = self.tabWidget().currentWidget()
         url = currentWidget.url().toString()
-        if url in ("", "about:blank", QUrl.fromUserInput(settings.new_tab_page).toString(),):
+        if url in ("", "about:blank", QUrl.fromUserInput(settings.new_tab_page).toString(), settings.new_tab_page_short):
             currentWidget.savePage()
         else:
             currentWidget.downloadFile(QNetworkRequest(currentWidget.url()))

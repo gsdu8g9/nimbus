@@ -118,6 +118,15 @@ class NetworkAccessManager(QNetworkAccessManager):
         if url.scheme() == "file" and os.path.isdir(os.path.abspath(url.path())):
             html = directoryView % {"title": urlString, "heading": url.path(), "links": "".join(["<a href=\"%s\">%s</a><br/>" % (QUrl.fromUserInput(os.path.join(urlString, path)).toString(), path,) for path in [".."] + sorted(os.listdir(os.path.abspath(url.path())))])}
             return NetworkReply(self, url, self.GetOperation, html)
+        if url.scheme() == "nimbus-extension":
+            request.setUrl(QUrl(request.url().toString().replace("nimbus-extension://", "http://127.0.0.1:8133/")))
+            return QNetworkAccessManager.createRequest(self, op, request, device)
+        if url.scheme() == "nimbus":
+            request.setUrl(QUrl(request.url().toString().replace("nimbus://", "file://%s/" % (common.app_folder,))))
+            return self.createRequest(op, request, device)
+        if url.scheme() == "nimbus-settings":
+            request.setUrl(QUrl(request.url().toString().replace("nimbus-settings://", "file://%s/" % (settings.settings_folder,))))
+            return self.createRequest(op, request, device)
         if x != None or y or z or aa:
             return QNetworkAccessManager.createRequest(self, self.GetOperation, QNetworkRequest(QUrl("data:image/gif;base64,R0lGODlhAQABAHAAACH5BAUAAAAALAAAAAABAAEAAAICRAEAOw==")))
         else:
