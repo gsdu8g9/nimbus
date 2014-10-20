@@ -119,16 +119,16 @@ class NetworkAccessManager(QNetworkAccessManager):
             html = directoryView % {"title": urlString, "heading": url.path(), "links": "".join(["<a href=\"%s\">%s</a><br/>" % (QUrl.fromUserInput(os.path.join(urlString, path)).toString(), path,) for path in [".."] + sorted(os.listdir(os.path.abspath(url.path())))])}
             return NetworkReply(self, url, self.GetOperation, html)
         if url.scheme() == "nimbus-extension":
-            request.setUrl(QUrl("http://127.0.0.1:8133/" + url.toString(QUrl.RemoveScheme)))
+            request.setUrl(QUrl("http://127.0.0.1:8133/" + common.chop(url.toString(QUrl.RemoveScheme), "//")))
             return QNetworkAccessManager.createRequest(self, op, request, device)
         if url.scheme() == "nimbus":
-            request.setUrl(QUrl("file://%s/" % (common.app_folder,) + url.toString(QUrl.RemoveScheme)))
+            request.setUrl(QUrl("file://%s/" % (common.app_folder,) + common.chop(url.toString(QUrl.RemoveScheme), "//")))
             return self.createRequest(op, request, device)
         if url.scheme() == "nimbus-settings":
-            request.setUrl(QUrl("file://%s/" % (settings.settings_folder,) + url.toString(QUrl.RemoveScheme)))
+            request.setUrl(QUrl("file://%s/" % (settings.settings_folder,) + common.chop(url.toString(QUrl.RemoveScheme), "//")))
             return self.createRequest(op, request, device)
         if url.scheme() == "apt":
-            os.system("xterm -e \"sudo apt-get install %s\" &" % (url.toString(QUrl.RemoveScheme).split("&")[0],))
+            os.system("xterm -e \"sudo apt-get install %s\" &" % (common.chop(url.toString(QUrl.RemoveScheme), "//").split("&")[0],))
             return QNetworkAccessManager.createRequest(self, self.GetOperation, QNetworkRequest(QUrl("data:image/gif;base64,R0lGODlhAQABAHAAACH5BAUAAAAALAAAAAABAAEAAAICRAEAOw==")))
         if x != None or y or z or aa:
             return QNetworkAccessManager.createRequest(self, self.GetOperation, QNetworkRequest(QUrl("data:image/gif;base64,R0lGODlhAQABAHAAACH5BAUAAAAALAAAAAABAAEAAAICRAEAOw==")))
