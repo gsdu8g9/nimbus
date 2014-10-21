@@ -116,7 +116,10 @@ class NetworkAccessManager(QNetworkAccessManager):
         if urlString in tuple(replacement_table.keys()):
             return QNetworkAccessManager.createRequest(self, op, QNetworkRequest(QUrl(replacement_table[urlString])), device)
         if url.scheme() == "file" and os.path.isdir(os.path.abspath(url.path())):
-            html = directoryView % {"title": urlString, "heading": url.path(), "links": "".join(["<a href=\"%s\">%s</a><br/>" % (QUrl.fromUserInput(os.path.join(urlString, path)).toString(), path,) for path in [".."] + sorted(os.listdir(os.path.abspath(url.path())))])}
+            try:
+                html = directoryView % {"title": urlString, "heading": url.path(), "links": "".join(["<a href=\"%s\">%s</a><br/>" % (QUrl.fromUserInput(os.path.join(urlString, path)).toString(), path,) for path in [".."] + sorted(os.listdir(os.path.abspath(url.path())))])}
+            except PermissionError:
+                html = directoryView % {"title": urlString, "heading": url.path(), "links": "Permission denied."}
             return NetworkReply(self, url, self.GetOperation, html)
         if url.scheme() == "nimbus-extension":
             request.setUrl(QUrl("http://127.0.0.1:8133/" + common.chop(url.toString(QUrl.RemoveScheme), "//")))
