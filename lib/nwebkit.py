@@ -1233,7 +1233,7 @@ class WebView(QWebView):
         # enabled, and private browsing isn't enabled.
         content_type = reply.header(QNetworkRequest.ContentTypeHeader)
         if "pdf" in content_type:
-            self.load(QUrl("qrc:///pdf.js/viewer.html?file=%s#disableWorker=true" % url))
+            self.load(QUrl("qrc:///pdf.js/viewer.html?file=%s#disableWorker=true" % url,))
             reply.deleteLater()
             return
         if not url2.scheme() == "file" and settings.setting_to_bool("content/UseOnlineContentViewers") and not self.incognito and not self.isUsingContentViewer():
