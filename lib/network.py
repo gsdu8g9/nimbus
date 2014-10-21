@@ -119,7 +119,7 @@ class NetworkAccessManager(QNetworkAccessManager):
             try:
                 html = directoryView % {"title": urlString, "heading": url.path(), "links": "".join(["<a href=\"%s\">%s</a><br/>" % (QUrl.fromUserInput(os.path.join(urlString, path)).toString(), path,) for path in [".."] + sorted(os.listdir(os.path.abspath(url.path())))])}
             except:
-                html = directoryView % {"title": urlString, "heading": url.path(), "links": "The contents of this directory could not be loaded."}
+                html = directoryView % {"title": urlString, "heading": url.path(), "links": tr("The contents of this directory could not be loaded.")}
             return NetworkReply(self, url, self.GetOperation, html)
         if url.scheme() == "nimbus-extension":
             request.setUrl(QUrl("http://127.0.0.1:8133/" + common.chop(url.toString(QUrl.RemoveScheme), "//")))
