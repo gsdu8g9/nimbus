@@ -1242,6 +1242,7 @@ class WebView(QWebView):
                     for extension in viewer[1]:
                         if url.lower().endswith(extension):
                             QWebView.load(self, QUrl(viewer[0] % (url,)))
+                            reply.deleteLater()
                             return
                 except:
                     pass
