@@ -18,6 +18,12 @@ LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
 OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 PERFORMANCE OF THIS SOFTWARE.
 
+PDF.js
+----------
+PDF.js is released under the terms of the Apache 2.0 License.
+
+See https://github.com/mozilla/pdf.js/blob/master/LICENSE for more details.
+
 lib/extensions/highlight.pack.js, lib/extensions/highlight-style.css
 ----------
 Copyright (c) 2006, Ivan Sagalaev

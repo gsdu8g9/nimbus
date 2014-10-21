@@ -25,6 +25,7 @@ except ImportError:
 sys.path.append(paths.app_folder)
 
 import settings
+import pdf_js
 import common
 from session import *
 import settings_dialog
@@ -56,7 +57,7 @@ if not common.pyqt4:
     from PyQt5.QtCore import Qt, QCoreApplication, QUrl, QTimer
     from PyQt5.QtGui import QPalette, QColor
     from PyQt5.QtWidgets import QApplication, QAction, QDesktopWidget, QMessageBox
-    from PyQt5.QtWebKit import QWebSettings
+    from PyQt5.QtWebKit import QWebSettings, QWebSecurityOrigin
     from PyQt5.QtWebKitWidgets import QWebPage
 
     # Python DBus
@@ -73,7 +74,7 @@ else:
     try:
         from PyQt4.QtCore import Qt, QCoreApplication, QUrl, QTimer
         from PyQt4.QtGui import QApplication, QAction, QDesktopWidget, QMessageBox, QPalette, QColor
-        from PyQt4.QtWebKit import QWebPage, QWebSettings
+        from PyQt4.QtWebKit import QWebPage, QWebSettings, QWebSecurityOrigin
 
         # Python DBus
         has_dbus = False
@@ -88,7 +89,7 @@ else:
     except ImportError:
         from PySide.QtCore import Qt, QCoreApplication, QUrl, QTimer
         from PySide.QtGui import QApplication, QAction, QDesktopWidget, QMessageBox, QPalette, QColor
-        from PySide.QtWebKit import QWebPage, QWebSettings
+        from PySide.QtWebKit import QWebPage, QWebSettings, QWebSecurityOrigin
 
 
 # chdir to the app folder. This way, we won't have issues related to
@@ -275,6 +276,8 @@ def main(argv):
     # Create instance of clear history dialog.
     common.chistorydialog = clear_history_dialog.ClearHistoryDialog()
 
+    QWebSettings.globalSettings().setAttribute(QWebSettings.globalSettings().LocalContentCanAccessRemoteUrls, True)
+    QWebSettings.globalSettings().setAttribute(QWebSettings.globalSettings().LocalContentCanAccessFileUrls, True)
     QWebSettings.globalSettings().setAttribute(QWebSettings.globalSettings().DeveloperExtrasEnabled, True)
 
     uc = QUrl.fromUserInput(settings.user_css)

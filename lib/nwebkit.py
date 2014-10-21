@@ -1231,6 +1231,11 @@ class WebView(QWebView):
 
         # Make sure the file isn't local, that content viewers are
         # enabled, and private browsing isn't enabled.
+        content_type = reply.header(QNetworkRequest.ContentTypeHeader)
+        if "pdf" in content_type:
+            self.load(QUrl("qrc:///pdf.js/viewer.html?file=%s#disableWorker=true" % url))
+            reply.deleteLater()
+            return
         if not url2.scheme() == "file" and settings.setting_to_bool("content/UseOnlineContentViewers") and not self.incognito and not self.isUsingContentViewer():
             for viewer in common.content_viewers:
                 try:
@@ -1241,7 +1246,7 @@ class WebView(QWebView):
                 except:
                     pass
 
-        self.downloadFile(reply.request(), reply.header(QNetworkRequest.ContentTypeHeader))
+        self.downloadFile(reply.request(), content_type)
         reply.deleteLater()
 
     # Downloads a file.
