@@ -1,5 +1,5 @@
-<RCC>
-  <qresource>
+<!DOCTYPE RCC><RCC version="1.0">
+<qresource>
     <file>ViewerJS/PluginLoader.js</file>
     <file>ViewerJS/compatibility.js</file>
     <file>ViewerJS/ODFViewerPlugin.css</file>
@@ -30,5 +30,5 @@
     <file>ViewerJS/images/toolbarButton-presentation.png</file>
     <file>ViewerJS/images/toolbarButton-fullscreen.png</file>
     <file>ViewerJS/images/nlnet.png</file>
-  </qresource>
+</qresource>
 </RCC>

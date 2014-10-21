@@ -1,5 +1,5 @@
-<RCC>
-  <qresource>
+<!DOCTYPE RCC><RCC version="1.0">
+<qresource>
     <file>pdf.js/viewer.html</file>
     <file>pdf.js/compatibility.js</file>
     <file>pdf.js/debugger.js</file>
@@ -190,5 +190,5 @@
     <file>pdf.js/locale/pt-BR/viewer.properties</file>
     <file>pdf.js/locale/sk/viewer.properties</file>
     <file>pdf.js/locale/en-GB/viewer.properties</file>
-  </qresource>
+</qresource>
 </RCC>
