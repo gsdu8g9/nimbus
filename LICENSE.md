@@ -20,7 +20,13 @@ PERFORMANCE OF THIS SOFTWARE.
 
 PDF.js
 ----------
-PDF.js is released under the terms of the Apache 2.0 License.
+PDF.js is released under the terms of the AGPL 3.0 License.
+
+See lib/ViewerJS/AGPL-3.0.txt for more details.
+
+ViewerJS
+----------
+ViewerJS is released under the terms of the Apache 2.0 License.
 
 See https://github.com/mozilla/pdf.js/blob/master/LICENSE for more details.
 

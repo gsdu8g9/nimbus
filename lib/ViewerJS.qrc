@@ -1,0 +1,34 @@
+<RCC>
+  <qresource>
+    <file>ViewerJS/PluginLoader.js</file>
+    <file>ViewerJS/compatibility.js</file>
+    <file>ViewerJS/ODFViewerPlugin.css</file>
+    <file>ViewerJS/pdf.js</file>
+    <file>ViewerJS/ODFViewerPlugin.js</file>
+    <file>ViewerJS/text_layer_builder.js</file>
+    <file>ViewerJS/webodf.js</file>
+    <file>ViewerJS/pdf.worker.js</file>
+    <file>ViewerJS/AGPL-3.0.txt</file>
+    <file>ViewerJS/pdfjsversion.js</file>
+    <file>ViewerJS/index.html</file>
+    <file>ViewerJS/pdf_find_bar.js</file>
+    <file>ViewerJS/pdf_find_controller.js</file>
+    <file>ViewerJS/PDFViewerPlugin.css</file>
+    <file>ViewerJS/viewer.js</file>
+    <file>ViewerJS/ui_utils.js</file>
+    <file>ViewerJS/example.local.css</file>
+    <file>ViewerJS/PDFViewerPlugin.js</file>
+    <file>ViewerJS/viewer.css</file>
+    <file>ViewerJS/images/toolbarButton-menuArrows.png</file>
+    <file>ViewerJS/images/texture.png</file>
+    <file>ViewerJS/images/kogmbh.png</file>
+    <file>ViewerJS/images/toolbarButton-pageDown.png</file>
+    <file>ViewerJS/images/toolbarButton-download.png</file>
+    <file>ViewerJS/images/toolbarButton-pageUp.png</file>
+    <file>ViewerJS/images/toolbarButton-zoomIn.png</file>
+    <file>ViewerJS/images/toolbarButton-zoomOut.png</file>
+    <file>ViewerJS/images/toolbarButton-presentation.png</file>
+    <file>ViewerJS/images/toolbarButton-fullscreen.png</file>
+    <file>ViewerJS/images/nlnet.png</file>
+  </qresource>
+</RCC>
