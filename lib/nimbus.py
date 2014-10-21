@@ -25,7 +25,6 @@ except ImportError:
 sys.path.append(paths.app_folder)
 
 import settings
-import pdf_js
 import common
 from session import *
 import settings_dialog
@@ -45,13 +44,6 @@ from nwebkit import *
 from mainwindow import *
 from tray_icon import *
 
-# This was made for an attempt to compile Nimbus to CPython,
-# but it is now useless.
-try: exec
-except:
-    def exec(code):
-        pass
-
 # Extremely specific imports from PyQt/PySide.
 if not common.pyqt4:
     from PyQt5.QtCore import Qt, QCoreApplication, QUrl, QTimer
@@ -59,6 +51,8 @@ if not common.pyqt4:
     from PyQt5.QtWidgets import QApplication, QAction, QDesktopWidget, QMessageBox
     from PyQt5.QtWebKit import QWebSettings, QWebSecurityOrigin
     from PyQt5.QtWebKitWidgets import QWebPage
+    import pdf_js
+    import viewerjs
 
     # Python DBus
     has_dbus = False
@@ -75,6 +69,8 @@ else:
         from PyQt4.QtCore import Qt, QCoreApplication, QUrl, QTimer
         from PyQt4.QtGui import QApplication, QAction, QDesktopWidget, QMessageBox, QPalette, QColor
         from PyQt4.QtWebKit import QWebPage, QWebSettings, QWebSecurityOrigin
+        import pdf_js_qt4
+        import viewerjs_qt4
 
         # Python DBus
         has_dbus = False
