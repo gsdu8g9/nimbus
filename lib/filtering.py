@@ -50,8 +50,9 @@ def download_rules():
         if not os.path.isdir(folder):
             os.makedirs(folder)
         for i in range(len(urls)):
-            print("Updating %s..." % (urls[i].split("/")[-1],))
-            urllib.request.urlretrieve(urls[i], os.path.join(folder, str(i) + ".txt"))
+            fname = str(i) + ".txt"
+            print("Updating %s (using %s)..." % (fname, urls[i]))
+            urllib.request.urlretrieve(urls[i], os.path.join(folder, fname))
             print("Done.")
         print("Filters for %s updated." % folder.split("/")[-1],)
 
