@@ -166,7 +166,7 @@ class MainWindow(QMainWindow):
         self.tabs = custom_widgets.TabWidget(self,
                                              styleSheet="""QTabWidget::pane{border:0;}
                                                            QTabBar{background:qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #d3d7cf, stop: 1 #eeeeec);border: 1px solid #888a85;}
-                                                           QTabBar::tab{min-width:224px;max-width:224px;padding:2px;margin:0;background:qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #d3d7cf, stop: 1 #eeeeec);border:0;border-top: 1px solid #888a85;border-bottom: 1px solid #888a85;color:#2e3436;}
+                                                           QTabBar::tab{padding:2px;margin:0;background:qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #d3d7cf, stop: 1 #eeeeec);border:0;border-top: 1px solid #888a85;border-bottom: 1px solid #888a85;color:#2e3436;}
                                                            QTabBar::tab:selected{background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #729FCF, stop: 1 #3465A4);color:#EEEEEC;}
                                                            QTabBar::tab:last,QTabBar::tab:only-one{border-right: 1px solid #888a85;}""")
         self.tabs.setCornerWidget(self.tabsToolBar, Qt.TopRightCorner)
@@ -1567,9 +1567,8 @@ self.origY + ev.globalY() - self.mouseY)
     # Closes the tabs on the left.
     def closeLeftTabs(self):
         t = self.tabs.currentIndex()
-        self.tabs.setCurrentIndex(0)
-        for i in range(t):
-            self.removeTab(0)
+        for i in range(t-settings.setting_to_int("general/PinnedTabCount")):
+            self.removeTab(settings.setting_to_int("general/PinnedTabCount"))
 
     # Closes the tabs on the right.
     def closeRightTabs(self):
