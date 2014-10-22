@@ -235,10 +235,12 @@ class MainWindow(QMainWindow):
 
         # These are hidden actions used for the Ctrl[+Shift]+Tab feature
         # you see in most browsers.
-        nextTabAction = QAction(self, triggered=self.nextTab, shortcut="Ctrl+Tab")
+        nextTabAction = QAction(self, triggered=self.nextTab)
+        nextTabAction.setShortcuts(["Ctrl+Tab", "Ctrl+PgDown"])
         self.addAction(nextTabAction)
 
-        previousTabAction = QAction(self, triggered=self.previousTab, shortcut="Ctrl+Shift+Tab")
+        previousTabAction = QAction(self, triggered=self.previousTab)
+        previousTabAction.setShortcuts(["Ctrl+Shift+Tab", "Ctrl+PgUp"])
         self.addAction(previousTabAction)
 
         # This is the Ctrl+W (Close Tab) shortcut.
