@@ -1,0 +1,131 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Nimbus by foxhead128</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Nimbus</h1>
+        <p>The browser designed for me, not you</p>
+
+        <p class="view"><a href="https://github.com/foxhead128/nimbus">View the Project on GitHub <small>foxhead128/nimbus</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/foxhead128/nimbus/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/foxhead128/nimbus/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/foxhead128/nimbus">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <p>Nimbus is a somewhat hacky Web browser coded in Python 3, using either Qt 5
+via PyQt5, or Qt 4 via either PyQt4 or PySide. It is tailored specifically
+for my use case, but I have open-sourced it due to 1) personal ideology, and
+2) personal convenience. Maybe someone will find it useful for something. Be
+warned that there are no claims of stability, security, or usability in
+Nimbus, since it is being made for no one but myself.</p>
+
+<p>Nimbus more or less covers the following use case:</p>
+
+<ul>
+<li>X11 user.</li>
+<li>Heavy use of keyboard shortcuts.</li>
+<li>Long periods of time spent in fullscreen mode.</li>
+<li>Limited use of bookmarks and history.</li>
+<li>Lots of forum browsing.</li>
+<li>General dislike of ads.</li>
+<li>Some basic desire to add features to the browser.</li>
+<li>Use of GitHub as an image hosting service.</li>
+</ul>
+
+<p><a href="https://github.com/foxhead128/nimbus/wiki">The wiki</a> contains information
+on security advisories, extensions, and some questions and statements you
+may have.</p>
+
+<h1>
+<a name="dependencies" class="anchor" href="#dependencies"><span class="octicon octicon-link"></span></a>Dependencies</h1>
+
+<p>Nimbus depends on Python &gt;=3.2 and either PyQt5, PyQt4, or PySide, with
+python3-dbus and feedparser as optional dependencies. It is possible that it
+will work in versions of Python 3 below 3.2 as well, but this has not been
+tested before.</p>
+
+<p>Nimbus does not work in Python 2.x and I have no plans to support it.</p>
+
+<p>You can install all of Nimbus's dependencies on Debian-based platforms
+using the following command:</p>
+
+<pre><code>sudo apt-get install python3 python3-pyqt5 python3-pyqt5.qtwebkit python3-dbus python3-dbus.mainloop.pyqt5 python3-feedparser
+</code></pre>
+
+<h1>
+<a name="running-nimbus-on-linux" class="anchor" href="#running-nimbus-on-linux"><span class="octicon octicon-link"></span></a>Running Nimbus on Linux</h1>
+
+<p>Simply run the following:</p>
+
+<pre><code>./nimbus
+</code></pre>
+
+<p>Alternatively, you can try the following:</p>
+
+<pre><code>./lib/nimbus.py
+</code></pre>
+
+<p><img src="https://raw.githubusercontent.com/foxhead128/fh-images/master/nimbus-themed.png" alt="Nimbus running on Debian"><br>
+<em>Nimbus running on Debian</em></p>
+
+<h1>
+<a name="installing-nimbus-on-linux" class="anchor" href="#installing-nimbus-on-linux"><span class="octicon octicon-link"></span></a>Installing Nimbus on Linux</h1>
+
+<p><strong>Note:</strong> You don't have to install Nimbus in order to run it; see previous
+section.</p>
+
+<p>If you want to install Nimbus system-wide, you will need setuptools. On
+Debian-based platforms, you can install it with the following command:</p>
+
+<pre><code>sudo apt-get install python3-setuptools
+</code></pre>
+
+<p>Once that's done, run the following:</p>
+
+<pre><code>sudo python3 ./setup.py install
+</code></pre>
+
+<h1>
+<a name="uninstalling-nimbus-on-linux" class="anchor" href="#uninstalling-nimbus-on-linux"><span class="octicon octicon-link"></span></a>Uninstalling Nimbus on Linux</h1>
+
+<p>Simply run the following:</p>
+
+<pre><code>./uninstall.sh
+</code></pre>
+
+<h1>
+<a name="running-nimbus-on-other-platforms" class="anchor" href="#running-nimbus-on-other-platforms"><span class="octicon octicon-link"></span></a>Running Nimbus on other platforms</h1>
+
+<p><a href="https://github.com/foxhead128/nimbus/wiki">The wiki</a> contains instructions on
+getting Nimbus to run on Windows and OS X.</p>
+
+<h1>
+<a name="licensing-information" class="anchor" href="#licensing-information"><span class="octicon octicon-link"></span></a>Licensing information</h1>
+
+<p>See LICENSE.md for more details.</p>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/foxhead128">foxhead128</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>
