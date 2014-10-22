@@ -222,12 +222,15 @@ class MainWindow(QMainWindow):
         self.newTabButton.setIcon(common.complete_icon("list-add"))
 
         tabsMenuAction = QAction(self)
+        tabsMenuAction.setShortcut("Alt+T")
         self.tabsToolBar.addAction(tabsMenuAction)
-        self.tabsToolBar.widgetForAction(tabsMenuAction).setPopupMode(QToolButton.InstantPopup)
-        self.tabsToolBar.widgetForAction(tabsMenuAction).setStyleSheet("QToolButton { max-width: 1em; }")
+        tabsMenuButton = self.tabsToolBar.widgetForAction(tabsMenuAction)
+        tabsMenuButton.setPopupMode(QToolButton.InstantPopup)
+        tabsMenuButton.setStyleSheet("QToolButton { max-width: 1em; }")
 
         self.tabsMenu = QMenu(self)
         self.tabsMenu.aboutToShow.connect(self.aboutToShowTabsMenu)
+        tabsMenuAction.triggered.connect(tabsMenuButton.showMenu)
         tabsMenuAction.setMenu(self.tabsMenu)
 
         # These are hidden actions used for the Ctrl[+Shift]+Tab feature
@@ -1391,6 +1394,11 @@ self.origY + ev.globalY() - self.mouseY)
 
     def aboutToShowTabsMenu(self):
         self.tabsMenu.clear()
+        closeLeftTabsAction = QAction(self.tabsMenu, text=tr("Close tabs on the &left"), triggered=self.closeLeftTabs)
+        self.tabsMenu.addAction(closeLeftTabsAction)
+        closeRightTabsAction = QAction(self.tabsMenu, text=tr("Close tabs on the &right"), triggered=self.closeRightTabs)
+        self.tabsMenu.addAction(closeRightTabsAction)
+        self.tabsMenu.addSeparator()
         for tab in range(self.tabWidget().count()):
             tabAction = custom_widgets.IndexAction(tab, self.tabWidget().widget(tab).shortWindowTitle(), self.tabsMenu)
             if tab == self.tabWidget().currentIndex():
@@ -1555,7 +1563,19 @@ self.origY + ev.globalY() - self.mouseY)
         if self.tabWidget().count() == 0 and\
         not settings.setting_to_bool("general/CloseWindowWithLastTab"):
             self.addTab(url="about:blank")
+    
+    # Closes the tabs on the left.
+    def closeLeftTabs(self):
+        t = self.tabs.currentIndex()
+        self.tabs.setCurrentIndex(0)
+        for i in range(t):
+            self.removeTab(0)
 
+    # Closes the tabs on the right.
+    def closeRightTabs(self):
+        while self.tabs.currentIndex() != self.tabs.count() - 1:
+            self.removeTab(self.tabs.count() - 1)
+    
     # Reopens the last closed tab.
     def reopenTab(self):
         if len(self.closedTabs) > 0:
