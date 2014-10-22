@@ -46,10 +46,33 @@ hosts_urls = ["http://www.malwaredomainlist.com/hostslist/hosts.txt",
 # Update everything.
 def download_rules():
     for folder, urls in ((adblock_folder, adblock_urls), (hosts_folder, hosts_urls)):
+        print("Updating filters for %s..." % folder.split("/")[-1],)
         if not os.path.isdir(folder):
             os.makedirs(folder)
         for i in range(len(urls)):
+            print("Updating %s..." % (urls[i].split("/")[-1],))
             urllib.request.urlretrieve(urls[i], os.path.join(folder, str(i) + ".txt"))
+            print("Done.")
+        print("Filters for %s updated." % folder.split("/")[-1],)
+
+# Update thread.
+class FilterUpdater(QThread):
+    def __init__(self, *args, **kwargs):
+        super(FilterUpdater, self).__init__(*args, **kwargs)
+    def run(self):
+        print("Updating content filters...")
+        download_rules()
+        load_host_rules()
+        print("All filters are up to date.")
+
+filter_updater = FilterUpdater()
+
+# Convenience function.
+def update_filters():
+    if not filter_updater.isRunning():
+        filter_updater.start()
+    else:
+        print("Already updating filters.")
 
 # Load adblock rules.
 def load_adblock_rules():

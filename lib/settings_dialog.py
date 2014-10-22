@@ -297,8 +297,7 @@ class ContentSettingsPanel(SettingsPanel):
         self.layout().addWidget(custom_widgets.Expander(self))
 
     def updateFilters(self):
-        filtering.download_rules()
-        filtering.load_host_rules()
+        filtering.update_filters()
 
     def loadSettings(self):
         self.jsExceptionsPanel.loadSettings()
