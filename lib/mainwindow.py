@@ -1574,7 +1574,7 @@ self.origY + ev.globalY() - self.mouseY)
 
     # Closes the tabs on the right.
     def closeRightTabs(self):
-        while self.tabs.currentIndex() != self.tabs.count() - 1:
+        while self.tabs.currentIndex() != self.tabs.count() - 1 and self.tabs.count() > settings.setting_to_int("general/PinnedTabCount"):
             self.removeTab(self.tabs.count() - 1)
     
     # Reopens the last closed tab.
