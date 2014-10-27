@@ -1522,8 +1522,10 @@ self.origY + ev.globalY() - self.mouseY)
     def updateTabTitles(self):
         count = self.tabWidget().count()
         for index in range(0, count):
-            title = (("[%s] " % (str(index+1),) if index < 8 else ("[9] " if index == count-1 else "")) if settings.setting_to_bool("general/TabHotkeysVisible") else "") + self.tabWidget().widget(index).shortWindowTitle()
-            longtitle = self.tabWidget().widget(index).windowTitle()
+            webView = self.tabWidget().widget(index)
+            ti = (("[%s] " % (str(index+1),) if index < 8 else ("[9] " if index == count-1 else "")) if settings.setting_to_bool("general/TabHotkeysVisible") else "") + webView.shortWindowTitle()
+            title = (ti if not webView.shortTempTitle() else webView.shortTempTitle())
+            longtitle = webView.windowTitle()
             self.tabWidget().setTabText(index, "\u26bf" if index < settings.setting_to_int("general/PinnedTabCount") else title)
             if index == self.tabWidget().currentIndex():
                 self.setWindowTitle(longtitle + " - " + common.app_name)

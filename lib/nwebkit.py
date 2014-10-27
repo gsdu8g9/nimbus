@@ -734,6 +734,9 @@ class WebView(QWebView):
         self.loadStarted.connect(self.checkIfUsingContentViewer)
         #self.loadFinished.connect(self.finishLoad)
 
+    def killTempTitle(self):
+        self._tempTitle = None
+
     def setJavaScriptEnabled(self):
         if not self.url().authority() in settings.js_exceptions and not self.url().authority().replace("www.", "") in settings.js_exceptions:
             self.settings().setAttribute(self.settings().JavascriptEnabled, settings.setting_to_bool("content/JavascriptEnabled"))
@@ -812,6 +815,12 @@ class WebView(QWebView):
         title = self.windowTitle()
         return title[:24] + '...' if len(title) > 24 else title
 
+    def shortTempTitle(self):
+        if not self._tempTitle:
+            return None
+        title = self._tempTitle
+        return title[:24] + '...' if len(title) > 24 else title
+
     def viewSource(self):
         sview = self.createWindow(QWebPage.WebBrowserWindow)
         sview.setHtml("""<!DOCTYPE html>
@@ -873,7 +882,12 @@ class WebView(QWebView):
         if self._historyToBeLoaded:
             self.page().loadHistory(self._historyToBeLoaded)
             self._historyToBeLoaded = None
+            self._tempTitle = None
         QWebView.paintEvent(self, ev)
+        self.paintEvent = self.shortPaintEvent
+
+    def shortPaintEvent(self, *args, **kwargs):
+        QWebView.paintEvent(self, *args, **kwargs)
 
     def loadHistory(self, history, title=None):
         self._historyToBeLoaded = history
