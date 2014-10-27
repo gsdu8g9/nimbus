@@ -89,7 +89,7 @@ directoryView = """<!DOCTYPE html>
 </html>
 """
 
-replacement_table = {"http://personalitycafe.com/images/styles/PersonalityCafe/misc/Other.gif": "http://personalitycafe.com/images/styles/PersonalityCafe/misc/Neutral.gif"}
+replacement_table = {}
 
 # Custom NetworkAccessManager class with support for ad-blocking.
 class NetworkAccessManager(QNetworkAccessManager):
@@ -113,6 +113,8 @@ class NetworkAccessManager(QNetworkAccessManager):
         y = url.authority() in filtering.host_rules if settings.setting_to_bool("content/HostFilterEnabled") and url.authority() != "" else False
         z = (lurlString.endswith(".swf") or "flash" in ctype) and not settings.setting_to_bool("content/FlashEnabled")
         aa = (lurlString.endswith(".gif") or "image/gif" in ctype) and not settings.setting_to_bool("content/GIFsEnabled")
+        if x != None or y or z or aa:
+            return QNetworkAccessManager.createRequest(self, self.GetOperation, QNetworkRequest(QUrl("data:image/gif;base64,R0lGODlhAQABAHAAACH5BAUAAAAALAAAAAABAAEAAAICRAEAOw==")))
         if urlString in tuple(replacement_table.keys()):
             return QNetworkAccessManager.createRequest(self, op, QNetworkRequest(QUrl(replacement_table[urlString])), device)
         if url.scheme() == "file" and os.path.isdir(os.path.abspath(url.path())):
@@ -133,8 +135,9 @@ class NetworkAccessManager(QNetworkAccessManager):
         if url.scheme() == "apt":
             os.system("xterm -e \"sudo apt-get install %s\" &" % (common.chop(url.toString(QUrl.RemoveScheme), "//").split("&")[0],))
             return QNetworkAccessManager.createRequest(self, self.GetOperation, QNetworkRequest(QUrl("")))
-        if x != None or y or z or aa:
-            return QNetworkAccessManager.createRequest(self, self.GetOperation, QNetworkRequest(QUrl("data:image/gif;base64,R0lGODlhAQABAHAAACH5BAUAAAAALAAAAAABAAEAAAICRAEAOw==")))
+        if url.scheme() == "mailto":
+            os.system("xdg-open %s &" % (urlString,))
+            return QNetworkAccessManager.createRequest(self, self.GetOperation, QNetworkRequest(QUrl("")))
         else:
             return QNetworkAccessManager.createRequest(self, op, request, device)
 
