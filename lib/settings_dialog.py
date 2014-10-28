@@ -24,12 +24,8 @@ if not common.pyqt4:
     from PyQt5.QtGui import QKeySequence, QIcon
     from PyQt5.QtWidgets import QWidget, QLabel, QMainWindow, QCheckBox, QGroupBox, QTabWidget, QToolBar, QToolButton, QLineEdit, QVBoxLayout, QComboBox, QSizePolicy, QAction, QPushButton, QListWidget, QTextEdit
 else:
-    try:
-        from PyQt4.QtCore import Qt, QUrl
-        from PyQt4.QtGui import QWidget, QKeySequence, QIcon, QLabel, QMainWindow, QCheckBox, QGroupBox, QTabWidget, QToolBar, QToolButton, QLineEdit, QVBoxLayout, QComboBox, QSizePolicy, QAction, QPushButton, QListWidget, QTextEdit
-    except ImportError:
-        from PySide.QtCore import Qt, QUrl
-        from PySide.QtGui import QWidget, QKeySequence, QIcon, QLabel, QMainWindow, QCheckBox, QGroupBox, QTabWidget, QToolBar, QToolButton, QLineEdit, QVBoxLayout, QComboBox, QSizePolicy, QAction, QPushButton, QListWidget, QTextEdit
+    from PyQt4.QtCore import Qt, QUrl
+    from PyQt4.QtGui import QWidget, QKeySequence, QIcon, QLabel, QMainWindow, QCheckBox, QGroupBox, QTabWidget, QToolBar, QToolButton, QLineEdit, QVBoxLayout, QComboBox, QSizePolicy, QAction, QPushButton, QListWidget, QTextEdit
 
 # Basic settings panel.
 class SettingsPanel(QWidget):

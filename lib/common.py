@@ -25,24 +25,14 @@ if not settings.pyqt4:
         from PyQt5.QtWidgets import QApplication
         from PyQt5.QtWebKit import qWebKitVersion
     except ImportError:
-        try:
-            from PyQt4.QtCore import qVersion, QLocale, QUrl, QEvent, QCoreApplication
-            from PyQt4.QtGui import QIcon, QApplication
-            from PyQt4.QtWebKit import qWebKitVersion
-        except ImportError:
-            from PySide.QtCore import qVersion, QLocale, QUrl, QEvent, QCoreApplication
-            from PySide.QtGui import QIcon, QApplication
-            from PySide.QtWebKit import qWebKitVersion
-        pyqt4 = True
-else:
-    try:
         from PyQt4.QtCore import qVersion, QLocale, QUrl, QEvent, QCoreApplication
         from PyQt4.QtGui import QIcon, QApplication
         from PyQt4.QtWebKit import qWebKitVersion
-    except:
-        from PySide.QtCore import qVersion, QLocale, QUrl, QEvent, QCoreApplication
-        from PySide.QtGui import QIcon, QApplication
-        from PySide.QtWebKit import qWebKitVersion
+        pyqt4 = True
+else:
+    from PyQt4.QtCore import qVersion, QLocale, QUrl, QEvent, QCoreApplication
+    from PyQt4.QtGui import QIcon, QApplication
+    from PyQt4.QtWebKit import qWebKitVersion
     pyqt4 = True
 
 def rm(fname):

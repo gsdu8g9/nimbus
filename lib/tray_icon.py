@@ -26,13 +26,9 @@ if not common.pyqt4:
     from PyQt5.QtGui import QCursor
     from PyQt5.QtWidgets import QWidget, QApplication, QMenu, QAction, QSystemTrayIcon, QDesktopWidget, QMessageBox, QToolButton, QToolBar, QLabel
 else:
-    try:
-        from PyQt4.QtCore import pyqtSignal, Qt, QTimer, QSize
-        Signal = pyqtSignal
-        from PyQt4.QtGui import QWidget, QCursor, QApplication, QMenu, QAction, QSystemTrayIcon, QDesktopWidget, QMessageBox, QToolButton, QToolBar, QLabel
-    except ImportError:
-        from PySide.QtCore import Signal, Qt, QTimer, QSize
-        from PySide.QtGui import QWidget, QCursor, QApplication, QMenu, QAction, QSystemTrayIcon, QDesktopWidget, QMessageBox, QToolButton, QToolBar, QLabel
+    from PyQt4.QtCore import pyqtSignal, Qt, QTimer, QSize
+    Signal = pyqtSignal
+    from PyQt4.QtGui import QWidget, QCursor, QApplication, QMenu, QAction, QSystemTrayIcon, QDesktopWidget, QMessageBox, QToolButton, QToolBar, QLabel
 
 class BackgroundToolBar(QToolBar):
     def __init__(self, *args, **kwargs):

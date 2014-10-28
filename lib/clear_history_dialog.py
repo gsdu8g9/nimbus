@@ -20,12 +20,8 @@ if not common.pyqt4:
     from PyQt5.QtCore import Qt
     from PyQt5.QtWidgets import QWidget, QVBoxLayout, QLabel, QMainWindow, QAction, QToolBar, QComboBox, QPushButton
 else:
-    try:
-        from PyQt4.QtCore import Qt
-        from PyQt4.QtGui import QWidget, QVBoxLayout, QLabel, QMainWindow, QAction, QToolBar, QComboBox, QPushButton
-    except:
-        from PySide.QtCore import Qt
-        from PySide.QtGui import QWidget, QVBoxLayout, QLabel, QMainWindow, QAction, QToolBar, QComboBox, QPushButton
+    from PySide.QtCore import Qt
+    from PySide.QtGui import QWidget, QVBoxLayout, QLabel, QMainWindow, QAction, QToolBar, QComboBox, QPushButton
 
 class ClearHistoryDialog(QMainWindow):
     def __init__(self, parent=None):

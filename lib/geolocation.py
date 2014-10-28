@@ -17,11 +17,8 @@ if not pyqt4:
     from PyQt5.QtCore import QObject, pyqtSlot
     Slot = pyqtSlot
 else:
-    try:
-        from PyQt4.QtCore import QObject, pyqtSlot
-        Slot = pyqtSlot
-    except ImportError:
-        from PySide.QtCore import QObject, Slot
+    from PyQt4.QtCore import QObject, pyqtSlot
+    Slot = pyqtSlot
 
 def geolocate():
     data = urllib.request.urlopen('http://freegeoip.net/json/').read().decode("utf-8")

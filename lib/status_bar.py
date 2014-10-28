@@ -13,12 +13,8 @@ if not pyqt4:
     from PyQt5.QtCore import Qt, QSize
     from PyQt5.QtWidgets import QToolBar, QStatusBar, QFrame, QMainWindow, QLineEdit, QProgressBar, QSizeGrip
 else:
-    try:
-        from PyQt4.QtCore import Qt, QSize
-        from PyQt4.QtGui import QToolBar, QStatusBar, QFrame, QMainWindow, QLineEdit, QProgressBar, QSizeGrip
-    except ImportError:
-        from PySide.QtCore import Qt, QSize
-        from PySide.QtGui import QToolBar, QStatusBar, QFrame, QMainWindow, QLineEdit, QProgressBar, QSizeGrip
+    from PyQt4.QtCore import Qt, QSize
+    from PyQt4.QtGui import QToolBar, QStatusBar, QFrame, QMainWindow, QLineEdit, QProgressBar, QSizeGrip
 
 class StatusBar(QToolBar):
     def __init__(self, parent=None):

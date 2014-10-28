@@ -22,8 +22,7 @@ import data
 from nwebkit import *
 import traceback
 
-# Extremely specific imports from PyQt5/PySide.
-# We give PyQt5 priority because it supports Qt5.
+# Extremely specific imports from PyQt5.
 if not common.pyqt4:
     from PyQt5.QtCore import Qt, QCoreApplication, QUrl, QTimer, QSize,\
                              QDateTime, QPoint
@@ -38,30 +37,17 @@ if not common.pyqt4:
     from PyQt5.QtNetwork import QNetworkRequest
     from PyQt5.QtWebKitWidgets import QWebPage
 else:
-    try:
-        from PyQt4.QtCore import Qt, QCoreApplication, QUrl, QTimer, QSize,\
+    from PyQt4.QtCore import Qt, QCoreApplication, QUrl, QTimer, QSize,\
                                  QDateTime, QPoint
-        from PyQt4.QtGui import QApplication, QDockWidget, QWidget, QHBoxLayout,\
-                                QVBoxLayout,\
-                                QKeySequence, QMessageBox, QSizePolicy, QIcon,\
-                                QMenu, QAction, QMainWindow, QToolBar,\
-                                QToolButton, QComboBox, QButtonGroup,\
-                                QLabel, QCalendarWidget, QCursor, QInputDialog,\
-                                QLineEdit, QStatusBar, QProgressBar
-        from PyQt4.QtNetwork import QNetworkRequest
-        from PyQt4.QtWebKit import QWebPage
-    except ImportError:
-        from PySide.QtCore import Qt, QCoreApplication, QUrl, QTimer, QSize,\
-                                  QDateTime, QPoint
-        from PySide.QtGui import QApplication, QDockWidget, QWidget,\
-                                 QVBoxLayout,\
-                                 QHBoxLayout, QKeySequence, QMessageBox,\
-                                 QSizePolicy, QIcon, QMenu, QAction,\
-                                 QMainWindow, QToolBar, QToolButton, QComboBox,\
-                                 QButtonGroup, QLabel, QCalendarWidget, QCursor,\
-                                 QInputDialog, QLineEdit, QStatusBar, QProgressBar
-        from PySide.QtNetwork import QNetworkRequest
-        from PySide.QtWebKit import QWebPage
+    from PyQt4.QtGui import QApplication, QDockWidget, QWidget, QHBoxLayout,\
+                            QVBoxLayout,\
+                            QKeySequence, QMessageBox, QSizePolicy, QIcon,\
+                            QMenu, QAction, QMainWindow, QToolBar,\
+                            QToolButton, QComboBox, QButtonGroup,\
+                            QLabel, QCalendarWidget, QCursor, QInputDialog,\
+                            QLineEdit, QStatusBar, QProgressBar
+    from PyQt4.QtNetwork import QNetworkRequest
+    from PyQt4.QtWebKit import QWebPage
 
 # Extension button class.
 class ExtensionButton(QToolButton):

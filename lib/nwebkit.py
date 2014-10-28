@@ -42,18 +42,12 @@ if not common.pyqt4:
     Signal = pyqtSignal
     Slot = pyqtSlot
 else:
-    try:
-        from PyQt4.QtCore import Qt, QSize, QObject, QCoreApplication, pyqtSignal, pyqtSlot, QUrl, QFile, QIODevice, QTimer, QByteArray, QDataStream, QDateTime, QPoint, QEventLoop
-        from PyQt4.QtGui import QApplication, QListWidget, QSpinBox, QListWidgetItem, QMessageBox, QIcon, QAction, QToolBar, QLineEdit, QPrinter, QPrintDialog, QPrintPreviewDialog, QInputDialog, QFileDialog, QProgressBar, QLabel, QCalendarWidget, QSlider, QFontComboBox, QLCDNumber, QImage, QDateTimeEdit, QDial, QSystemTrayIcon, QPushButton, QMenu, QDesktopWidget, QClipboard, QWidgetAction, QToolTip, QCursor, QWidget, QToolButton, QVBoxLayout
-        from PyQt4.QtNetwork import QNetworkProxy, QNetworkRequest
-        from PyQt4.QtWebKit import QWebView, QWebPage, QWebHistory
-        Signal = pyqtSignal
-        Slot = pyqtSlot
-    except ImportError:
-        from PySide.QtCore import Qt, QSize, QObject, QCoreApplication, Signal, Slot, QUrl, QFile, QIODevice, QTimer, QByteArray, QDataStream, QDateTime, QPoint, QEventLoop
-        from PySide.QtGui import QApplication, QListWidget, QSpinBox, QListWidgetItem, QMessageBox, QIcon, QAction, QToolBar, QLineEdit, QPrinter, QPrintDialog, QPrintPreviewDialog, QInputDialog, QFileDialog, QProgressBar, QLabel, QCalendarWidget, QSlider, QFontComboBox, QLCDNumber, QImage, QDateTimeEdit, QDial, QSystemTrayIcon, QPushButton, QMenu, QDesktopWidget, QClipboard, QWidgetAction, QToolTip, QCursor, QWidget, QToolButton, QVBoxLayout
-        from PySide.QtNetwork import QNetworkProxy, QNetworkRequest
-        from PySide.QtWebKit import QWebView, QWebPage, QWebHistory
+    from PyQt4.QtCore import Qt, QSize, QObject, QCoreApplication, pyqtSignal, pyqtSlot, QUrl, QFile, QIODevice, QTimer, QByteArray, QDataStream, QDateTime, QPoint, QEventLoop
+    from PyQt4.QtGui import QApplication, QListWidget, QSpinBox, QListWidgetItem, QMessageBox, QIcon, QAction, QToolBar, QLineEdit, QPrinter, QPrintDialog, QPrintPreviewDialog, QInputDialog, QFileDialog, QProgressBar, QLabel, QCalendarWidget, QSlider, QFontComboBox, QLCDNumber, QImage, QDateTimeEdit, QDial, QSystemTrayIcon, QPushButton, QMenu, QDesktopWidget, QClipboard, QWidgetAction, QToolTip, QCursor, QWidget, QToolButton, QVBoxLayout
+    from PyQt4.QtNetwork import QNetworkProxy, QNetworkRequest
+    from PyQt4.QtWebKit import QWebView, QWebPage, QWebHistory
+    Signal = pyqtSignal
+    Slot = pyqtSlot
 
 # Add an item to the browser history.
 def addHistoryItem(url, title=None):
@@ -917,6 +911,7 @@ class WebView(QWebView):
     def setChangeCanGoNext(self, true=False):
         self._changeCanGoNext = true
 
+    # Can it go up?
     def canGoUp(self):
         components = self.url().toString().split("/")
         urlString = self.url().toString()
@@ -924,6 +919,7 @@ class WebView(QWebView):
             return False
         return True
 
+    # Go up.
     def up(self):
         components = self.url().toString().split("/")
         urlString = self.url().toString()
@@ -932,6 +928,7 @@ class WebView(QWebView):
             return
         self.load(QUrl.fromUserInput("/".join(components[:(-1 if components[-1] != "" else -2)])))
 
+    # Get RSS.
     def rssFeeds(self):
         feed_urls = []
         links = self.page().mainFrame().findAllElements("[type=\"application/rss+xml\"], [type=\"application/atom+xml\"]")
@@ -942,6 +939,7 @@ class WebView(QWebView):
                 feed_urls.append((element.attribute("href"), element.attribute("href")))
         return feed_urls
 
+    # This is awful and needs to be fixed.
     def setCanGoNext(self):
         if not self._changeCanGoNext:
             return

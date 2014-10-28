@@ -22,13 +22,9 @@ if not pyqt4:
     from PyQt5.QtGui import QIcon, QPixmap
     from PyQt5.QtWidgets import QMainWindow, QAction, QToolButton, QPushButton, QWidget, QComboBox, QHBoxLayout, QTabWidget, QTextEdit, QVBoxLayout, QLabel, QSizePolicy, QLineEdit, QSpinBox, QToolBar, QStyle, QStylePainter, QStyleOptionToolBar, QMenu, QTabBar, QWidgetAction, QListWidget
 else:
-    try:
-        from PyQt4.QtCore import Qt, pyqtSignal, QPoint, QUrl, QSize, QTimer
-        Signal = pyqtSignal
-        from PyQt4.QtGui import QPixmap, QMainWindow, QAction, QToolButton, QPushButton, QIcon, QWidget, QComboBox, QHBoxLayout, QTabWidget, QTextEdit, QVBoxLayout, QLabel, QSizePolicy, QLineEdit, QSpinBox, QToolBar, QStyle, QStylePainter, QStyleOptionToolBar, QMenu, QTabBar, QWidgetAction, QListWidget
-    except ImportError:
-        from PySide.QtCore import Qt, Signal, QPoint, QUrl, QSize, QTimer
-        from PySide.QtGui import QPixmap, QMainWindow, QAction, QToolButton, QPushButton, QIcon, QWidget, QComboBox, QHBoxLayout, QTabWidget, QTextEdit, QVBoxLayout, QLabel, QSizePolicy, QLineEdit, QSpinBox, QToolBar, QStyle, QStylePainter, QStyleOptionToolBar, QMenu, QTabBar, QWidgetAction, QListWidget
+    from PyQt4.QtCore import Qt, pyqtSignal, QPoint, QUrl, QSize, QTimer
+    Signal = pyqtSignal
+    from PyQt4.QtGui import QPixmap, QMainWindow, QAction, QToolButton, QPushButton, QIcon, QWidget, QComboBox, QHBoxLayout, QTabWidget, QTextEdit, QVBoxLayout, QLabel, QSizePolicy, QLineEdit, QSpinBox, QToolBar, QStyle, QStylePainter, QStyleOptionToolBar, QMenu, QTabBar, QWidgetAction, QListWidget
 
 # Custom LineEdit class with delete button.
 if sys.platform.startswith("linux"):

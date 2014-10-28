@@ -44,7 +44,7 @@ from nwebkit import *
 from mainwindow import *
 from tray_icon import *
 
-# Extremely specific imports from PyQt/PySide.
+# Extremely specific imports from PyQt.
 if not common.pyqt4:
     from PyQt5.QtCore import Qt, QCoreApplication, QUrl, QTimer
     from PyQt5.QtGui import QPalette, QColor
@@ -65,27 +65,22 @@ if not common.pyqt4:
         except ImportError:
             pass
 else:
-    try:
-        from PyQt4.QtCore import Qt, QCoreApplication, QUrl, QTimer
-        from PyQt4.QtGui import QApplication, QAction, QDesktopWidget, QMessageBox, QPalette, QColor
-        from PyQt4.QtWebKit import QWebPage, QWebSettings, QWebSecurityOrigin
-        import pdf_js_qt4
-        import viewerjs_qt4
+    from PyQt4.QtCore import Qt, QCoreApplication, QUrl, QTimer
+    from PyQt4.QtGui import QApplication, QAction, QDesktopWidget, QMessageBox, QPalette, QColor
+    from PyQt4.QtWebKit import QWebPage, QWebSettings, QWebSecurityOrigin
+    import pdf_js_qt4
+    import viewerjs_qt4
 
-        # Python DBus
-        has_dbus = False
-        if not "-no-remote" in sys.argv:
-            try:
-                import dbus
-                import dbus.service
-                from dbus.mainloop.qt import DBusQtMainLoop
-                has_dbus = True
-            except:
-                pass
-    except ImportError:
-        from PySide.QtCore import Qt, QCoreApplication, QUrl, QTimer
-        from PySide.QtGui import QApplication, QAction, QDesktopWidget, QMessageBox, QPalette, QColor
-        from PySide.QtWebKit import QWebPage, QWebSettings, QWebSecurityOrigin
+    # Python DBus
+    has_dbus = False
+    if not "-no-remote" in sys.argv:
+        try:
+            import dbus
+            import dbus.service
+            from dbus.mainloop.qt import DBusQtMainLoop
+            has_dbus = True
+        except:
+            pass
 
 
 # chdir to the app folder. This way, we won't have issues related to

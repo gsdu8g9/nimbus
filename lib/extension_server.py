@@ -18,10 +18,7 @@ import time
 if not pyqt4:
     from PyQt5.QtCore import QThread
 else:
-    try:
-        from PyQt4.QtCore import QThread
-    except ImportError:
-        from PySide.QtCore import QThread
+    from PyQt4.QtCore import QThread
 from settings import extensions_folder
 
 class ExtensionServerThread(QThread):
