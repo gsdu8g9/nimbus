@@ -107,6 +107,8 @@ class MainWindow(QMainWindow):
     def __init__(self, appMode=False, *args, **kwargs):
         super(MainWindow, self).__init__(*args, **kwargs)
 
+        style = QApplication.style()
+
         # These are used to store where the mouse pressed down.
         # This is used in a hack to drag the window by the toolbar.
         self.mouseX = False
@@ -168,12 +170,10 @@ class MainWindow(QMainWindow):
                                                            QTabBar{background:qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #d3d7cf, stop: 1 #eeeeec);border: 1px solid #888a85;}
                                                            QTabBar::tab{padding:2px;margin:0;background:qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #d3d7cf, stop: 1 #eeeeec);border:0;border-top: 1px solid #888a85;border-bottom: 1px solid #888a85;color:#2e3436;}
                                                            QTabBar::tab:selected{background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #729FCF, stop: 1 #3465A4);color:#EEEEEC;}
-                                                           QTabBar::tab:last,QTabBar::tab:only-one{border-right: 1px solid #888a85;}""")
+                                                           QTabBar::tab:last,QTabBar::tab:only-one{border-right: 1px solid #888a85;}
+/*QTabBar::tab:first,QTabBar::tab:only-one{border-left: 1px solid #888a85;}*/""")
         self.tabs.setCornerWidget(self.tabsToolBar, Qt.TopRightCorner)
-
-        # Remove border around tabs.
-        #self.tabs.setDocumentMode(True)
-
+        
         # Allow rearranging of tabs.
         self.tabs.setMovable(True)
 
@@ -221,6 +221,11 @@ class MainWindow(QMainWindow):
         self.newTabButton = self.tabsToolBar.widgetForAction(newTabAction)
         self.newTabButton.setIcon(common.complete_icon("list-add"))
 
+        closeTabButton = QAction(self)
+        closeTabButton.triggered.connect(self.removeTab)
+        closeTabButton.setIcon(style.standardIcon(style.SP_DialogCloseButton))
+        self.tabsToolBar.addAction(closeTabButton)
+
         tabsMenuAction = QAction(self)
         tabsMenuAction.setShortcut("Alt+T")
         self.tabsToolBar.addAction(tabsMenuAction)
@@ -256,7 +261,18 @@ class MainWindow(QMainWindow):
         self.timer.timeout.connect(self.updateDateTime)
         self.timer.timeout.connect(self.reconnectWebViews)
         
-        style = QApplication.style()
+        """closeTabsToolBar = QToolBar(movable=False,\
+                           contextMenuPolicy=Qt.CustomContextMenu,\
+                           parent=self,
+                           windowTitle=tr("Tabs"),
+                           styleSheet="QToolBar {background: transparent; border: 0;}")
+        closeTabsToolBar.layout().setSpacing(0)
+        closeTabsToolBar.layout().setContentsMargins(0,0,0,0)
+        closeTabButton = QAction(self)
+        closeTabButton.triggered.connect(self.removeTab)
+        closeTabButton.setIcon(style.standardIcon(style.SP_DialogCloseButton))
+        closeTabsToolBar.addAction(closeTabButton)
+        self.tabs.setCornerWidget(closeTabsToolBar, Qt.TopLeftCorner)"""
 
         # Set up navigation actions.
         self.backAction = QAction(self, icon=style.standardIcon(style.SP_ArrowBack), text=tr("Go Back"))
@@ -1538,7 +1554,9 @@ self.origY + ev.globalY() - self.mouseY)
             self.tabWidget().setTabIcon(index, icon)
 
     # Removes a tab at index.
-    def removeTab(self, index):
+    def removeTab(self, index=None):
+        if not index:
+            index = self.tabWidget().currentIndex()
         if index < settings.setting_to_int("general/PinnedTabCount"):
             return
         elif self.tabWidget().count() == 1 and settings.setting_to_bool("general/CloseWindowWithLastTab"):
