@@ -129,7 +129,8 @@ def load_host_rules():
             else:
                 # This is a big hacky way of parsing the rules.
                 try:
-                    host_rules += [line for line in [line.split(" ")[-1].replace("\n", "") for line in f.readlines() if len(line.split(" ")) > 1 and not line.startswith("#") and len(line) > 1] if line != ""]
+                    new_file = [line for line in [line.split(" ")[-1].replace("\n", "") for line in f.readlines() if not line.startswith("#") and len(line) > 1] if line != ""]
+                    host_rules += new_file
                 except:
                     traceback.print_exc()
                 f.close()
