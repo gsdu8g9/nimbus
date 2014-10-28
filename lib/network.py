@@ -19,11 +19,12 @@ import settings
 from translate import tr
 if not common.pyqt4:
     from PyQt5.QtCore import QCoreApplication, QUrl, QTimer
+    from PyQt5.QtGui import QDesktopServices
     from PyQt5.QtWidgets import QInputDialog, QLineEdit
     from PyQt5.QtNetwork import QNetworkInterface, QNetworkCookieJar, QNetworkAccessManager, QNetworkDiskCache, QNetworkRequest, QNetworkReply
 else:
     from PyQt4.QtCore import QCoreApplication, QUrl, QTimer, SIGNAL
-    from PyQt4.QtGui import QInputDialog, QLineEdit
+    from PyQt4.QtGui import QInputDialog, QLineEdit, QDesktopServices
     from PyQt4.QtNetwork import QNetworkInterface, QNetworkCookieJar, QNetworkAccessManager, QNetworkDiskCache, QNetworkRequest, QNetworkReply
 
 # Global cookiejar to store cookies.
@@ -131,7 +132,7 @@ class NetworkAccessManager(QNetworkAccessManager):
             os.system("xterm -e \"sudo apt-get install %s\" &" % (common.chop(url.toString(QUrl.RemoveScheme), "//").split("&")[0],))
             return QNetworkAccessManager.createRequest(self, self.GetOperation, QNetworkRequest(QUrl("")))
         if url.scheme() == "mailto":
-            os.system("xdg-open %s &" % (urlString,))
+            QDesktopServices.openUrl(url)
             return QNetworkAccessManager.createRequest(self, self.GetOperation, QNetworkRequest(QUrl("")))
         else:
             return QNetworkAccessManager.createRequest(self, op, request, device)

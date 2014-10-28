@@ -26,14 +26,12 @@ import data
 import network
 import rss_parser
 #import view_source_dialog
-if not sys.platform.startswith("linux"):
-    import webbrowser
 
 # Extremely specific imports from PyQt5/PySide.
 # We give PyQt5 priority because it supports Qt5.
 if not common.pyqt4:
     from PyQt5.QtCore import Qt, QSize, QObject, QCoreApplication, pyqtSignal, pyqtSlot, QUrl, QFile, QIODevice, QTimer, QByteArray, QDataStream, QDateTime, QPoint, QEventLoop
-    from PyQt5.QtGui import QIcon, QImage, QClipboard, QCursor
+    from PyQt5.QtGui import QIcon, QImage, QClipboard, QCursor, QDesktopServices
     from PyQt5.QtWidgets import QApplication, QListWidget, QSpinBox, QListWidgetItem, QMessageBox, QAction, QToolBar, QLineEdit, QInputDialog, QFileDialog, QProgressBar, QLabel, QCalendarWidget, QSlider, QFontComboBox, QLCDNumber, QDateTimeEdit, QDial, QSystemTrayIcon, QPushButton, QMenu, QDesktopWidget, QWidgetAction, QToolTip, QWidget, QToolButton, QVBoxLayout
     from PyQt5.QtPrintSupport import QPrinter, QPrintDialog, QPrintPreviewDialog
     from PyQt5.QtNetwork import QNetworkProxy, QNetworkRequest
@@ -43,7 +41,7 @@ if not common.pyqt4:
     Slot = pyqtSlot
 else:
     from PyQt4.QtCore import Qt, QSize, QObject, QCoreApplication, pyqtSignal, pyqtSlot, QUrl, QFile, QIODevice, QTimer, QByteArray, QDataStream, QDateTime, QPoint, QEventLoop
-    from PyQt4.QtGui import QApplication, QListWidget, QSpinBox, QListWidgetItem, QMessageBox, QIcon, QAction, QToolBar, QLineEdit, QPrinter, QPrintDialog, QPrintPreviewDialog, QInputDialog, QFileDialog, QProgressBar, QLabel, QCalendarWidget, QSlider, QFontComboBox, QLCDNumber, QImage, QDateTimeEdit, QDial, QSystemTrayIcon, QPushButton, QMenu, QDesktopWidget, QClipboard, QWidgetAction, QToolTip, QCursor, QWidget, QToolButton, QVBoxLayout
+    from PyQt4.QtGui import QApplication, QListWidget, QSpinBox, QListWidgetItem, QMessageBox, QIcon, QAction, QToolBar, QLineEdit, QPrinter, QPrintDialog, QPrintPreviewDialog, QInputDialog, QFileDialog, QProgressBar, QLabel, QCalendarWidget, QSlider, QFontComboBox, QLCDNumber, QImage, QDateTimeEdit, QDial, QSystemTrayIcon, QPushButton, QMenu, QDesktopWidget, QClipboard, QWidgetAction, QToolTip, QCursor, QWidget, QToolButton, QVBoxLayout, QDesktopServices
     from PyQt4.QtNetwork import QNetworkProxy, QNetworkRequest
     from PyQt4.QtWebKit import QWebView, QWebPage, QWebHistory
     Signal = pyqtSignal
@@ -141,6 +139,9 @@ class DownloadBar(QToolBar):
         #self.progressBar.networkReply.finished.connect(self.deleteLater)
         self.addWidget(self.progressBar)
         label.setText(os.path.split(self.progressBar.destination)[1])
+        openFileAction = QAction(common.complete_icon("media-playback-start"), tr("Open file"), self)
+        openFileAction.triggered.connect(self.openFile)
+        self.addAction(openFileAction)
         openFolderAction = QAction(common.complete_icon("document-open"), tr("Open containing folder"), self)
         openFolderAction.triggered.connect(self.openFolder)
         self.addAction(openFolderAction)
@@ -148,11 +149,10 @@ class DownloadBar(QToolBar):
         abortAction.triggered.connect(self.progressBar.abort)
         abortAction.triggered.connect(self.deleteLater)
         self.addAction(abortAction)
+    def openFile(self):
+        QDesktopServices.openUrl(QUrl.fromUserInput(self.progressBar.destination))
     def openFolder(self):
-        if sys.platform.startswith("linux"):
-            os.system("xdg-open %s &" % (os.path.split(self.progressBar.destination)[0].split("://")[-1],))
-        else:
-            os.system("explorer %s &" % (os.path.split(self.progressBar.destination)[0].split("://")[-1],))
+        QDesktopServices.openUrl(QUrl.fromUserInput(os.path.split(self.progressBar.destination)[0]))
 
 # Class for exposing fullscreen API to DOM.
 class FullScreenRequester(QObject):
@@ -1114,10 +1114,7 @@ class WebView(QWebView):
             url = url.toString()
         elif not url:
             url = self._statusBarMessage
-        if sys.platform.startswith("linux"):
-            subprocess.Popen(["xdg-open", url])
-        else:
-            webbrowser.open(url)
+        QDesktopServies.openUrl(QUrl(url))
 
     # Creates an error page.
     def errorPage(self, *args, **kwargs):
