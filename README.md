@@ -47,7 +47,7 @@ Alternatively, you can try the following:
 
     ./lib/nimbus.py
 
-![Nimbus running on Debian](https://raw.githubusercontent.com/foxhead128/fh-images/master/nimbus-themed.png)<br>
+![Nimbus running on Debian](https://raw.githubusercontent.com/foxhead128/fh-images/master/nimbus-296bf74460-debian.png)<br>
 *Nimbus running on Debian*
 
 Installing Nimbus on Linux
