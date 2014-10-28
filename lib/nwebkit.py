@@ -1045,7 +1045,7 @@ class WebView(QWebView):
         return False
 
     def extension(self, extension, option=None, output=None):
-        if extension == QWebPage.ErrorPageExtension and option != NOne:
+        if extension == QWebPage.ErrorPageExtension and option != None:
             option.frame().setHtml(errorPage())
         else:
             QWebPage.extension(self, extension, option, output)
