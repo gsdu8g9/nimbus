@@ -69,7 +69,7 @@ class ClearHistoryDialog(QMainWindow):
         self.activateWindow()
 
     def clearHistory(self):
-        clear_everything = (self.dataType.currentIndex() == 5)
+        clear_everything = (self.dataType.currentIndex() == self.dataType.count()-1)
         if self.dataType.currentIndex() == 0 or clear_everything:
             data.clearHistory()
         if self.dataType.currentIndex() == 1 or clear_everything:
