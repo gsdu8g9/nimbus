@@ -110,7 +110,7 @@ class NetworkAccessManager(QNetworkAccessManager):
         z = (lurlString.endswith(".swf") or "flash" in ctype) and not settings.setting_to_bool("content/FlashEnabled")
         aa = (lurlString.endswith(".gif") or "image/gif" in ctype) and not settings.setting_to_bool("content/GIFsEnabled")
         if x != None or y or z or aa:
-            return QNetworkAccessManager.createRequest(self, self.GetOperation, QNetworkRequest(QUrl("data:image/gif;base64,R0lGODlhAQABAHAAACH5BAUAAAAALAAAAAABAAEAAAICRAEAOw==")))
+            return QNetworkAccessManager.createRequest(self, self.GetOperation, QNetworkRequest(QUrl("http://www.randomkittengenerator.com/images/cats/rotator.php" if settings.setting_to_bool("content/KittensEnabled") else "data:image/gif;base64,R0lGODlhAQABAHAAACH5BAUAAAAALAAAAAABAAEAAAICRAEAOw==")))
         if urlString in tuple(replacement_table.keys()):
             return QNetworkAccessManager.createRequest(self, op, QNetworkRequest(QUrl(replacement_table[urlString])), device)
         if url.scheme() == "file" and os.path.isdir(os.path.abspath(url.path())):

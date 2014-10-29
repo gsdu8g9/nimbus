@@ -263,6 +263,9 @@ class ContentSettingsPanel(SettingsPanel):
 
         contentFilteringRow = custom_widgets.Row(self.contentFilteringGroupBox)
         self.contentFilteringGroupBox.layout().addWidget(contentFilteringRow)
+        
+        contentFilteringRow2 = custom_widgets.Row(self.contentFilteringGroupBox)
+        self.contentFilteringGroupBox.layout().addWidget(contentFilteringRow2)
 
         # Checkbox to toggle ad blocking.
         self.adblockToggle = QCheckBox(tr("Enable ad &blocking"), self)
@@ -272,8 +275,13 @@ class ContentSettingsPanel(SettingsPanel):
         self.hostFilterToggle = QCheckBox(tr("Enable host &filtering"), self)
         contentFilteringRow.layout().addWidget(self.hostFilterToggle)
 
+        # Enable GIF filtering. Not very well implemented.
         self.gifsToggle = QCheckBox(tr("Block GIF images"), self)
-        contentFilteringRow.layout().addWidget(self.gifsToggle)
+        contentFilteringRow2.layout().addWidget(self.gifsToggle)
+        
+        # Replace ads with kittens!
+        self.kittensToggle = QCheckBox(tr("Enable &kittens"), self)
+        contentFilteringRow2.layout().addWidget(self.kittensToggle)
         
         self.updateFilteringButton = QPushButton(tr("Update content filters"), self.contentFilteringGroupBox)
         self.updateFilteringButton.clicked.connect(self.updateFilters)
@@ -311,6 +319,7 @@ class ContentSettingsPanel(SettingsPanel):
         self.adblockToggle.setChecked(settings.setting_to_bool("content/AdblockEnabled"))
         self.gifsToggle.setChecked(not settings.setting_to_bool("content/GIFsEnabled"))
         self.hostFilterToggle.setChecked(settings.setting_to_bool("content/HostFilterEnabled"))
+        self.kittensToggle.setChecked(settings.setting_to_bool("content/KittensEnabled"))
         self.mediaToggle.setChecked(settings.setting_to_bool("content/ReplaceHTML5MediaTagsWithEmbedTags"))
         self.contentViewersToggle.setChecked(settings.setting_to_bool("content/UseOnlineContentViewers"))
         self.tiledBackingStoreToggle.setChecked(settings.setting_to_bool("content/TiledBackingStoreEnabled"))
@@ -333,6 +342,7 @@ class ContentSettingsPanel(SettingsPanel):
         settings.settings.setValue("content/AdblockEnabled", self.adblockToggle.isChecked())
         settings.settings.setValue("content/GIFsEnabled", not self.gifsToggle.isChecked())
         settings.settings.setValue("content/HostFilterEnabled", self.hostFilterToggle.isChecked())
+        settings.settings.setValue("content/KittensEnabled", self.kittensToggle.isChecked())
         settings.settings.setValue("content/ReplaceHTML5MediaTagsWithEmbedTags", self.mediaToggle.isChecked())
         filtering.adblock_filter_loader.start()
         settings.settings.setValue("content/UseOnlineContentViewers", self.contentViewersToggle.isChecked())
