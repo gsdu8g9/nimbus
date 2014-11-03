@@ -188,7 +188,7 @@ class SystemTrayIcon(QSystemTrayIcon):
                           "<h3>" + common.app_name + " " +\
                           common.app_version +\
                           "</h3>" +\
-                          tr("A Qt-based web browser made in Python."))
+                          tr("A Qt-based web browser made in Python.<br><br>%s is provided to you free of charge, with no promises of security or stability. By using this software, you agree not to sue me for anything that goes wrong with it.") % (common.app_name,))
         self.widget.hide()
 
     # Reopen window.

@@ -125,7 +125,7 @@ class MainWindow(QMainWindow):
         self.sideBars = {}
 
         # Main toolbar.
-        self.toolBar = QToolBar(movable=False,\
+        self.toolBar = custom_widgets.MenuToolBar(movable=False,\
                                 contextMenuPolicy=Qt.CustomContextMenu,\
                                 parent=self,
                                 iconSize=QSize(22,22),
