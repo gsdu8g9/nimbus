@@ -145,19 +145,13 @@ class MainWindow(QMainWindow):
         self.tabsToolBar = QToolBar(movable=False,\
                            contextMenuPolicy=Qt.CustomContextMenu,\
                            parent=self,
-                           windowTitle=tr("Tabs"),
-                           styleSheet="QToolBar {background: transparent; border: 0;}")
+                           windowTitle=tr("Tabs"))
         self.tabsToolBar.layout().setSpacing(0)
         self.tabsToolBar.layout().setContentsMargins(0,0,0,0)
     
         # Tab widget for tabbed browsing.
         self.tabs = custom_widgets.TabWidget(self,
-                                             styleSheet="""QTabWidget::pane{border:0;}
-                                                           QTabBar{background:qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #d3d7cf, stop: 1 #eeeeec);border: 1px solid #888a85;}
-                                                           QTabBar::tab{padding:2px;margin:0;background:qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #d3d7cf, stop: 1 #eeeeec);border:0;border-top: 1px solid #888a85;border-bottom: 1px solid #888a85;color:#2e3436;}
-                                                           QTabBar::tab:selected{background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #729FCF, stop: 1 #3465A4);color:#EEEEEC;}
-                                                           QTabBar::tab:last,QTabBar::tab:only-one{border-right: 1px solid #888a85;}
-/*QTabBar::tab:first,QTabBar::tab:only-one{border-left: 1px solid #888a85;}*/""")
+                                             styleSheet="QTabWidget::pane{border:0;}")
         self.tabs.setCornerWidget(self.tabsToolBar, Qt.TopRightCorner)
         
         # Allow rearranging of tabs.
@@ -673,9 +667,9 @@ class MainWindow(QMainWindow):
         self.tabsToolBar.addAction(self.mainMenuAction)
         self.mainMenuButton = self.tabsToolBar.widgetForAction(self.mainMenuAction)
         self.mainMenuButton.setPopupMode(QToolButton.InstantPopup)
-        if self.appMode:
+        """if self.appMode:
             self.mainMenuButton.setStyleSheet("QToolButton { border-radius: 4px; border-top-%(o)s-radius: 0; border-bottom-%(o)s-radius: 0; padding: 2px; background: palette(highlight); color: palette(highlighted-text); }" % {"o": "right" if self.layoutDirection() == Qt.LeftToRight else "left"})
-            self.mainMenuButton.setToolButtonStyle(Qt.ToolButtonTextBesideIcon)
+            self.mainMenuButton.setToolButtonStyle(Qt.ToolButtonTextBesideIcon)"""
         #self.mainMenuButton.setAutoRaise(False)
         self.mainMenuAction.triggered.\
              connect(lambda: self.mainMenuButton.showMenu())
@@ -1132,7 +1126,7 @@ self.origY + ev.globalY() - self.mouseY)
                 self.tabsToolBar.addAction(self.searchEditAction)
                 self.tabsToolBar.addAction(self.mainMenuAction)
                 self.mainMenuButton = self.tabsToolBar.widgetForAction(self.mainMenuAction)
-                self.mainMenuButton.setStyleSheet("QToolButton { border-radius: 4px; border-top-%(o)s-radius: 0; border-bottom-%(o)s-radius: 0; padding: 2px; background: palette(highlight); color: palette(highlighted-text); }" % {"o": "right" if self.layoutDirection() == Qt.LeftToRight else "left"})
+                """self.mainMenuButton.setStyleSheet("QToolButton { border-radius: 4px; border-top-%(o)s-radius: 0; border-bottom-%(o)s-radius: 0; padding: 2px; background: palette(highlight); color: palette(highlighted-text); }" % {"o": "right" if self.layoutDirection() == Qt.LeftToRight else "left"})"""
                 self.mainMenuButton.setToolButtonStyle(Qt.ToolButtonTextBesideIcon)
                 self.searchEditButton = self.tabsToolBar.widgetForAction(self.searchEditAction)
             self.mainMenuButton.setPopupMode(QToolButton.InstantPopup)
