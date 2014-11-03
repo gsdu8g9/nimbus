@@ -128,7 +128,7 @@ class BatteryAction(QAction):
 class ToolBarAction(QWidgetAction):
     def __init__(self, *args, **kwargs):
         super(ToolBarAction, self).__init__(*args, **kwargs)
-        self._toolBar = QToolBar()
+        self._toolBar = QToolBar(styleSheet="QToolBar {background: transparent; border: 0;}")
         self._toolBar.setIconSize(QSize(16, 16))
         self.setDefaultWidget(self._toolBar)
     def toolBar(self):
