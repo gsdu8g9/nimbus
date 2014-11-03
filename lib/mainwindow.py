@@ -145,7 +145,8 @@ class MainWindow(QMainWindow):
         self.tabsToolBar = QToolBar(movable=False,\
                            contextMenuPolicy=Qt.CustomContextMenu,\
                            parent=self,
-                           windowTitle=tr("Tabs"))
+                           windowTitle=tr("Tabs"),
+                           styleSheet="QToolBar {background: transparent; border: 0;}")
         self.tabsToolBar.layout().setSpacing(0)
         self.tabsToolBar.layout().setContentsMargins(0,0,0,0)
     
