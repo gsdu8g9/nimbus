@@ -224,14 +224,14 @@ class InvisibleMenu(QMenu):
         QMenu.setVisible(self, False)
 
 # Toolbar that looks like a menubar.
-class MenuToolBar(QToolBar):
+class _MenuToolBar(QToolBar):
     def __init__(self, *args, **kwargs):
-        super(MenuToolBar, self).__init__(*args, **kwargs)
+        super(_MenuToolBar, self).__init__(*args, **kwargs)
         self._isMenuBar = True
     def isMenuBar(self):
         return self._isMenuBar
     def addAction(self, action):
-        super(MenuToolBar, self).addAction(action)
+        super(_MenuToolBar, self).addAction(action)
         if action.shortcut().toString() > "":
             action.setToolTip(action.text().replace("&", "") + "<br>" + action.shortcut().toString())
     def setIsMenuBar(self, isMenuBar):
@@ -246,6 +246,12 @@ class MenuToolBar(QToolBar):
             style.drawControl(QStyle.CE_MenuBarEmptyArea, option, painter, self)
         else:
             QToolBar.paintEvent(self, event)
+
+class MenuToolBar(QToolBar):
+    pass
+
+if not sys.platform.startswith("darwin"):
+    MenuToolBar = _MenuToolBar
 
 # Location bar.
 class LocationBar(QComboBox):
