@@ -554,13 +554,6 @@ class MainWindow(QMainWindow):
         else:
             self.networkManagerAction.triggered.connect(lambda: os.system("control ncpa.cpl"))
 
-        # Add fullscreen button.
-        self.toggleFullScreenButton = QAction(common.complete_icon("view-fullscreen"), tr("Toggle Fullscreen"), self)
-        self.toggleFullScreenButton.setCheckable(True)
-        self.toggleFullScreenButton.triggered.connect(lambda: self.setFullScreen(not self.isFullScreen()))
-        self.tabsToolBar.addAction(self.toggleFullScreenButton)
-        self.toggleFullScreenButton.setVisible(False)
-
         # Add fullscreen action.
         self.toggleFullScreenAction = QAction(common.complete_icon("view-fullscreen"), tr("Toggle Fullscreen"), self)
         self.toggleFullScreenAction.setShortcuts(["F11", "Ctrl+Shift+F"])
@@ -678,10 +671,19 @@ class MainWindow(QMainWindow):
         self.sessionMenuAction = QAction(tr("Session"), self)
         self.sessionMenuAction.setShortcut("Alt+S")
         self.sessionMenuAction.setIcon(common.complete_icon("nimbus"))
+        self.sessionMenuAction.triggered.connect(self.showSessionMenu)
+        self.addAction(self.sessionMenuAction)
         self.tabsToolBar.addAction(self.sessionMenuAction)
         self.sessionMenuButton = self.tabsToolBar.widgetForAction(self.sessionMenuAction)
         self.sessionMenuButton.setPopupMode(QToolButton.InstantPopup)
-        self.sessionMenuAction.triggered.connect(self.showSessionMenu)
+        self.sessionMenuAction.setVisible(False)
+        
+        # Add fullscreen button.
+        self.toggleFullScreenButton = QAction(common.complete_icon("view-fullscreen"), tr("Toggle Fullscreen"), self)
+        self.toggleFullScreenButton.setCheckable(True)
+        self.toggleFullScreenButton.triggered.connect(lambda: self.setFullScreen(not self.isFullScreen()))
+        self.tabsToolBar.addAction(self.toggleFullScreenButton)
+        self.toggleFullScreenButton.setVisible(False)
         
         # This is horribly out of order.
         self.tabsToolBar.addAction(self.searchEditAction)
@@ -1381,6 +1383,7 @@ class MainWindow(QMainWindow):
             self.toggleFullScreenAction.setChecked(True)
             self.toggleFullScreenButton.setVisible(True)
             self.networkManagerAction.setVisible(True)
+            self.sessionMenuAction.setVisible(True)
             self.dateTime.setVisible(True)
             self.batteryAction.setVisible(True)
             self._wasMaximized = self.isMaximized()
@@ -1390,6 +1393,7 @@ class MainWindow(QMainWindow):
             self.toggleFullScreenAction.setChecked(False)
             self.toggleFullScreenButton.setVisible(False)
             self.networkManagerAction.setVisible(False)
+            self.sessionMenuAction.setVisible(False)
             self.dateTime.setVisible(False)
             self.batteryAction.setVisible(False)
             if not self._wasMaximized:
