@@ -29,7 +29,6 @@ crash_file = os.path.join(settings_folder, ".browsercrash")
 
 # This stores the cache.
 network_cache_folder = os.path.join(settings_folder, "Cache")
-offline_cache_folder = os.path.join(settings_folder, "OfflineCache")
 
 # Start page.
 startpage = os.path.join(settings_folder, "start.html")

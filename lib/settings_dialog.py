@@ -23,9 +23,11 @@ if not common.pyqt4:
     from PyQt5.QtCore import Qt, QUrl
     from PyQt5.QtGui import QKeySequence, QIcon
     from PyQt5.QtWidgets import QWidget, QLabel, QMainWindow, QCheckBox, QGroupBox, QTabWidget, QToolBar, QToolButton, QLineEdit, QVBoxLayout, QComboBox, QSizePolicy, QAction, QPushButton, QListWidget, QTextEdit
+    from PyQt5.QtWebKit import QWebSettings
 else:
     from PyQt4.QtCore import Qt, QUrl
     from PyQt4.QtGui import QWidget, QKeySequence, QIcon, QLabel, QMainWindow, QCheckBox, QGroupBox, QTabWidget, QToolBar, QToolButton, QLineEdit, QVBoxLayout, QComboBox, QSizePolicy, QAction, QPushButton, QListWidget, QTextEdit
+    from PyQt5.QtWebKit import QWebSettings
 
 # Basic settings panel.
 class SettingsPanel(QWidget):
@@ -659,6 +661,9 @@ class NetworkSettingsPanel(SettingsPanel):
         settings.settings.setValue("proxy/Port", self.portEntry.value())
         settings.settings.setValue("proxy/User", self.userEntry.text())
         settings.settings.setValue("proxy/Password", self.passwordEntry.text())
+        websettings = QWebSettings.globalSettings()
+        websettings.setAttribute(websettings.XSSAuditingEnabled, settings.setting_to_bool("network/XSSAuditingEnabled"))
+        websettings.setAttribute(websettings.DnsPrefetchEnabled, settings.setting_to_bool("network/DnsPrefetchEnabled"))
         settings.settings.sync()
 
 # Extension configuration panel
@@ -822,10 +827,17 @@ class SettingsDialog(QWidget):
             except: pass
             try: window.applySettings()
             except: pass
-        for webview in common.webviews:
-            webview.updateProxy()
-            webview.updateNetworkSettings()
-            webview.updateContentSettings()
+        websettings = QWebSettings.globalSettings()
+        websettings.setAttribute(websettings.AutoLoadImages, settings.setting_to_bool("content/AutoLoadImages"))
+        websettings.setAttribute(websettings.JavascriptCanOpenWindows, settings.setting_to_bool("content/JavascriptCanOpenWindows"))
+        websettings.setAttribute(websettings.JavascriptCanCloseWindows, settings.setting_to_bool("content/JavascriptCanCloseWindows"))
+        websettings.setAttribute(websettings.JavascriptCanAccessClipboard, settings.setting_to_bool("content/JavascriptCanAccessClipboard"))
+        websettings.setAttribute(websettings.JavaEnabled, settings.setting_to_bool("content/JavaEnabled"))
+        websettings.setAttribute(websettings.PrintElementBackgrounds, settings.setting_to_bool("content/PrintElementBackgrounds"))
+        websettings.setAttribute(websettings.FrameFlatteningEnabled, settings.setting_to_bool("content/FrameFlatteningEnabled"))
+        websettings.setAttribute(websettings.PluginsEnabled, settings.setting_to_bool("content/PluginsEnabled"))
+        websettings.setAttribute(websettings.TiledBackingStoreEnabled, settings.setting_to_bool("content/TiledBackingStoreEnabled"))
+        websettings.setAttribute(websettings.SiteSpecificQuirksEnabled, settings.setting_to_bool("content/SiteSpecificQuirksEnabled"))
 
 class SettingsDialogWrapper(QWidget):
     def __init__(self, parent=None):

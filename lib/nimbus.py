@@ -261,7 +261,9 @@ def main(argv):
     QWebSettings.globalSettings().setAttribute(QWebSettings.globalSettings().DeveloperExtrasEnabled, True)
 
     uc = QUrl.fromUserInput(settings.user_css)
-    QWebSettings.globalSettings().setUserStyleSheetUrl(uc)
+    websettings = QWebSettings.globalSettings()
+    websettings.setUserStyleSheetUrl(uc)
+    websettings.enablePersistentStorage(settings.settings_folder)
 
     # Set up settings dialog.
     settings.settingsDialog = settings_dialog.SettingsDialog()

@@ -625,25 +625,28 @@ class WebView(QWebView):
         self.nAM.setParent(QCoreApplication.instance())
 
         self.updateProxy()
-        self.updateNetworkSettings()
-        self.updateContentSettings()
 
         # What to do if private browsing is not enabled.
-        if not self.incognito:
-            # Set persistent storage path to settings_folder.
-            self.settings().enablePersistentStorage(settings.settings_folder)
-
-            # Do this so that cookie_jar doesn't get deleted along with WebView.
-            network.cookie_jar.setParent(QCoreApplication.instance())
-
-        # What to do if private browsing is enabled.
-        else:
+        if self.incognito:
             # Global incognito cookie jar, so that logins are preserved
             # between incognito tabs.
             network.incognito_cookie_jar.setParent(QCoreApplication.instance())
 
             # Enable private browsing for QWebSettings.
-            self.settings().setAttribute(self.settings().PrivateBrowsingEnabled, True)
+            websettings = self.settings()
+            websettings.setAttribute(websettings.PrivateBrowsingEnabled, True)
+            websettings.setAttribute(websettings.AutoLoadImages, True)
+            websettings.setAttribute(websettings.JavascriptCanOpenWindows, False)
+            websettings.setAttribute(websettings.JavascriptCanCloseWindows, False)
+            websettings.setAttribute(websettings.JavascriptCanAccessClipboard, False)
+            websettings.setAttribute(websettings.JavaEnabled, False)
+            websettings.setAttribute(websettings.PrintElementBackgrounds, True)
+            websettings.setAttribute(websettings.FrameFlatteningEnabled, False)
+            websettings.setAttribute(websettings.PluginsEnabled, False)
+            websettings.setAttribute(websettings.TiledBackingStoreEnabled, False)
+            websettings.setAttribute(websettings.SiteSpecificQuirksEnabled, True)
+            websettings.setAttribute(websettings.XSSAuditingEnabled, True)
+            websettings.setAttribute(websettings.DnsPrefetchEnabled, False)
 
         # Handle unsupported content.
         self.page().setForwardUnsupportedContent(True)
@@ -1213,24 +1216,6 @@ class WebView(QWebView):
         if password == "":
             password = None
         self.page().networkAccessManager().setProxy(QNetworkProxy(eval("QNetworkProxy." + proxyType + "Proxy"), str(settings.settings.value("proxy/Hostname")), int(port), user, password))
-
-    # Updates content settings based on settings.settings.
-    def updateContentSettings(self):
-        self.settings().setAttribute(self.settings().AutoLoadImages, settings.setting_to_bool("content/AutoLoadImages"))
-        self.settings().setAttribute(self.settings().JavascriptCanOpenWindows, settings.setting_to_bool("content/JavascriptCanOpenWindows"))
-        self.settings().setAttribute(self.settings().JavascriptCanCloseWindows, settings.setting_to_bool("content/JavascriptCanCloseWindows"))
-        self.settings().setAttribute(self.settings().JavascriptCanAccessClipboard, settings.setting_to_bool("content/JavascriptCanAccessClipboard"))
-        self.settings().setAttribute(self.settings().JavaEnabled, settings.setting_to_bool("content/JavaEnabled"))
-        self.settings().setAttribute(self.settings().PrintElementBackgrounds, settings.setting_to_bool("content/PrintElementBackgrounds"))
-        self.settings().setAttribute(self.settings().FrameFlatteningEnabled, settings.setting_to_bool("content/FrameFlatteningEnabled"))
-        self.settings().setAttribute(self.settings().PluginsEnabled, settings.setting_to_bool("content/PluginsEnabled"))
-        self.settings().setAttribute(self.settings().TiledBackingStoreEnabled, settings.setting_to_bool("content/TiledBackingStoreEnabled"))
-        self.settings().setAttribute(self.settings().SiteSpecificQuirksEnabled, settings.setting_to_bool("content/SiteSpecificQuirksEnabled"))
-
-    # Updates network settings based on settings.settings.
-    def updateNetworkSettings(self):
-        self.settings().setAttribute(self.settings().XSSAuditingEnabled, settings.setting_to_bool("network/XSSAuditingEnabled"))
-        self.settings().setAttribute(self.settings().DnsPrefetchEnabled, settings.setting_to_bool("network/DnsPrefetchEnabled"))
 
     # Handler for unsupported content.
     # This is where the content viewers are loaded.

@@ -76,14 +76,6 @@ class ClearHistoryDialog(QMainWindow):
             data.clearCookies()
         if self.dataType.currentIndex() == 2 or clear_everything:
             network.clear_cache()
-            path = settings.offline_cache_folder
-            if os.path.isdir(path):
-                if sys.platform.startswith("win"):
-                    try: subprocess.Popen(["rd", path])
-                    except: pass
-                else:
-                    try: subprocess.Popen(["rm", "-rf", path])
-                    except: pass
         if self.dataType.currentIndex() == 3 or clear_everything:
             for subpath in ("WebpageIcons.db", "LocalStorage", "Databases",):
                 path = os.path.abspath(os.path.join(settings.settings_folder, subpath))
