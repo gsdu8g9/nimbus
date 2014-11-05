@@ -205,7 +205,4 @@ def shortenURL(url):
 blank_toolbar = "QToolBar { border: 0; background: transparent; }"
 
 # Stores WebView instances.
-webviews = []
-
-# Stores WebView instances.
 disconnected = []

@@ -729,7 +729,6 @@ class WebView(QWebView):
         self.loadStarted.connect(self.resetContentType)
         self.loadFinished.connect(self.replaceAVTags)
         self.loadFinished.connect(self.setCanGoNext)
-        #self.loadFinished.connect(self.savePageToCache)
         self.loadStarted.connect(self.checkIfUsingContentViewer)
         #self.loadFinished.connect(self.finishLoad)
 
@@ -1121,8 +1120,6 @@ class WebView(QWebView):
     def finishLoad(self, ok=False):
         if not ok:
             success = False
-            if not network.isConnectedToNetwork():
-                success = self.loadPageFromCache(self._url)
             if not success:
                 if not network.isConnectedToNetwork():
                     self.errorPage("Problem loading page", "No Internet connection", "Your computer is not connected to the Internet. You may want to try the following:", ["<b>Windows 7 or Vista:</b> Click the <i>Start</i> button, then click <i>Control Panel</i>. Type <b>network</b> into the search box, click <i>Network and Sharing Center</i>, click <i>Set up a new connection or network</i>, and then double-click <i>Connect to the Internet</i>. From there, follow the instructions. If the network is password-protected, you will have to enter the password.", "<b>Windows 8:</b> Open the <i>Settings charm</i> and tap or click the Network icon (shaped like either five bars or a computer screen with a cable). Select the network you want to join, then tap or click <i>Connect</i>.", "<b>Mac OS X:</b> Click the AirPort icon (the icon shaped like a slice of pie near the top right of your screen). From there, select the network you want to join. If the network is password-protected, enter the password.", "<b>Ubuntu (Unity and Xfce):</b> Click the Network Indicator (the icon with two arrows near the upper right of your screen). From there, select the network you want to join. If the network is password-protected, enter the password.", "<b>Other Linux:</b> Oh, come on. I shouldn't have to be telling you this.", "Alternatively, if you have access to a wired Ethernet connection, you can simply plug the cable into your computer."])
@@ -1297,37 +1294,6 @@ class WebView(QWebView):
 
             # Emit signal.
             self.downloadStarted.emit(downloadDialog)
-
-    # Loads a page from the offline cache.
-    def loadPageFromCache(self, url):
-        m = hashlib.md5()
-        m.update(common.shortenURL(url).encode('utf-8'))
-        h = m.hexdigest()
-        try: f = open(os.path.join(settings.offline_cache_folder, h), "r")
-        except: pass
-        else:
-            try: self.setHtml(f.read(), QUrl(url))
-            except: pass
-            f.close()
-            return True
-        return False
-
-    # Saves a page to the offline cache.
-    def savePageToCache(self):
-        if not self.incognito:
-            if not os.path.exists(settings.offline_cache_folder):
-                try: os.mkdir(settings.offline_cache_folder)
-                except: return
-            content = self.page().mainFrame().toHtml()
-            m = hashlib.md5()
-            m.update(common.shortenURL(self.url().toString()).encode('utf-8'))
-            h = m.hexdigest()
-            try: f = open(os.path.join(settings.offline_cache_folder, h), "w")
-            except: pass
-            else:
-                try: f.write(content)
-                except: pass
-                f.close()
 
     # Saves the current page.
     # It partially supports saving edits to a page,
