@@ -151,8 +151,8 @@ class MainWindow(QMainWindow):
         self.tabsToolBar.layout().setContentsMargins(0,0,0,0)
     
         # Tab widget for tabbed browsing.
-        self.tabs = custom_widgets.TabWidget(self,
-                                             styleSheet="QTabWidget::pane{border:0;}")
+        self.tabs = custom_widgets.TabWidget(self)
+        self.tabs.setDocumentMode(True)
         self.tabs.setCornerWidget(self.tabsToolBar, Qt.TopRightCorner)
         
         # Allow rearranging of tabs.
