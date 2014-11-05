@@ -606,6 +606,11 @@ class MainWindow(QMainWindow):
             action.triggered2.connect(lambda x: data.setUserAgentForUrl(x, self.currentWidget().url()))
             action.triggered2.connect(self.reload)
             self.userAgentMenu.addAction(action)
+        self.customUserAgentAction = QAction(common.complete_icon("list-add"), tr("Custom"), self.userAgentMenu)
+        self.customUserAgentAction.setShortcut("Alt+U")
+        self.customUserAgentAction.triggered.connect(self.customUserAgent)
+        self.addAction(self.customUserAgentAction)
+        self.userAgentMenu.addAction(self.customUserAgentAction)
         self.mainMenu.addAction(self.userAgentMenu)
 
         # Add settings dialog action.
@@ -732,6 +737,12 @@ class MainWindow(QMainWindow):
         tabNineAction.triggered.connect(lambda: self.tabWidget().setCurrentIndex(self.tabWidget().count()-1))
         self.addAction(tabNineAction)
         self.applySettings()
+
+    def customUserAgent(self):
+        userAgent = QInputDialog.getText(self, tr("Custom user agent"), tr("User agent:"))
+        if userAgent[1]:
+            data.setUserAgentForUrl(userAgent[0], self.currentWidget().url())
+            self.reload()
 
     def focusLocationBar(self):
         if self.locationBar.isVisible():
