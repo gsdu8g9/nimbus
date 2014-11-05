@@ -146,29 +146,6 @@ if has_dbus:
                 browser.windows[-1].activateWindow()
                 return url
 
-
-def recoverLostTabs():
-    killemall = []
-    for webview in common.webviews:
-        try:
-            if webview.parent() == None:
-                browser.activeWindow().addTab(webview)
-        except:
-            killemall.append(webview)
-    for webview in killemall:
-        common.webviews.remove(webview)
-
-def cleanJavaScriptBars():
-    killthem = []
-    for webview in common.webviews:
-        for bar in webview.javaScriptBars:
-            try:
-                bar.label
-            except:
-                killthem.append((webview, bar))
-    for bar in killthem:
-        bar[0].javaScriptBars.remove(bar)
-
 # Main function to load everything.
 def main(argv):
     print("Starting %s %s..." % (common.app_name, common.app_version))
@@ -332,13 +309,6 @@ def main(argv):
         common.sessionSaver.start(30000)
 
     common.desktop = QDesktopWidget()
-
-    lostTabsTimer = QTimer(timeout=recoverLostTabs, parent=QCoreApplication.instance())
-    lostTabsTimer.timeout.connect(cleanJavaScriptBars)
-    if common.portable:
-        lostTabsTimer.start(1000)
-    else:
-        lostTabsTimer.start(500)
 
     if os.path.isfile(settings.crash_file):
         print("Crash file detected.", end="")

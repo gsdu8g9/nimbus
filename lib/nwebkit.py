@@ -560,7 +560,6 @@ class WebView(QWebView):
         self._minimumSizeHint = minimumSizeHint
 
         # Add this webview to the list of webviews.
-        common.webviews.append(self)
         self.setStyleSheet(self.baseStyleSheet % (self.size().width(), self.size().width(), self.size().height(), self.size().height()))
 
         # These are used to store the current url.
@@ -673,7 +672,10 @@ class WebView(QWebView):
         self.init()
 
         if os.path.exists(settings.new_tab_page) and not forceBlankPage:
-            self.load(QUrl.fromUserInput(settings.new_tab_page_short))
+            if sys.platform.startswith("win"):
+                self.load(QUrl.fromUserInput(settings.new_tab_page))
+            else:
+                self.load(QUrl.fromUserInput(settings.new_tab_page_short))
 
     def addJavaScriptBar(self, toolBar):
         self.javaScriptBars.append(toolBar)
@@ -869,8 +871,6 @@ class WebView(QWebView):
         self.setHtml(self._html)
 
     def deleteLater(self):
-        try: common.webviews.remove(self)
-        except: pass
         try: self.page().networkAccessManager().finished.disconnect(self.ready)
         except: pass
         QWebView.deleteLater(self)
@@ -1074,13 +1074,6 @@ class WebView(QWebView):
         self._contentType = None
         if self._oldURL != self._url:
             self._oldURL = self._url
-
-    # Custom implementation of deleteLater that also removes
-    # the WebView from common.webviews.
-    def deleteLater(self):
-        try: common.webviews.remove(self)
-        except: pass
-        QWebView.deleteLater(self)
 
     # If a request has finished and the request's URL is the current URL,
     # then set self._contentType.

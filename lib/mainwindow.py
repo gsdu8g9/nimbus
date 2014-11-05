@@ -1569,7 +1569,8 @@ class MainWindow(QMainWindow):
             webView.history().canGoForward() or\
             webView.url().toString() not in\
             ("about:blank", "",\
-             QUrl.fromUserInput(settings.new_tab_page).toString(),) or webView._historyToBeLoaded:
+             QUrl.fromUserInput(settings.new_tab_page).toString(),
+             QUrl.fromUserInput(settings.new_tab_page_short).toString()) or webView._historyToBeLoaded:
                 self.closedTabs.append((webView.saveHistory(), index, webView.incognito))
                 while len(self.closedTabs) >\
                 settings.setting_to_int("general/ReopenableTabCount"):
