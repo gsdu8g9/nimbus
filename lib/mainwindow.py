@@ -1091,7 +1091,6 @@ self.origY + ev.globalY() - self.mouseY)
             self.stopAction.setEnabled(False)
             self.reloadAction.setEnabled(False)
         self.toggleActions2()
-        self.updateTabTitles()
 
     def applySettings(self):
         self.homeAction.setVisible(settings.\
