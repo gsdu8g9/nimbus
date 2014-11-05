@@ -130,17 +130,17 @@ class MainWindow(QMainWindow):
                                 parent=self,
                                 iconSize=QSize(22,22),
                                 windowTitle=tr("Navigation Toolbar"))
-        if sys.platform.startswith("darwin"):
-            try:
-                self.toolBar.setUnifiedTitleAndToolBarOnMac(True)
-            except:
-                pass
         self.extensionBar = QToolBar(movable=False,\
                                 contextMenuPolicy=Qt.CustomContextMenu,\
                                 parent=self,
                                 styleSheet="QToolButton { padding: 0; }",
                                 windowTitle=tr("Extension Toolbar"))
         self.addToolBar(self.toolBar)
+        if sys.platform.startswith("darwin"):
+            try:
+                self.toolBar.setUnifiedTitleAndToolBarOnMac(True)
+            except:
+                pass
         self.addToolBarBreak()
         self.addToolBar(Qt.BottomToolBarArea, self.extensionBar)
         if self.appMode:
