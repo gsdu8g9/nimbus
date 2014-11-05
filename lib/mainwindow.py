@@ -1528,7 +1528,7 @@ class MainWindow(QMainWindow):
                                              currentIndex() - 1)
 
     def updateTitle(self):
-        self.setWindowTitle(self.currentWidget().windowTitle())
+        self.setWindowTitle(self.currentWidget().windowTitle() + " - " + common.app_name)
 
     # Update the titles on every single tab.
     def updateTabTitles(self):
