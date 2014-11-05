@@ -136,10 +136,11 @@ class MainWindow(QMainWindow):
                                 styleSheet="QToolButton { padding: 0; }",
                                 windowTitle=tr("Extension Toolbar"))
         self.addToolBar(self.toolBar)
-        try:
-            self.toolBar.setUnifiedTitleAndToolBarOnMac(True)
-        except:
-            pass
+        if sys.platform.startswith("darwin"):
+            try:
+                self.setUnifiedTitleAndToolBarOnMac(True)
+            except:
+                pass
         self.addToolBarBreak()
         self.addToolBar(Qt.BottomToolBarArea, self.extensionBar)
         if self.appMode:
