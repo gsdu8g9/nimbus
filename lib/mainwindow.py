@@ -208,6 +208,7 @@ class MainWindow(QMainWindow):
         self.newTabButton.setIcon(common.complete_icon("list-add"))
 
         closeTabButton = QAction(self)
+        closeTabButton.setText(tr("Close Tab"))
         closeTabButton.triggered.connect(self.removeTab)
         closeTabButton.setIcon(style.standardIcon(style.SP_DialogCloseButton))
         self.tabsToolBar.addAction(closeTabButton)
@@ -215,6 +216,7 @@ class MainWindow(QMainWindow):
         tabsMenuButton = QToolButton(self)
         tabsMenuButton.setArrowType(Qt.DownArrow)
         tabsMenuButton.setFocusPolicy(Qt.TabFocus)
+        tabsMenuButton.setToolTip(tr("List all tabs"))
         tabsMenuButton.setStyleSheet("QToolButton { max-width: 20px; } QToolButton::menu-indicator { image: none; }")
         self.tabsToolBar.addWidget(tabsMenuButton)
 
@@ -403,6 +405,14 @@ class MainWindow(QMainWindow):
         newWindowAction.setShortcut("Ctrl+N")
         newWindowAction.triggered.connect(self.addWindow)
         self.addAction(newWindowAction)
+        
+        # Instructions for use.
+        self.label = QAction(self)
+        self.label.setDisabled(True)
+        self.label.setText(tr("Mouse over a button for details."))
+        self.mainMenu.addAction(self.label)
+        
+        self.mainMenu.addSeparator()
 
         self.tabMenuToolBar = custom_widgets.ToolBarAction(self)
         self.mainMenu.addAction(self.tabMenuToolBar)
