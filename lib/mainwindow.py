@@ -130,6 +130,11 @@ class MainWindow(QMainWindow):
                                 parent=self,
                                 iconSize=QSize(22,22),
                                 windowTitle=tr("Navigation Toolbar"))
+        if sys.platform.startswith("darwin"):
+            try:
+                self.toolBar.setUnifiedTitleAndToolBarOnMac(True)
+            except:
+                pass
         self.extensionBar = QToolBar(movable=False,\
                                 contextMenuPolicy=Qt.CustomContextMenu,\
                                 parent=self,
@@ -932,28 +937,6 @@ class MainWindow(QMainWindow):
                            self.sideBars[name]["sideBar"])
         self.tabifyDockWidget(self.sideBar, self.sideBars[name]["sideBar"])
         self.sideBars[name]["sideBar"].setVisible(True)
-
-    # This is so you can grab the window by its toolbar and move it.
-    # It's an ugly hack, but it works.
-    def mousePressEvent(self, ev):
-        if ev.button() != Qt.LeftButton:
-            return QMainWindow.mousePressEvent(self, ev)
-        else:
-            if not QCoreApplication.instance().keyboardModifiers() in (Qt.ControlModifier, Qt.ShiftModifier, Qt.AltModifier):
-                QApplication.setOverrideCursor(Qt.SizeAllCursor)
-            self.mouseX = ev.globalX()
-            self.origX = self.x()
-            self.mouseY = ev.globalY()
-            self.origY = self.y()
-
-    def mouseMoveEvent(self, ev):
-        if self.mouseX and self.mouseY and not self.isMaximized():
-            self.move(self.origX + ev.globalX() - self.mouseX,
-self.origY + ev.globalY() - self.mouseY)
-
-    def mouseReleaseEvent(self, ev):
-        QApplication.restoreOverrideCursor()
-        return QMainWindow.mouseReleaseEvent(self, ev)
 
     # Deletes any closed windows above the reopenable window count,
     # and blanks all the tabs and sidebars.
