@@ -27,7 +27,7 @@ if not common.pyqt4:
 else:
     from PyQt4.QtCore import Qt, QUrl
     from PyQt4.QtGui import QWidget, QKeySequence, QIcon, QLabel, QMainWindow, QCheckBox, QGroupBox, QTabWidget, QToolBar, QToolButton, QLineEdit, QVBoxLayout, QComboBox, QSizePolicy, QAction, QPushButton, QListWidget, QTextEdit
-    from PyQt5.QtWebKit import QWebSettings
+    from PyQt4.QtWebKit import QWebSettings
 
 # Basic settings panel.
 class SettingsPanel(QWidget):
