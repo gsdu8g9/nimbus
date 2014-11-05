@@ -212,17 +212,21 @@ class MainWindow(QMainWindow):
         closeTabButton.setIcon(style.standardIcon(style.SP_DialogCloseButton))
         self.tabsToolBar.addAction(closeTabButton)
 
-        tabsMenuAction = QAction(self)
-        tabsMenuAction.setShortcut("Alt+T")
-        self.tabsToolBar.addAction(tabsMenuAction)
-        tabsMenuButton = self.tabsToolBar.widgetForAction(tabsMenuAction)
-        tabsMenuButton.setPopupMode(QToolButton.InstantPopup)
-        tabsMenuButton.setStyleSheet("QToolButton { max-width: 1em; }")
+        tabsMenuButton = QToolButton(self)
+        tabsMenuButton.setArrowType(Qt.DownArrow)
+        tabsMenuButton.setFocusPolicy(Qt.TabFocus)
+        tabsMenuButton.setStyleSheet("QToolButton { max-width: 20px; } QToolButton::menu-indicator { image: none; }")
+        self.tabsToolBar.addWidget(tabsMenuButton)
 
         self.tabsMenu = QMenu(self)
         self.tabsMenu.aboutToShow.connect(self.aboutToShowTabsMenu)
+        tabsMenuButton.clicked.connect(tabsMenuButton.showMenu)
+        tabsMenuButton.setMenu(self.tabsMenu)
+        
+        tabsMenuAction = QAction(self)
+        tabsMenuAction.setShortcut("Alt+T")
         tabsMenuAction.triggered.connect(tabsMenuButton.showMenu)
-        tabsMenuAction.setMenu(self.tabsMenu)
+        self.addAction(tabsMenuAction)
 
         # These are hidden actions used for the Ctrl[+Shift]+Tab feature
         # you see in most browsers.
