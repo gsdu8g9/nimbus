@@ -1529,7 +1529,7 @@ class MainWindow(QMainWindow):
 
     # Removes a tab at index.
     def removeTab(self, index=None):
-        if not index:
+        if type(index) is not int:
             index = self.tabWidget().currentIndex()
         if index < settings.setting_to_int("general/PinnedTabCount"):
             return
@@ -1563,8 +1563,9 @@ class MainWindow(QMainWindow):
     # Closes the tabs on the left.
     def closeLeftTabs(self):
         t = self.tabs.currentIndex()
-        for i in range(t-settings.setting_to_int("general/PinnedTabCount")):
-            self.removeTab(settings.setting_to_int("general/PinnedTabCount"))
+        pinnedTabCount = settings.setting_to_int("general/PinnedTabCount")
+        for i in range(t-pinnedTabCount):
+            self.removeTab(pinnedTabCount)
 
     # Closes the tabs on the right.
     def closeRightTabs(self):
