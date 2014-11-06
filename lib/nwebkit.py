@@ -213,10 +213,7 @@ class WebPage(QWebPage):
         # Start self.isOnlineTimer.
         isOnlineTimer.timeout.connect(self.setNavigatorOnline)
         if not isOnlineTimer.isActive():
-            if sys.platform.startswith("linux"):
-                isOnlineTimer.start(5000)
-            else:
-                isOnlineTimer.start(10000)
+            isOnlineTimer.start(5000)
 
         # Set user agent to default value.
         self.setUserAgent()

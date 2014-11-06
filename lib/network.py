@@ -17,8 +17,6 @@ import settings
 import filtering
 import random
 import settings
-if not sys.platform.startswith("linux"):
-    import urllib.request
 from translate import tr
 if not common.pyqt4:
     from PyQt5.QtCore import QCoreApplication, QUrl, QTimer
@@ -172,20 +170,12 @@ def clear_cache():
 # Ported from http://stackoverflow.com/questions/2475266/verfiying-the-network-connection-using-qt-4-4
 # and http://stackoverflow.com/questions/13533710/pyqt-convert-enum-value-to-key
 # and http://stackoverflow.com/questions/3764291/checking-network-connection
-if 1:
-    def isConnectedToNetwork(reference=None):
-        ifaces = QNetworkInterface.allInterfaces()
-        result = False
-        for iface in ifaces:
-            if (iface.flags() & QNetworkInterface.IsUp) and not (iface.flags() & QNetworkInterface.IsLoopBack):
-                for entry in iface.addressEntries():
-                    result = True
-                    break
-        return result
-else:
-    def isConnectedToNetwork(reference):
-        try:
-            urllib.request.urlopen(reference, timeout=1)
-            return True
-        except urllib.request.URLError:
-            return False
+def isConnectedToNetwork(reference=None):
+    ifaces = QNetworkInterface.allInterfaces()
+    result = False
+    for iface in ifaces:
+        if (iface.flags() & QNetworkInterface.IsUp) and not (iface.flags() & QNetworkInterface.IsLoopBack):
+            for entry in iface.addressEntries():
+                result = True
+                break
+    return result

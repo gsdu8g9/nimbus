@@ -166,7 +166,7 @@ class MainWindow(QMainWindow):
         # Update tab titles and icons when the current tab is changed.
         self.tabs.currentChanged.connect(self.updateTabIcons)
         self.tabs.currentChanged.connect(self.updateTitle)
-        self.tabs.currentChanged.connect(self.setProgress)
+        self.tabs.currentChanged.connect(lambda: self.setProgress(0))
 
         # Hacky way of updating the location bar text when the tab is changed.
         self.tabs.currentChanged.connect(self.updateLocationText)
