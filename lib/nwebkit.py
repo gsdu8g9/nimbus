@@ -623,7 +623,17 @@ class WebView(QWebView):
         self.page().setNetworkAccessManager(self.nAM)
         self.nAM.setParent(QCoreApplication.instance())
 
-        self.updateProxy()
+        #self.updateProxy()
+        
+        self.toggleCaretBrowsingAction = QAction(self)
+        self.toggleCaretBrowsingAction.setShortcut("F8")
+        self.toggleCaretBrowsingAction.triggered.connect(self.toggleCaretBrowsing)
+        self.addAction(self.toggleCaretBrowsingAction)
+        
+        self.toggleSpatialNavigationAction = QAction(self)
+        self.toggleSpatialNavigationAction.setShortcut("F8")
+        self.toggleSpatialNavigationAction.triggered.connect(self.toggleSpatialNavigation)
+        self.addAction(self.toggleSpatialNavigationAction)
 
         # What to do if private browsing is not enabled.
         if self.incognito:
@@ -634,16 +644,8 @@ class WebView(QWebView):
             # Enable private browsing for QWebSettings.
             websettings = self.settings()
             websettings.setAttribute(websettings.PrivateBrowsingEnabled, True)
-            websettings.setAttribute(websettings.AutoLoadImages, True)
-            websettings.setAttribute(websettings.JavascriptCanOpenWindows, False)
-            websettings.setAttribute(websettings.JavascriptCanCloseWindows, False)
-            websettings.setAttribute(websettings.JavascriptCanAccessClipboard, False)
             websettings.setAttribute(websettings.JavaEnabled, False)
-            websettings.setAttribute(websettings.PrintElementBackgrounds, True)
-            websettings.setAttribute(websettings.FrameFlatteningEnabled, False)
             websettings.setAttribute(websettings.PluginsEnabled, False)
-            websettings.setAttribute(websettings.TiledBackingStoreEnabled, False)
-            websettings.setAttribute(websettings.SiteSpecificQuirksEnabled, True)
             websettings.setAttribute(websettings.XSSAuditingEnabled, True)
             websettings.setAttribute(websettings.DnsPrefetchEnabled, False)
 
@@ -676,6 +678,24 @@ class WebView(QWebView):
                 self.load(QUrl.fromUserInput(settings.new_tab_page))
             else:
                 self.load(QUrl.fromUserInput(settings.new_tab_page_short))
+
+    def toggleCaretBrowsing(self):
+        websettings = self.settings().globalSettings()
+        book = websettings.testAttribute(websettings.CaretBrowsingEnabled)
+        websettings.setAttribute(websettings.CaretBrowsingEnabled, not book)
+        if book:
+            common.trayIcon.showMessage(common.app_name, tr("Caret browsing disabled."))
+        else:
+            common.trayIcon.showMessage(common.app_name, tr("Caret browsing enabled."))
+
+    def toggleSpatialNavigation(self):
+        websettings = self.settings().globalSettings()
+        book = websettings.testAttribute(websettings.SpatialNavigationEnabled)
+        websettings.setAttribute(websettings.SpatialNavigationEnabled, not book)
+        if book:
+            common.trayIcon.showMessage(common.app_name, tr("Spatial navigation disabled."))
+        else:
+            common.trayIcon.showMessage(common.app_name, tr("Spatial navigation enabled."))
 
     def addJavaScriptBar(self, toolBar):
         self.javaScriptBars.append(toolBar)
@@ -1190,22 +1210,6 @@ class WebView(QWebView):
             return common.complete_icon("text-html")
         else:
             return icon
-
-    # Function to update proxy list.
-    def updateProxy(self):
-        proxyType = str(settings.settings.value("proxy/Type"))
-        if proxyType == "None":
-            proxyType = "No"
-        port = settings.settings.value("proxy/Port")
-        if port == None:
-            port = common.default_port
-        user = str(settings.settings.value("proxy/User"))
-        if user == "":
-            user = None
-        password = str(settings.settings.value("proxy/Password"))
-        if password == "":
-            password = None
-        self.page().networkAccessManager().setProxy(QNetworkProxy(eval("QNetworkProxy." + proxyType + "Proxy"), str(settings.settings.value("proxy/Hostname")), int(port), user, password))
 
     # Handler for unsupported content.
     # This is where the content viewers are loaded.

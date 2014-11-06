@@ -233,14 +233,15 @@ def main(argv):
     # Create instance of clear history dialog.
     common.chistorydialog = clear_history_dialog.ClearHistoryDialog()
 
-    QWebSettings.globalSettings().setAttribute(QWebSettings.globalSettings().LocalContentCanAccessRemoteUrls, True)
-    QWebSettings.globalSettings().setAttribute(QWebSettings.globalSettings().LocalContentCanAccessFileUrls, True)
-    QWebSettings.globalSettings().setAttribute(QWebSettings.globalSettings().DeveloperExtrasEnabled, True)
-
     uc = QUrl.fromUserInput(settings.user_css)
     websettings = QWebSettings.globalSettings()
     websettings.setUserStyleSheetUrl(uc)
     websettings.enablePersistentStorage(settings.settings_folder)
+    websettings.setAttribute(websettings.LocalContentCanAccessRemoteUrls, True)
+    websettings.setAttribute(websettings.LocalContentCanAccessFileUrls, True)
+    websettings.setAttribute(websettings.DeveloperExtrasEnabled, True)
+    websettings.setAttribute(websettings.ScrollAnimatorEnabled, True)
+    common.applyWebSettings()
 
     # Set up settings dialog.
     settings.settingsDialog = settings_dialog.SettingsDialog()

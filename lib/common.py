@@ -23,16 +23,16 @@ if not settings.pyqt4:
         from PyQt5.QtCore import qVersion, QLocale, QUrl, QEvent, QCoreApplication
         from PyQt5.QtGui import QIcon
         from PyQt5.QtWidgets import QApplication
-        from PyQt5.QtWebKit import qWebKitVersion
+        from PyQt5.QtWebKit import qWebKitVersion, QWebSettings
     except ImportError:
         from PyQt4.QtCore import qVersion, QLocale, QUrl, QEvent, QCoreApplication
         from PyQt4.QtGui import QIcon, QApplication
-        from PyQt4.QtWebKit import qWebKitVersion
+        from PyQt4.QtWebKit import qWebKitVersion, QWebSettings
         pyqt4 = True
 else:
     from PyQt4.QtCore import qVersion, QLocale, QUrl, QEvent, QCoreApplication
     from PyQt4.QtGui import QIcon, QApplication
-    from PyQt4.QtWebKit import qWebKitVersion
+    from PyQt4.QtWebKit import qWebKitVersion, QWebSettings
     pyqt4 = True
 
 def rm(fname):
@@ -97,6 +97,21 @@ app_name_file = paths.app_name_file
 
 # Version info file
 app_version_file = paths.app_version_file
+
+def applyWebSettings():
+    websettings = QWebSettings.globalSettings()
+    websettings.setAttribute(websettings.XSSAuditingEnabled, settings.setting_to_bool("network/XSSAuditingEnabled"))
+    websettings.setAttribute(websettings.DnsPrefetchEnabled, settings.setting_to_bool("network/DnsPrefetchEnabled"))
+    websettings.setAttribute(websettings.AutoLoadImages, settings.setting_to_bool("content/AutoLoadImages"))
+    websettings.setAttribute(websettings.JavascriptCanOpenWindows, settings.setting_to_bool("content/JavascriptCanOpenWindows"))
+    websettings.setAttribute(websettings.JavascriptCanCloseWindows, settings.setting_to_bool("content/JavascriptCanCloseWindows"))
+    websettings.setAttribute(websettings.JavascriptCanAccessClipboard, settings.setting_to_bool("content/JavascriptCanAccessClipboard"))
+    websettings.setAttribute(websettings.JavaEnabled, settings.setting_to_bool("content/JavaEnabled"))
+    websettings.setAttribute(websettings.PrintElementBackgrounds, settings.setting_to_bool("content/PrintElementBackgrounds"))
+    websettings.setAttribute(websettings.FrameFlatteningEnabled, settings.setting_to_bool("content/FrameFlatteningEnabled"))
+    websettings.setAttribute(websettings.PluginsEnabled, settings.setting_to_bool("content/PluginsEnabled"))
+    websettings.setAttribute(websettings.TiledBackingStoreEnabled, settings.setting_to_bool("content/TiledBackingStoreEnabled"))
+    websettings.setAttribute(websettings.SiteSpecificQuirksEnabled, settings.setting_to_bool("content/SiteSpecificQuirksEnabled"))
 
 # Application name. Change this to change the name of the program everywhere.
 app_name = "Nimbus"

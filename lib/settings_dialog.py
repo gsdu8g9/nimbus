@@ -351,6 +351,7 @@ class ContentSettingsPanel(SettingsPanel):
         settings.settings.setValue("content/TiledBackingStoreEnabled", self.tiledBackingStoreToggle.isChecked())
         settings.settings.setValue("content/FrameFlatteningEnabled", self.frameFlattenToggle.isChecked())
         settings.settings.setValue("content/SiteSpecificQuirksEnabled", self.siteSpecificQuirksToggle.isChecked())
+        common.applyWebSettings()
         settings.settings.sync()
 
 # Ad Remover settings panel
@@ -661,9 +662,7 @@ class NetworkSettingsPanel(SettingsPanel):
         settings.settings.setValue("proxy/Port", self.portEntry.value())
         settings.settings.setValue("proxy/User", self.userEntry.text())
         settings.settings.setValue("proxy/Password", self.passwordEntry.text())
-        websettings = QWebSettings.globalSettings()
-        websettings.setAttribute(websettings.XSSAuditingEnabled, settings.setting_to_bool("network/XSSAuditingEnabled"))
-        websettings.setAttribute(websettings.DnsPrefetchEnabled, settings.setting_to_bool("network/DnsPrefetchEnabled"))
+        common.applyWebSettings()
         settings.settings.sync()
 
 # Extension configuration panel
@@ -827,17 +826,6 @@ class SettingsDialog(QWidget):
             except: pass
             try: window.applySettings()
             except: pass
-        websettings = QWebSettings.globalSettings()
-        websettings.setAttribute(websettings.AutoLoadImages, settings.setting_to_bool("content/AutoLoadImages"))
-        websettings.setAttribute(websettings.JavascriptCanOpenWindows, settings.setting_to_bool("content/JavascriptCanOpenWindows"))
-        websettings.setAttribute(websettings.JavascriptCanCloseWindows, settings.setting_to_bool("content/JavascriptCanCloseWindows"))
-        websettings.setAttribute(websettings.JavascriptCanAccessClipboard, settings.setting_to_bool("content/JavascriptCanAccessClipboard"))
-        websettings.setAttribute(websettings.JavaEnabled, settings.setting_to_bool("content/JavaEnabled"))
-        websettings.setAttribute(websettings.PrintElementBackgrounds, settings.setting_to_bool("content/PrintElementBackgrounds"))
-        websettings.setAttribute(websettings.FrameFlatteningEnabled, settings.setting_to_bool("content/FrameFlatteningEnabled"))
-        websettings.setAttribute(websettings.PluginsEnabled, settings.setting_to_bool("content/PluginsEnabled"))
-        websettings.setAttribute(websettings.TiledBackingStoreEnabled, settings.setting_to_bool("content/TiledBackingStoreEnabled"))
-        websettings.setAttribute(websettings.SiteSpecificQuirksEnabled, settings.setting_to_bool("content/SiteSpecificQuirksEnabled"))
 
 class SettingsDialogWrapper(QWidget):
     def __init__(self, parent=None):

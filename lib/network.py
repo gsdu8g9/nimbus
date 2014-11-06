@@ -144,6 +144,22 @@ network_access_manager.setCookieJar(cookie_jar)
 incognito_network_access_manager = NetworkAccessManager(nocache=True)
 incognito_network_access_manager.setCookieJar(incognito_cookie_jar)
 
+def apply_proxy():
+    proxyType = str(settings.settings.value("proxy/Type"))
+    if proxyType == "None":
+        proxyType = "No"
+    port = settings.settings.value("proxy/Port")
+    if port == None:
+        port = common.default_port
+    user = str(settings.settings.value("proxy/User"))
+    if user == "":
+        user = None
+    password = str(settings.settings.value("proxy/Password"))
+    if password == "":
+        password = None
+    for manager in (incognito_network_access_manager, network_access_manager):
+        manager.setProxy(QNetworkProxy(eval("QNetworkProxy." + proxyType + "Proxy"), str(settings.settings.value("proxy/Hostname")), int(port), user, password))
+
 # Clear cache.
 def clear_cache():
     common.trayIcon.showMessage("What cache?", "%s doesn't have a cache." % (common.app_name,))
