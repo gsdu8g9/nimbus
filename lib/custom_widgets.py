@@ -88,10 +88,13 @@ class BatteryAction(QAction):
     def updateLife(self):
         percentage = system.get_battery_percentage()
         text_percentage = str(percentage) + "%"
-        if system.is_on_ac():
-            text_percentage += " (AC)"
         self.setText(text_percentage)
-        self.setToolTip("Power remaining: " + text_percentage)
+        percent = tr("Power remaining: %s%s")
+        ac = system.is_on_ac()
+        self.setToolTip(percent % (text_percentage, " (AC)" if ac else ""))
+        if ac:
+            self.setIcon(complete_icon("charging"))
+            return
         if percentage >= 40:
             self.setIcon(complete_icon("battery"))
         elif percentage >= 10:

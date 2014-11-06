@@ -18,6 +18,16 @@ LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
 OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 PERFORMANCE OF THIS SOFTWARE.
 
+Icons
+---------
+The icons are from the Tango! Desktop Project and are released into the public
+domain.
+
+Exceptions to the above rule:
+---------
+charging.png is released under the Creative Commons Attribution 2.5 Generic
+license. It can be found at http://commons.wikimedia.org/wiki/File:Lightning-silk.png
+
 ViewerJS
 ----------
 ViewerJS is released under the terms of the AGPL 3.0 License.
