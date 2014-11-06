@@ -18,12 +18,12 @@ from translate import tr
 import system
 
 if not pyqt4:
-    from PyQt5.QtCore import Qt, pyqtSignal, QPoint, QUrl, QSize, QTimer
+    from PyQt5.QtCore import Qt, pyqtSignal, QPoint, QUrl, QSize, QTimer, QCoreApplication
     Signal = pyqtSignal
     from PyQt5.QtGui import QIcon, QPixmap
     from PyQt5.QtWidgets import QMainWindow, QAction, QToolButton, QPushButton, QWidget, QComboBox, QHBoxLayout, QTabWidget, QTextEdit, QVBoxLayout, QLabel, QSizePolicy, QLineEdit, QSpinBox, QToolBar, QStyle, QStylePainter, QStyleOptionToolBar, QMenu, QTabBar, QWidgetAction, QListWidget
 else:
-    from PyQt4.QtCore import Qt, pyqtSignal, QPoint, QUrl, QSize, QTimer
+    from PyQt4.QtCore import Qt, pyqtSignal, QPoint, QUrl, QSize, QTimer, QCoreApplication
     Signal = pyqtSignal
     from PyQt4.QtGui import QPixmap, QMainWindow, QAction, QToolButton, QPushButton, QIcon, QWidget, QComboBox, QHBoxLayout, QTabWidget, QTextEdit, QVBoxLayout, QLabel, QSizePolicy, QLineEdit, QSpinBox, QToolBar, QStyle, QStylePainter, QStyleOptionToolBar, QMenu, QTabBar, QWidgetAction, QListWidget
 
@@ -64,16 +64,15 @@ else:
 
 # This action shows how much power the computer has left.
 class BatteryAction(QAction):
+    timer = QTimer(QCoreApplication.instance())
     def __init__(self, *args, **kwargs):
         super(BatteryAction, self).__init__(*args, **kwargs)
         self.setToolTip(tr("Power"))
         if system.battery:
             self.updateLife()
-            try:
-                common.sessionSaver.timeout.connect(self.updateLife)
-            except:
-                self.timer = QTimer(timeout=self.updateLife, parent=self)
-                self.timer.start(20000)
+            self.timer.timeout.connect(self.updateLife)
+            if not self.timer.isActive():
+                self.timer.start(5000)
         elif system.is_on_ac():
             self.setIcon(complete_icon("battery"))
             self.setText(tr("AC"))
@@ -83,7 +82,7 @@ class BatteryAction(QAction):
             self.setText(tr("N/A"))
             self.setToolTip(tr("Battery not detected"))
     def deleteLater(self):
-        try: common.sessionSaver.timeout.disconnect(self.updateLife)
+        try: self.timer.timeout.disconnect(self.updateLife)
         except: pass
         super(BatteryAction, self).deleteLater()
     def updateLife(self):

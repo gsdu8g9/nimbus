@@ -44,10 +44,34 @@ if sys.platform.startswith("win"):
         battery = True
     
     def is_on_ac():
-        return bool(status.ACLineStatus)
+        SYSTEM_POWER_STATUS_P = ctypes.POINTER(SYSTEM_POWER_STATUS)
+
+        GetSystemPowerStatus = ctypes.windll.kernel32.GetSystemPowerStatus
+        GetSystemPowerStatus.argtypes = [SYSTEM_POWER_STATUS_P]
+        GetSystemPowerStatus.restype = wintypes.BOOL
+
+        status = SYSTEM_POWER_STATUS()
+        if not GetSystemPowerStatus(ctypes.pointer(status)):
+            raise ctypes.WinError()
+        acline = bool(status.ACLineStatus)
+        del SYSTEM_POWER_STATUS_P
+        del status
+        return acline
     
     def get_battery_percentage():
-        return status.BatteryLifePercent
+        SYSTEM_POWER_STATUS_P = ctypes.POINTER(SYSTEM_POWER_STATUS)
+
+        GetSystemPowerStatus = ctypes.windll.kernel32.GetSystemPowerStatus
+        GetSystemPowerStatus.argtypes = [SYSTEM_POWER_STATUS_P]
+        GetSystemPowerStatus.restype = wintypes.BOOL
+
+        status = SYSTEM_POWER_STATUS()
+        if not GetSystemPowerStatus(ctypes.pointer(status)):
+            raise ctypes.WinError()
+        percent = status.BatteryLifePercent
+        del SYSTEM_POWER_STATUS_P
+        del status
+        return percent
 else:
     power_supplies = "/sys/class/power_supply/"
     ac_status = os.path.join(power_supplies, "ACAD")
