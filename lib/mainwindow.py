@@ -757,7 +757,7 @@ class MainWindow(QMainWindow):
         self.applySettings()
 
     def customUserAgent(self):
-        userAgent = QInputDialog.getText(self, tr("Custom user agent"), tr("User agent:"))
+        userAgent = QInputDialog.getText(self, tr("Custom user agent"), tr("User agent:"), QLineEdit.Normal, data.userAgentForUrl(self.currentWidget().url()))
         if userAgent[1]:
             data.setUserAgentForUrl(userAgent[0], self.currentWidget().url())
             self.reload()
