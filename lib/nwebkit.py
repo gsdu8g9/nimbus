@@ -686,9 +686,9 @@ class WebView(QWebView):
         settings.settings.setValue("navigation/CaretBrowsingEnabled", not book)
         settings.settings.sync()
         if book:
-            common.trayIcon.showMessage(common.app_name, tr("Caret browsing disabled."))
+            common.trayIcon.showMessage(tr("Caret browsing disabled."), tr("Press F7 to toggle."))
         else:
-            common.trayIcon.showMessage(common.app_name, tr("Caret browsing enabled."))
+            common.trayIcon.showMessage(tr("Caret browsing enabled."), tr("Press F7 to toggle."))
 
     def toggleSpatialNavigation(self):
         websettings = self.settings().globalSettings()
@@ -697,9 +697,9 @@ class WebView(QWebView):
         settings.settings.setValue("navigation/SpatialNavigationEnabled", not book)
         settings.settings.sync()
         if book:
-            common.trayIcon.showMessage(common.app_name, tr("Spatial navigation disabled."))
+            common.trayIcon.showMessage(tr("Spatial navigation disabled."), tr("Press F8 to toggle."))
         else:
-            common.trayIcon.showMessage(common.app_name, tr("Spatial navigation enabled."))
+            common.trayIcon.showMessage(tr("Spatial navigation enabled."), tr("Press F8 to toggle."))
 
     def addJavaScriptBar(self, toolBar):
         self.javaScriptBars.append(toolBar)
