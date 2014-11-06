@@ -208,9 +208,3 @@ class SystemTrayIcon(QSystemTrayIcon):
 
     def saveSession(self):
         session.saveSessionManually()
-
-    def showMessage(self, title, msg, icon=QSystemTrayIcon.Information, millisecondsTimeoutHint=10000):
-        if sys.platform.startswith("linux"):
-            subprocess.Popen(["notify-send", "--expire-time", str(millisecondsTimeoutHint), "--icon=dialog-information", "%s\n\n%s" % (title, msg,)])
-        else:
-            super(SystemTrayIcon, self).showMessage(title, msg)

@@ -626,7 +626,7 @@ class WebView(QWebView):
         #self.updateProxy()
         
         self.toggleCaretBrowsingAction = QAction(self)
-        self.toggleCaretBrowsingAction.setShortcut("F8")
+        self.toggleCaretBrowsingAction.setShortcut("F7")
         self.toggleCaretBrowsingAction.triggered.connect(self.toggleCaretBrowsing)
         self.addAction(self.toggleCaretBrowsingAction)
         
@@ -683,6 +683,8 @@ class WebView(QWebView):
         websettings = self.settings().globalSettings()
         book = websettings.testAttribute(websettings.CaretBrowsingEnabled)
         websettings.setAttribute(websettings.CaretBrowsingEnabled, not book)
+        settings.settings.setValue("navigation/CaretBrowsingEnabled", not book)
+        settings.settings.sync()
         if book:
             common.trayIcon.showMessage(common.app_name, tr("Caret browsing disabled."))
         else:
@@ -692,6 +694,8 @@ class WebView(QWebView):
         websettings = self.settings().globalSettings()
         book = websettings.testAttribute(websettings.SpatialNavigationEnabled)
         websettings.setAttribute(websettings.SpatialNavigationEnabled, not book)
+        settings.settings.setValue("navigation/SpatialNavigationEnabled", not book)
+        settings.settings.sync()
         if book:
             common.trayIcon.showMessage(common.app_name, tr("Spatial navigation disabled."))
         else:
