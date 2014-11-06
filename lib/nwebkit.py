@@ -268,7 +268,7 @@ class WebPage(QWebPage):
         toolBar.setLayout(layout)
         w1 = custom_widgets.Expander(parent=toolBar)
         layout.addWidget(w1)
-        title = QLabel(parent=toolBar, text="<b></b>" % title,)
+        title = QLabel(parent=toolBar, text="<b>%s</b>" % title,)
         layout.addWidget(title)
         tb.label = QLabel(parent=toolBar, text=msg)
         layout.addWidget(tb.label)
