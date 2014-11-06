@@ -251,6 +251,7 @@ class MainWindow(QMainWindow):
         # Regularly and forcibly enable and disable navigation actions
         # every few milliseconds.
         self.timer = QTimer(timeout=self.toggleActions, parent=self)
+        isOnlineTimer.timeout.connect(self.updateNetworkStatus)
         self.timer.timeout.connect(self.updateDateTime)
         self.timer.timeout.connect(self.reconnectWebViews)
         
@@ -981,6 +982,8 @@ class MainWindow(QMainWindow):
     def deleteLater(self):
         try: browser.windows.remove(self)
         except: pass
+        try: isOnlineTimer.disconnect(self.updateNetworkStatus)
+        except: pass
         QMainWindow.deleteLater(self)
 
     # Open settings dialog.
@@ -1061,11 +1064,13 @@ class MainWindow(QMainWindow):
                         newExtension.setIcon(common.complete_icon("applications-other"))
                     self._extensions.append(newExtension)
 
+    # Updates the network status:
+    def updateNetworkStatus(self):
+        self.networkManagerAction.setIcon(common.complete_icon("network-idle") if network.isConnectedToNetwork(self.currentWidget().url().toString()) else common.complete_icon("network-offline"))
+
     # Updates the time.
     def updateDateTime(self):
         self.dateTime.setText(QDateTime.currentDateTime().toString())
-        #print(network.isConnectedToNetwork())
-        self.networkManagerAction.setIcon(common.complete_icon("network-idle") if network.isConnectedToNetwork(self.currentWidget().url().toString()) else common.complete_icon("network-offline"))
 
     # Toggle all the navigation buttons.
     def toggleActions(self):
