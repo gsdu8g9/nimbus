@@ -1228,8 +1228,16 @@ class WebView(QWebView):
         content_type = reply.header(QNetworkRequest.ContentTypeHeader)
         print(content_type)
         if "pdf" in str(content_type):
-            self.load(QUrl("qrc:///pdf.js/viewer.html?file=%s#disableWorker=true" % url,))
-            reply.deleteLater()
+            if not common.pyqt4:
+                self.load(QUrl("qrc:///pdf.js/viewer.html?file=%s#disableWorker=true" % url,))
+                reply.deleteLater()
+            else:
+                stream = QFile(':/pdf.js/viewer.html')
+                stream.open(QIODevice.ReadOnly)
+                data = stream.readAll().data().decode("utf-8")
+                self.setHtml(data, QUrl("qrc:///pdf.js/viewer.html?file=%s#disableWorker=true" % url,))
+                stream.close()
+                reply.deleteLater()
             return
         elif "opendocument" in str(content_type):
             self.load(QUrl("qrc:///ViewerJS/index.html#%s" % url,))
