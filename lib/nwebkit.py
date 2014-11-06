@@ -681,7 +681,8 @@ class WebView(QWebView):
 
     def toggleCaretBrowsing(self):
         websettings = self.settings().globalSettings()
-        book = websettings.testAttribute(websettings.CaretBrowsingEnabled)
+        try: book = websettings.testAttribute(websettings.CaretBrowsingEnabled)
+        except: return
         websettings.setAttribute(websettings.CaretBrowsingEnabled, not book)
         settings.settings.setValue("navigation/CaretBrowsingEnabled", not book)
         settings.settings.sync()
@@ -692,7 +693,8 @@ class WebView(QWebView):
 
     def toggleSpatialNavigation(self):
         websettings = self.settings().globalSettings()
-        book = websettings.testAttribute(websettings.SpatialNavigationEnabled)
+        try: book = websettings.testAttribute(websettings.SpatialNavigationEnabled)
+        except: return
         websettings.setAttribute(websettings.SpatialNavigationEnabled, not book)
         settings.settings.setValue("navigation/SpatialNavigationEnabled", not book)
         settings.settings.sync()

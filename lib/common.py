@@ -112,8 +112,10 @@ def applyWebSettings():
     websettings.setAttribute(websettings.PluginsEnabled, settings.setting_to_bool("content/PluginsEnabled"))
     websettings.setAttribute(websettings.TiledBackingStoreEnabled, settings.setting_to_bool("content/TiledBackingStoreEnabled"))
     websettings.setAttribute(websettings.SiteSpecificQuirksEnabled, settings.setting_to_bool("content/SiteSpecificQuirksEnabled"))
-    websettings.setAttribute(websettings.SpatialNavigationEnabled, settings.setting_to_bool("navigation/SpatialNavigationEnabled"))
-    websettings.setAttribute(websettings.CaretBrowsingEnabled, settings.setting_to_bool("navigation/CaretBrowsingEnabled"))
+    try: websettings.setAttribute(websettings.SpatialNavigationEnabled, settings.setting_to_bool("navigation/SpatialNavigationEnabled"))
+    except: pass
+    try: websettings.setAttribute(websettings.CaretBrowsingEnabled, settings.setting_to_bool("navigation/CaretBrowsingEnabled"))
+    except: pass
 
 # Application name. Change this to change the name of the program everywhere.
 app_name = "Nimbus"

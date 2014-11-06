@@ -240,7 +240,8 @@ def main(argv):
     websettings.setAttribute(websettings.LocalContentCanAccessRemoteUrls, True)
     websettings.setAttribute(websettings.LocalContentCanAccessFileUrls, True)
     websettings.setAttribute(websettings.DeveloperExtrasEnabled, True)
-    websettings.setAttribute(websettings.ScrollAnimatorEnabled, True)
+    try: websettings.setAttribute(websettings.ScrollAnimatorEnabled, True)
+    except: pass
     common.applyWebSettings()
 
     # Set up settings dialog.
