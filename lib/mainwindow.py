@@ -1376,7 +1376,7 @@ class MainWindow(QMainWindow):
     def setProgress(self, progress=None):
         if progress in (0, 100):
             self.progressBar.hide()
-            self.networkManagerAction.setIcon(common.complete_icon("network-idle"))
+            self.updateNetworkStatus()
         else:
             self.progressBar.show()
             self.networkManagerAction.setIcon(common.complete_icon("network-transmit-receive"))

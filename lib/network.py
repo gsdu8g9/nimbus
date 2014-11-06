@@ -172,17 +172,15 @@ def clear_cache():
 # Ported from http://stackoverflow.com/questions/2475266/verfiying-the-network-connection-using-qt-4-4
 # and http://stackoverflow.com/questions/13533710/pyqt-convert-enum-value-to-key
 # and http://stackoverflow.com/questions/3764291/checking-network-connection
-try: urllib.request
-except:
+if 1:
     def isConnectedToNetwork(reference=None):
         ifaces = QNetworkInterface.allInterfaces()
         result = False
         for iface in ifaces:
-            if int(iface.flags() & QNetworkInterface.IsUp) != 0 and int(iface.flags() & QNetworkInterface.IsLoopBack) == 0:
-                if len(iface.addressEntries()) > 0:
-                    if iface.addressEntries()[0].ip().toIPv4Address() > 0:
-                        result = True
-                        break
+            if (iface.flags() & QNetworkInterface.IsUp) and not (iface.flags() & QNetworkInterface.IsLoopBack):
+                for entry in iface.addressEntries():
+                    result = True
+                    break
         return result
 else:
     def isConnectedToNetwork(reference):
