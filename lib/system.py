@@ -9,7 +9,7 @@ energyNow = 0
 hasBattery = True
 
 def is_on_ac():
-    return True
+    return False
 def get_battery_percentage():
     return 100
 
