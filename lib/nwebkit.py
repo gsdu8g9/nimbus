@@ -1228,6 +1228,7 @@ class WebView(QWebView):
                 self.load(QUrl("qrc:///pdf.js/viewer.html?file=%s#disableWorker=true" % url,))
                 reply.deleteLater()
             else:
+                self.load(QUrl("about:blank"))
                 stream = QFile(':/pdf.js/viewer.html')
                 stream.open(QIODevice.ReadOnly)
                 data = stream.readAll().data().decode("utf-8")
