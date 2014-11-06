@@ -1239,7 +1239,7 @@ class WebView(QWebView):
                 stream.close()
                 reply.deleteLater()
             return
-        elif "opendocument" in str(content_type):
+        elif "opendocument" in str(content_type) and not common.pyqt4:
             self.load(QUrl("qrc:///ViewerJS/index.html#%s" % url,))
             reply.deleteLater()
             return
