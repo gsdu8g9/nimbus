@@ -163,26 +163,6 @@ class FullScreenRequester(QObject):
 
 isOnlineTimer = QTimer()
 
-def setNavigatorOnline():
-    online = bool(network.isConnectedToNetwork())
-    script = "window.navigator.onLine = " + str(online).lower() + ";"
-    if online:
-        for window in browser.windows:
-            for tab in range(window.tabWidget().count()):
-                try:
-                    window.tabWidget().widget(tab).page().mainFrame().evaluateJavaScript(script)
-                    window.tabWidget().widget(tab).page().mainFrame().evaluateJavaScript("document.dispatchEvent(window.nimbus.onLineEvent);")
-                except:
-                    traceback.print_exc()
-    else:
-        for window in browser.windows:
-            for tab in range(window.tabWidget().count()):
-                try:
-                    window.tabWidget().widget(tab).page().mainFrame().evaluateJavaScript(script)
-                    window.tabWidget().widget(tab).page().mainFrame().evaluateJavaScript("document.dispatchEvent(window.nimbus.offLineEvent);")
-                except:
-                    traceback.print_exc()
-
 # Custom WebPage class with support for filesystem.
 class WebPage(QWebPage):
     plugins = (("qcalendarwidget", QCalendarWidget),
@@ -231,12 +211,28 @@ class WebPage(QWebPage):
         self._userAgent = ""
 
         # Start self.isOnlineTimer.
+        isOnlineTimer.timeout.connect(self.setNavigatorOnline)
         if not isOnlineTimer.isActive():
-            isOnlineTimer.timeout.connect(setNavigatorOnline)
             isOnlineTimer.start(5000)
 
         # Set user agent to default value.
         self.setUserAgent()
+
+    def deleteLater(self):
+        try: isOnlineTimer.timeout.disconnect(self.setNavigatorOnline)
+        except: pass
+        QWebPage.deleteLater(self)
+
+    def setNavigatorOnline(self):
+        online = bool(network.isConnectedToNetwork(self.mainFrame().url().toString()))
+        script = "window.navigator.onLine = " + str(online).lower() + ";"
+        self.mainFrame().evaluateJavaScript(script)
+        if online:
+            try: self.mainFrame().evaluateJavaScript("document.dispatchEvent(window.nimbus.onLineEvent);")
+            except: pass
+        else:
+            try: self.mainFrame().evaluateJavaScript("document.dispatchEvent(window.nimbus.offLineEvent);")
+            except: pass
 
     def javaScriptAlert(self, frame, msg, title="JavaScript Alert:"):
         pause = QEventLoop()
@@ -1147,7 +1143,7 @@ class WebView(QWebView):
         if not ok:
             success = False
             if not success:
-                if not network.isConnectedToNetwork():
+                if not network.isConnectedToNetwork(self.url().toString()):
                     self.errorPage("Problem loading page", "No Internet connection", "Your computer is not connected to the Internet. You may want to try the following:", ["<b>Windows 7 or Vista:</b> Click the <i>Start</i> button, then click <i>Control Panel</i>. Type <b>network</b> into the search box, click <i>Network and Sharing Center</i>, click <i>Set up a new connection or network</i>, and then double-click <i>Connect to the Internet</i>. From there, follow the instructions. If the network is password-protected, you will have to enter the password.", "<b>Windows 8:</b> Open the <i>Settings charm</i> and tap or click the Network icon (shaped like either five bars or a computer screen with a cable). Select the network you want to join, then tap or click <i>Connect</i>.", "<b>Mac OS X:</b> Click the AirPort icon (the icon shaped like a slice of pie near the top right of your screen). From there, select the network you want to join. If the network is password-protected, enter the password.", "<b>Ubuntu (Unity and Xfce):</b> Click the Network Indicator (the icon with two arrows near the upper right of your screen). From there, select the network you want to join. If the network is password-protected, enter the password.", "<b>Other Linux:</b> Oh, come on. I shouldn't have to be telling you this.", "Alternatively, if you have access to a wired Ethernet connection, you can simply plug the cable into your computer."])
                 #else:
                     #self.errorPage()

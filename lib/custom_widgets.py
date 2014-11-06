@@ -15,6 +15,7 @@ except ImportError:
     pass
 from common import app_folder, blank_toolbar, complete_icon, pyqt4
 from translate import tr
+import system
 
 if not pyqt4:
     from PyQt5.QtCore import Qt, pyqtSignal, QPoint, QUrl, QSize, QTimer
@@ -63,40 +64,17 @@ else:
 
 # This action shows how much power the computer has left.
 class BatteryAction(QAction):
-    battery = None
-    energyFull = 0
-    energyNow = 0
-    hasBattery = True
-    power_supplies = "/sys/class/power_supply/"
     def __init__(self, *args, **kwargs):
         super(BatteryAction, self).__init__(*args, **kwargs)
         self.setToolTip(tr("Power"))
-        if not self.battery and self.hasBattery:
-            try:
-                psups = os.listdir(self.power_supplies)
-            except:
-                self.hasBattery = False
-            else:
-                for fname in psups:
-                    if fname.lower().startswith("bat"):
-                        self.battery = os.path.join(self.power_supplies, fname)
-                        try:
-                            f = open(os.path.join(self.battery, "energy_full"))
-                            self.energyFull = int(f.read())
-                            f.close()
-                        except:
-                            pass
-                        break
-                if not self.battery:
-                    self.hasBattery = False
-        if self.battery:
+        if system.battery:
             self.updateLife()
             try:
                 common.sessionSaver.timeout.connect(self.updateLife)
             except:
                 self.timer = QTimer(timeout=self.updateLife, parent=self)
                 self.timer.start(20000)
-        elif os.path.isdir(self.power_supplies):
+        elif system.is_on_ac():
             self.setIcon(complete_icon("battery"))
             self.setText(tr("AC"))
             self.setToolTip(tr("System is running on AC power"))
@@ -104,25 +82,23 @@ class BatteryAction(QAction):
             self.setIcon(complete_icon("dialog-warning"))
             self.setText(tr("N/A"))
             self.setToolTip(tr("Battery not detected"))
+    def deleteLater(self):
+        try: common.sessionSaver.timeout.disconnect(self.updateLife)
+        except: pass
+        super(BatteryAction, self).deleteLater()
     def updateLife(self):
-        if os.path.isdir(self.battery):
-            try:
-                f = open(os.path.join(self.battery, "energy_now"))
-                self.energyNow = int(f.read())
-                f.close()
-            except:
-                pass
-            else:
-                percentage = round(self.energyNow/self.energyFull*100, 1)
-                text_percentage = str(percentage) + "%"
-                self.setText(text_percentage)
-                self.setToolTip("Power remaining: " + text_percentage)
-                if percentage >= 40:
-                    self.setIcon(complete_icon("battery"))
-                elif percentage >= 10:
-                    self.setIcon(complete_icon("battery-caution"))
-                else:
-                    self.setIcon(complete_icon("dialog-warning"))
+        percentage = system.get_battery_percentage()
+        text_percentage = str(percentage) + "%"
+        if system.is_on_ac():
+            text_percentage += " (AC)"
+        self.setText(text_percentage)
+        self.setToolTip("Power remaining: " + text_percentage)
+        if percentage >= 40:
+            self.setIcon(complete_icon("battery"))
+        elif percentage >= 10:
+            self.setIcon(complete_icon("battery-caution"))
+        else:
+            self.setIcon(complete_icon("dialog-warning"))
 
 # This toolbar can be shoved into a menu.
 class ToolBarAction(QWidgetAction):

@@ -1065,7 +1065,7 @@ class MainWindow(QMainWindow):
     def updateDateTime(self):
         self.dateTime.setText(QDateTime.currentDateTime().toString())
         #print(network.isConnectedToNetwork())
-        self.networkManagerAction.setIcon(common.complete_icon("network-idle") if network.isConnectedToNetwork() else common.complete_icon("network-offline"))
+        self.networkManagerAction.setIcon(common.complete_icon("network-idle") if network.isConnectedToNetwork(self.currentWidget().url().toString()) else common.complete_icon("network-offline"))
 
     # Toggle all the navigation buttons.
     def toggleActions(self):
