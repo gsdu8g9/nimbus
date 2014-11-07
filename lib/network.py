@@ -70,10 +70,10 @@ class NetworkReply(QNetworkReply):
             return bytes(data)
 
 # Error page generator.
-def errorPage(url="about:blank", title="Whoops...", error="Nimbus could not load the requested page."):
+def errorPage(url="about:blank", title="Whoops...", error="Nimbus could not load the requested page.", suggestions=["Make sure the URL was entered properly. For example, <b>www.google.com</b> instead of <b>ww.google.com</b>", "Ensure that your computer is connected to the Internet.", "The page you requested might no longer exist. Try loading it on Wayback Machine."]):
     if type(url) is QUrl:
         url = url.toString()
-    return "<!DOCTYPE html><html><title>%(title)s</title><style type='text/css'>html{font-family:sans-serif;}</style><body><h1>%(heading)s</h1><p>%(error)s</p><a href=\"%(url)s\">%(tryagain)s</a></body></html>" % {"title": tr("Problem loading page"), "heading": tr(title), "error": tr(error), "url": url, "tryagain": tr("Try again")}
+    return "<!DOCTYPE html><html><title>%(title)s</title><style type='text/css'>html{font-family:sans-serif;}</style><body><h1>%(heading)s</h1><p>%(error)s</p><ul>%(suggestions)s</ul><p><a href=\"%(url)s\">%(tryagain)s</a><br><a href=\"http://web.archive.org/web/*/%(url)s\">%(trywayback)s</a></p></body></html>" % {"title": tr("Problem loading page"), "heading": tr(title), "error": tr(error), "url": url, "suggestions": "".join(["<li>%s</li>" % tr(suggestion) for suggestion in suggestions]), "tryagain": tr("Try again"), "trywayback": tr("Try on Wayback Machine")}
 
 directoryView = """<!DOCTYPE html>
 <html>
