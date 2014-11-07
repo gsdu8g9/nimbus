@@ -19,9 +19,11 @@ from translate import tr
 if not common.pyqt4:
     from PyQt5.QtCore import Qt
     from PyQt5.QtWidgets import QWidget, QVBoxLayout, QLabel, QMainWindow, QAction, QToolBar, QComboBox, QPushButton
+    from PyQt5.QtWebKit import QWebSettings
 else:
     from PyQt4.QtCore import Qt
     from PyQt4.QtGui import QWidget, QVBoxLayout, QLabel, QMainWindow, QAction, QToolBar, QComboBox, QPushButton
+    from PyQt4.QtWebKit import QWebSettings
 
 class ClearHistoryDialog(QMainWindow):
     def __init__(self, parent=None):
@@ -45,7 +47,7 @@ class ClearHistoryDialog(QMainWindow):
         self.dataType = QComboBox(self)
         self.dataType.addItem(tr("History"))
         self.dataType.addItem(tr("Cookies"))
-        self.dataType.addItem(tr("Cache"))
+        self.dataType.addItem(tr("Memory Caches"))
         self.dataType.addItem(tr("Persistent Storage"))
         self.dataType.addItem(tr("Everything"))
         self.layout.addWidget(self.dataType)
@@ -75,8 +77,12 @@ class ClearHistoryDialog(QMainWindow):
         if self.dataType.currentIndex() == 1 or clear_everything:
             data.clearCookies()
         if self.dataType.currentIndex() == 2 or clear_everything:
-            network.clear_cache()
+            QWebSettings.globalSettings().clearMemoryCaches()
         if self.dataType.currentIndex() == 3 or clear_everything:
+            QWebSettings.globalSettings().setIconDatabasePath("")
+            QWebSettings.globalSettings().setLocalStoragePath("")
+            QWebSettings.globalSettings().setOfflineStoragePath("")
+            QWebSettings.globalSettings().setOfflineWebApplicationCachePath("")
             for subpath in ("WebpageIcons.db", "LocalStorage", "Databases",):
                 path = os.path.abspath(os.path.join(settings.settings_folder, subpath))
                 if os.path.isfile(path):
@@ -84,8 +90,10 @@ class ClearHistoryDialog(QMainWindow):
                     except: pass
                 elif os.path.isdir(path):
                     if sys.platform.startswith("win"):
-                        try: subprocess.Popen(["rd", path])
+                        args = ["rmdir", "/s", "/q", "\"" + path + "\""]
+                        try: os.system(" ".join(args))
                         except: pass
                     else:
                         try: subprocess.Popen(["rm", "-rf", path])
                         except: pass
+            QWebSettings.globalSettings().enablePersistentStorage(settings.settings_folder)
