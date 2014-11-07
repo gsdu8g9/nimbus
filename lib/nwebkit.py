@@ -233,10 +233,12 @@ class WebPage(QWebPage):
 
     def extension(self, extension, option=None, output=None):
         if extension == QWebPage.ErrorPageExtension and option != None:
+            try: url = option.url
+            except: url = QUrl("about:blank")
             if network.isConnectedToNetwork():
-                output.content = QByteArray(network.errorPage(option.url))
+                output.content = QByteArray(network.errorPage(url))
             else:
-                output.content = QByteArray(network.errorPage(option.url, "No Internet connection.", "Your computer is not connected to the Internet.", suggestions=["Check your computer's network settings.", "If you have access to a wired Ethernet connection, make sure the cable is plugged in.", "If the problem persists, contact your network administrator."]))
+                output.content = QByteArray(network.errorPage(url, "No Internet connection.", "Your computer is not connected to the Internet.", suggestions=["Check your computer's network settings.", "If you have access to a wired Ethernet connection, make sure the cable is plugged in.", "If the problem persists, contact your network administrator."]))
             return True
         else:
             return QWebPage.extension(self, extension, option, output)
