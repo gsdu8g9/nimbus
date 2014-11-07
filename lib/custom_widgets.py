@@ -74,7 +74,7 @@ class BatteryAction(QAction):
             if not self.timer.isActive():
                 self.timer.start(5000)
         elif system.is_on_ac():
-            self.setIcon(complete_icon("battery"))
+            self.setIcon(complete_icon("charging"))
             self.setText(tr("AC"))
             self.setToolTip(tr("System is running on AC power"))
         else:
