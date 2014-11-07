@@ -177,6 +177,7 @@ class WebPage(QWebPage):
 
     fullScreenRequested = Signal(bool)
     javaScriptBar = Signal(QWidget)
+    
     def __init__(self, *args, **kwargs):
         super(WebPage, self).__init__(*args, **kwargs)
 
@@ -198,10 +199,8 @@ class WebPage(QWebPage):
         self.mainFrame().javaScriptWindowObjectCleared.connect(self.tweakDOM)
 
         # Connect loadFinished to checkForNavigatorGeolocation and loadUserScripts.
-        self.loadFinished.connect(self.doRedirectHack)
-        self.loadFinished.connect(self.checkForNavigatorGeolocation)
+        self.loadFinished.connect(self.onLoadFinished)
         self.loadStarted.connect(self.loadUserScriptsStart)
-        self.loadFinished.connect(self.loadUserScripts)
         self.jsConfirm = False
 
         # Custom userscript.
@@ -217,6 +216,30 @@ class WebPage(QWebPage):
 
         # Set user agent to default value.
         self.setUserAgent()
+
+    def onLoadFinished(self, success=True):
+        if success:
+            self.doRedirectHack()
+            self.loadUserScripts()
+            self.checkForNavigatorGeolocation()
+    
+    # This is a half-assed implementation of error pages,
+    # which doesn't work yet.
+    def supportsExtension(self, extension):
+        if extension == QWebPage.ErrorPageExtension:
+            return True
+        else:
+            return QWebPage.supportsExtension(self, extension)
+
+    def extension(self, extension, option=None, output=None):
+        if extension == QWebPage.ErrorPageExtension and option != None:
+            if network.isConnectedToNetwork():
+                output.content = QByteArray(network.errorPage(option.url))
+            else:
+                output.content = QByteArray(network.errorPage(option.url, "No Internet connection.", "Your computer is not connected to the Internet."))
+            return True
+        else:
+            return QWebPage.extension(self, extension, option, output)
 
     def deleteLater(self):
         try: isOnlineTimer.timeout.disconnect(self.setNavigatorOnline)
@@ -349,15 +372,6 @@ class WebPage(QWebPage):
                         url = href.split(gurl)[-1]
                         url = urllib.parse.unquote(url)
                         link.setAttribute("href", url)
-                    # This is just awkward.
-                    """elif "#post" in href:
-                        try: class_ = link.attribute("class")
-                        except: class_ = ""
-                        if not "postcounter" in class_:
-                            url = "-".join(href.split("-")[:-1])
-                            postnumber = href.split("#")[-1]
-                            url = url + "-" + postnumber + ".html"
-                            link.setAttribute("href", url)"""
 
     # Loads history.
     def loadHistory(self, history):
@@ -1055,23 +1069,6 @@ class WebView(QWebView):
         if href:
             self.page().mainFrame().evaluateJavaScript("window.location.href = \"%s\";" % (href,))
 
-    # Calls network.errorPage.
-    def errorPage(self, title="Problem loading page", heading="Whoops...", error="Nimbus could not load the requested page.", suggestions=["Try reloading the page.", "Make sure you're connected to the Internet. Once you're connected, try loading this page again.", "Check for misspellings in the URL (e.g. <b>ww.google.com</b> instead of <b>www.google.com</b>).", "The server may be experiencing some downtime. Wait for a while before trying again.", "If your computer or network is protected by a firewall, make sure that Nimbus is permitted ."]):
-        return network.errorPage(title, heading, error, suggestions)
-
-    # This is a half-assed implementation of error pages,
-    # which doesn't work yet.
-    def supportsExtension(self, extension):
-        if extension == QWebPage.ErrorPageExtension:
-            return True
-        return False
-
-    def extension(self, extension, option=None, output=None):
-        if extension == QWebPage.ErrorPageExtension and option != None:
-            option.frame().setHtml(errorPage())
-        else:
-            QWebPage.extension(self, extension, option, output)
-
     # Convenience function.
     def setUserAgent(self, ua=None):
         self.page().setUserAgent(ua)
@@ -1132,23 +1129,6 @@ class WebView(QWebView):
         elif not url:
             url = self._statusBarMessage
         QDesktopServies.openUrl(QUrl(url))
-
-    # Creates an error page.
-    def errorPage(self, *args, **kwargs):
-        self.setHtml(network.errorPage(*args, **kwargs), QUrl("nimbus://error"))
-
-    # This loads a page from the cache if certain network errors occur.
-    # If that can't be done either, it produces an error page.
-    def finishLoad(self, ok=False):
-        if not ok:
-            success = False
-            if not success:
-                if not network.isConnectedToNetwork(self.url().toString()):
-                    self.errorPage("Problem loading page", "No Internet connection", "Your computer is not connected to the Internet. You may want to try the following:", ["<b>Windows 7 or Vista:</b> Click the <i>Start</i> button, then click <i>Control Panel</i>. Type <b>network</b> into the search box, click <i>Network and Sharing Center</i>, click <i>Set up a new connection or network</i>, and then double-click <i>Connect to the Internet</i>. From there, follow the instructions. If the network is password-protected, you will have to enter the password.", "<b>Windows 8:</b> Open the <i>Settings charm</i> and tap or click the Network icon (shaped like either five bars or a computer screen with a cable). Select the network you want to join, then tap or click <i>Connect</i>.", "<b>Mac OS X:</b> Click the AirPort icon (the icon shaped like a slice of pie near the top right of your screen). From there, select the network you want to join. If the network is password-protected, enter the password.", "<b>Ubuntu (Unity and Xfce):</b> Click the Network Indicator (the icon with two arrows near the upper right of your screen). From there, select the network you want to join. If the network is password-protected, enter the password.", "<b>Other Linux:</b> Oh, come on. I shouldn't have to be telling you this.", "Alternatively, if you have access to a wired Ethernet connection, you can simply plug the cable into your computer."])
-                #else:
-                    #self.errorPage()
-            else:
-                self._cacheLoaded = True
 
     def load2(self, url):
         self.page().mainFrame().evaluateJavaScript("window.location.href = \"%s\"" % (url,))

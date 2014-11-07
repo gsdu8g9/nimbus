@@ -70,8 +70,10 @@ class NetworkReply(QNetworkReply):
             return bytes(data)
 
 # Error page generator.
-def errorPage(title="Problem loading page", heading="Whoops...", error="Nimbus could not load the requested page.", suggestions=["Try reloading the page.", "Make sure you're connected to the Internet. Once you're connected, try loading this page again.", "Check for misspellings in the URL (e.g. <b>ww.google.com</b> instead of <b>www.google.com</b>).", "The server may be experiencing some downtime. Wait for a while before trying again.", "If your computer or network is protected by a firewall, make sure that Nimbus is permitted ."]):
-    return "<!DOCTYPE html><html><title>%(title)s</title><style type='text/css'>html{font-family:sans-serif;}</style><body><h1>%(heading)s</h1><p>%(error)s</p><ul>%(suggestions)s</ul></body></html>" % {"title": tr(title), "heading": tr(heading), "error": tr(error), "suggestions": "".join(["<li>" + tr(suggestion) + "</li>" for suggestion in suggestions])}
+def errorPage(url="about:blank", title="Whoops...", error="Nimbus could not load the requested page."):
+    if type(url) is QUrl:
+        url = url.toString()
+    return "<!DOCTYPE html><html><title>%(title)s</title><style type='text/css'>html{font-family:sans-serif;}</style><body><h1>%(heading)s</h1><p>%(error)s</p><a href=\"%(url)s\">%(tryagain)s</a></body></html>" % {"title": tr("Problem loading page"), "heading": tr(title), "error": tr(error), "url": url, "tryagain": tr("Try again")}
 
 directoryView = """<!DOCTYPE html>
 <html>
