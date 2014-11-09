@@ -1447,6 +1447,7 @@ class MainWindow(QMainWindow):
         tabCountAction.setText(tr("You currently have %s tab(s) open") % (self.tabWidget().count(),))
         tabCountAction.setEnabled(False)
         self.tabsMenu.addAction(tabCountAction)
+        closeTabsByTitleAction.lineEdit().setFocus()
 
     def currentWidget(self):
         return self.tabWidget().currentWidget()
