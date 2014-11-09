@@ -102,6 +102,15 @@ class BatteryAction(QAction):
         else:
             self.setIcon(complete_icon("dialog-warning"))
 
+# This QLineEdit can be shoved into a menu.
+class LineEditAction(QWidgetAction):
+    def __init__(self, *args, **kwargs):
+        super(LineEditAction, self).__init__(*args, **kwargs)
+        self._lineEdit = QLineEdit()
+        self.setDefaultWidget(self._lineEdit)
+    def lineEdit(self):
+        return self._lineEdit
+
 # This toolbar can be shoved into a menu.
 class ToolBarAction(QWidgetAction):
     def __init__(self, *args, **kwargs):

@@ -217,7 +217,7 @@ class MainWindow(QMainWindow):
         tabsMenuButton = QToolButton(self)
         tabsMenuButton.setArrowType(Qt.DownArrow)
         tabsMenuButton.setFocusPolicy(Qt.TabFocus)
-        tabsMenuButton.setToolTip(tr("List all tabs"))
+        tabsMenuButton.setToolTip(tr("List all tabs\nAlt+T"))
         tabsMenuButton.setStyleSheet("QToolButton { max-width: 20px; } QToolButton::menu-indicator { image: none; }")
         self.tabsToolBar.addWidget(tabsMenuButton)
 
@@ -1408,8 +1408,33 @@ class MainWindow(QMainWindow):
                 self.showNormal()
                 self.showMaximized()
 
+    def closeTabsByTitle(self, text):
+        text = str(text).lower()
+        killem = []
+        for index in range(self.tabWidget().count()):
+            widget = self.tabWidget().widget(index)
+            if text in widget.title().lower():
+                killem.append(widget)
+        if len(killem) == self.tabWidget().count():
+            confirm = QMessageBox.question(self, tr("Warning!"), tr("The entire window will be closed. Proceed anyway?"), QMessageBox.Yes | QMessageBox.No)
+            if confirm == QMessageBox.No:
+                return
+        for widget in killem:
+            index = self.tabWidget().indexOf(widget)
+            pinnedTabCount = settings.setting_to_int("general/PinnedTabCount")
+            if index >= pinnedTabCount:
+                self.removeTab(index)
+
     def aboutToShowTabsMenu(self):
         self.tabsMenu.clear()
+        closeTabsByTitleActionLabel = QAction(self.tabsMenu, text=tr("Close tabs by title"))
+        closeTabsByTitleActionLabel.setDisabled(True)
+        self.tabsMenu.addAction(closeTabsByTitleActionLabel)
+        closeTabsByTitleAction = custom_widgets.LineEditAction(self.tabsMenu)
+        closeTabsByTitleAction.lineEdit().returnPressed.connect(lambda: self.closeTabsByTitle(closeTabsByTitleAction.lineEdit().text()))
+        closeTabsByTitleAction.lineEdit().returnPressed.connect(closeTabsByTitleAction.lineEdit().clear)
+        self.tabsMenu.addAction(closeTabsByTitleAction)
+        self.tabsMenu.addSeparator()
         closeLeftTabsAction = QAction(self.tabsMenu, text=tr("Close tabs on the &left"), triggered=self.closeLeftTabs)
         self.tabsMenu.addAction(closeLeftTabsAction)
         closeRightTabsAction = QAction(self.tabsMenu, text=tr("Close tabs on the &right"), triggered=self.closeRightTabs)
