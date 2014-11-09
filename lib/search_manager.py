@@ -60,7 +60,7 @@ class SearchManager(object):
             common.search_engines['Openclipart'] = ["oca", "http://openclipart.org/search/?query=%s"]
             common.search_engines['Safebooru'] = ["sb", "http://safebooru.org/index.php?page=post&s=list&tags=%s"]
             common.search_engines["Urban Dictionary"] = ["u", "http://www.urbandictionary.com/define.php?term=%s"]
-            settings.settings.setValue("general/Search", common.search_engines['Disconnect Search'])
+            settings.settings.setValue("general/Search", common.search_engines['Disconnect Search'][-1])
             settings.settings.setValue("SearchEngines", json.dumps(common.search_engines))
             settings.settings.sync()
         else:
