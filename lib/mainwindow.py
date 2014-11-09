@@ -94,11 +94,6 @@ class MainWindow(QMainWindow):
         super(MainWindow, self).__init__(*args, **kwargs)
 
         style = QApplication.style()
-
-        # These are used to store where the mouse pressed down.
-        # This is used in a hack to drag the window by the toolbar.
-        self.mouseX = False
-        self.mouseY = False
         
         self.appMode = bool(appMode)
         
