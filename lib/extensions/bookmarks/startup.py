@@ -3,15 +3,16 @@ settings.settings.setValue("general/FeedButtonVisible", True)
 settings.settings.sync()
 try: common.feeds
 except:
-    feeds = data.data.value("data/Feeds")
+    feeds = data.data.value("data/CompleterPriority")
     if not feeds:
         common.feeds = []
-        data.data.setValue("data/Feeds", json.dumps(common.feeds))
+        data.data.setValue("data/CompleterPriority", json.dumps(common.feeds))
         data.data.sync()
     else:
         common.feeds = json.loads(feeds)
 for feed in reversed(range(len(common.feeds))):
-    self.locationBar.insertItem(0, common.feeds[feed])
+    try: self.locationBar.insertItem(0, common.feeds[feed])
+    except: pass
 self.feedMenuButton.setText(tr("Bookmarks"))
 self.feedMenuButton.setShortcut("Ctrl+Shift+B")
 try: self.feedMenuButton.setIcon(QIcon(common.complete_icon("bookmarks")))
@@ -42,7 +43,7 @@ def toggleFeedsDock():
                 browser.activeWindow().feedsList.takeItem(browser.activeWindow().feedsList.row(currentItem))
                 try: common.feeds.remove(url)
                 except: pass
-                data.data.setValue("data/Feeds", json.dumps(common.feeds))
+                data.data.setValue("data/CompleterPriority", json.dumps(common.feeds))
                 data.data.sync()
         deleteAction.triggered.connect(removeBookmark)
         def loadFeed(item):
@@ -55,9 +56,10 @@ def toggleFeedsDock():
                     mainWindow.feedsList.addItem(bookmark)
                     common.feeds.append(bookmark)
                     for window in browser.windows:
-                        window.locationBar.insertItem(len(common.feeds)-1, bookmark)
+                        try: window.locationBar.insertItem(len(common.feeds)-1, bookmark)
+                        except: pass
                     common.feeds = [feed.split("://")[-1] for feed in common.feeds]
-                    data.data.setValue("data/Feeds", json.dumps(common.feeds))
+                    data.data.setValue("data/CompleterPriority", json.dumps(common.feeds))
                     data.data.sync()
             else:
                 browser.activeWindow().tabs.currentWidget().load(QUrl.fromUserInput(item.text()))

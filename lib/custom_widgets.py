@@ -241,7 +241,7 @@ if not sys.platform.startswith("darwin"):
     MenuToolBar = _MenuToolBar
 
 # Location bar.
-class LocationBar(QComboBox):
+class LocationBar(QLineEdit):
     def __init__(self, *args, icon=None, **kwargs):
         super(LocationBar, self).__init__(*args, **kwargs)
         self.icon = QToolButton(self)
@@ -269,7 +269,7 @@ class LocationBar(QComboBox):
         fw = self.style().pixelMetric(QStyle.PM_DefaultFrameWidth)
         self.icon.move(QPoint(self.rect().left() + (self.height() + 1 - sz.width())/2, (self.height() + 1 - sz.height())/2))
         if self.s == False:
-            self.lineEdit().setStyleSheet("QLineEdit { background: transparent; padding-left: %spx; }" % str(sz.width() + (self.height() + 1 - sz.width())/2))
+            self.setStyleSheet("QLineEdit { background: transparent; padding-left: %spx; }" % str(sz.width() + (self.height() + 1 - sz.width())/2))
             self.s = True
             self.redefResizeEvent()
 

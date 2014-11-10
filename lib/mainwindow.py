@@ -25,7 +25,7 @@ import traceback
 # Extremely specific imports from PyQt5.
 if not common.pyqt4:
     from PyQt5.QtCore import Qt, QCoreApplication, QUrl, QTimer, QSize,\
-                             QDateTime, QPoint
+                             QDateTime, QPoint, QStringListModel
     from PyQt5.QtGui import QKeySequence, QIcon, QCursor
     from PyQt5.QtWidgets import QApplication, QDockWidget, QWidget, QHBoxLayout,\
                             QVBoxLayout,\
@@ -33,7 +33,7 @@ if not common.pyqt4:
                             QMenu, QAction, QMainWindow, QToolBar,\
                             QToolButton, QComboBox, QButtonGroup,\
                             QLabel, QCalendarWidget, QInputDialog,\
-                            QLineEdit, QStatusBar, QProgressBar
+                            QLineEdit, QStatusBar, QProgressBar, QCompleter
     from PyQt5.QtNetwork import QNetworkRequest
     from PyQt5.QtWebKitWidgets import QWebPage
 else:
@@ -45,7 +45,8 @@ else:
                             QMenu, QAction, QMainWindow, QToolBar,\
                             QToolButton, QComboBox, QButtonGroup,\
                             QLabel, QCalendarWidget, QCursor, QInputDialog,\
-                            QLineEdit, QStatusBar, QProgressBar
+                            QLineEdit, QStatusBar, QProgressBar, QCompleter,\
+                            QStringListModel
     from PyQt4.QtNetwork import QNetworkRequest
     from PyQt4.QtWebKit import QWebPage
 
@@ -346,24 +347,22 @@ class MainWindow(QMainWindow):
         self.locationBar = custom_widgets.LocationBar(icon=None, parent=self)
 
         # Load stored browser history.
-        if type(data.history) is list:
-            for url in data.history:
-                self.locationBar.addItem(url)
-        else:
-            for url in data.history.keys():
-                self.locationBar.addItem(data.shortUrl(url))
+        self.completer = QCompleter(self.locationBar)
+        self.completer.setFilterMode(Qt.MatchContains)
+        self.updateCompleter()
+        self.locationBar.setCompleter(self.completer)
 
         # Combo boxes are not normally editable by default.
-        self.locationBar.setEditable(True)
+        #self.locationBar.setEditable(True)
 
         # We want the location bar to stretch to fit the toolbar,
         # so we set its size policy to expand.
         self.locationBar.setSizePolicy(QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed))
 
         # Load a page when Enter is pressed.
-        self.locationBar.lineEdit().returnPressed.connect(lambda: self.load(self.locationBar.lineEdit().text()))
-        self.locationBar.lineEdit().textChanged.connect(lambda x: self.tabWidget().currentWidget().setUrlText(x, emit=False))
-        self.locationBar.view().activated.connect(lambda index: self.load(index.data()))
+        self.locationBar.returnPressed.connect(lambda: self.load(self.locationBar.text()))
+        self.locationBar.textChanged.connect(lambda x: self.tabWidget().currentWidget().setUrlText(x, emit=False))
+        #self.locationBar.activated.connect(lambda index: self.load(index.data()))
 
         # This is so that the location bar can shrink to a width
         # shorter than the length of its longest item.
@@ -751,6 +750,19 @@ class MainWindow(QMainWindow):
         self.addAction(tabNineAction)
         self.applySettings()
 
+    def updateCompleter(self):
+        try: self.completer
+        except: return
+        full_data = []
+        try: full_data += json.loads(data.data.value("data/CompleterPriority"))
+        except: pass
+        if type(data.history) is list:
+            full_data += data.history
+        else:
+            full_data += [data.shortUrl(url) for url in data.history.keys()]
+        model = QStringListModel(full_data, self.completer)
+        self.completer.setModel(model)
+
     def customUserAgent(self):
         userAgent = QInputDialog.getText(self, tr("Custom user agent"), tr("User agent:"), QLineEdit.Normal, data.userAgentForUrl(self.currentWidget().url()))
         if userAgent[1]:
@@ -760,7 +772,7 @@ class MainWindow(QMainWindow):
     def focusLocationBar(self):
         if self.locationBar.isVisible():
             self.locationBar.setFocus()
-            self.locationBar.lineEdit().selectAll()
+            self.locationBar.selectAll()
         else:
             if type(data.history) is list:
                 items = [url for url in data.history if len(url) < 65]
@@ -1233,7 +1245,7 @@ class MainWindow(QMainWindow):
             self.tabWidget().currentWidget().javaScriptBars[-1].no.click()
         except:
             pass
-        self.locationBar.setEditText(self.tabWidget().\
+        self.locationBar.setText(self.tabWidget().\
                                      currentWidget().url().toString())
 
     def goHome(self):
@@ -1348,6 +1360,7 @@ class MainWindow(QMainWindow):
                     webview.titleChanged.connect(self.updateTabTitles)
                     webview.page().fullScreenRequested.connect(self.setFullScreen)
                     webview.urlChanged.connect(self.updateLocationText)
+                    webview.urlChanged.connect(self.updateCompleter)
                     webview.urlChanged2.connect(self.updateLocationText)
                     webview.iconChanged.connect(self.updateTabIcons)
                     webview.iconChanged.connect(self.updateLocationIcon)
@@ -1505,6 +1518,7 @@ class MainWindow(QMainWindow):
         webview.titleChanged.connect(self.updateTabTitles)
         webview.page().fullScreenRequested.connect(self.setFullScreen)
         webview.urlChanged.connect(self.updateLocationText)
+        webview.urlChanged.connect(self.updateCompleter)
         webview.urlChanged2.connect(self.updateLocationText)
         webview.iconChanged.connect(self.updateTabIcons)
         webview.iconChanged.connect(self.updateLocationIcon)
@@ -1647,7 +1661,7 @@ class MainWindow(QMainWindow):
             elif type(url) is QUrl:
                 url = url.toString()
             if url in (currentWidget.url().toString(), currentWidget._urlText):
-                self.locationBar.setEditText(url)
+                self.locationBar.setText(url)
         except:
             pass
 
