@@ -7,7 +7,7 @@ title = mainWindow.tabWidget().currentWidget().windowTitle()
 def bbCodify(text):
     mainWindow = browser.activeWindow()
     if mainWindow.locationBar.isVisible():
-        mainWindow.locationBar.setEditText(text)
+        mainWindow.locationBar.setText(text)
     else:
         common.copyToClipboard(text)
         common.trayIcon.showMessage("Now on clipboard", text)
