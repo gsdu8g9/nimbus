@@ -285,11 +285,16 @@ class LocationBar(QLineEdit):
     def setIcon(self, icon):
         self.icon.setIcon(icon)
 
+    # These are just here to maintain some level of compatibility with older extensions.
+
     def lineEdit(self):
         return self
 
     def setEditText(self, *args, **kwargs):
         self.setText(*args, **kwargs)
+
+    def addItem(self, *args, **kwargs):
+        pass
 
 # Link action for dropdown menus.
 class LinkAction(QAction):
