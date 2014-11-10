@@ -72,6 +72,16 @@ if sys.platform.startswith("win"):
         del SYSTEM_POWER_STATUS_P
         del status
         return percent
+elif sys.platform.startswith("darwin"):
+    command = "pmset -g batt | egrep \"([0-9]+\%).*\" -o --colour=auto | cut -zmbfqx -d';'"
+    def get_battery_percentage():
+        stdout_handle = os.popen(command.replace("zmbfqx", "f1"))
+        value = stdout_handle.read().replace("%", "").replace("\n", "")
+        return int(value)
+    def is_on_ac():
+        stdout_handle = os.popen(command.replace("zmbfqx", "f2"))
+        value = stdout_handle.read()
+        return not "dis" in value
 else:
     power_supplies = "/sys/class/power_supply/"
     ac_status = os.path.join(power_supplies, "ACAD")
