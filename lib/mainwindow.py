@@ -1422,7 +1422,7 @@ class MainWindow(QMainWindow):
         killem = []
         for index in range(self.tabWidget().count()):
             widget = self.tabWidget().widget(index)
-            if text in widget.title().lower():
+            if text in widget.title().lower() or text in widget.windowTitle().lower():
                 killem.append(widget)
         if len(killem) == self.tabWidget().count():
             confirm = QMessageBox.question(self, tr("Warning!"), tr("The entire window will be closed. Proceed anyway?"), QMessageBox.Yes | QMessageBox.No)
@@ -1450,7 +1450,10 @@ class MainWindow(QMainWindow):
         self.tabsMenu.addAction(closeRightTabsAction)
         self.tabsMenu.addSeparator()
         for tab in range(self.tabWidget().count()):
-            tabAction = custom_widgets.IndexAction(tab, self.tabWidget().widget(tab).shortTitle(), self.tabsMenu)
+            title = self.tabWidget().widget(tab).shortTitle()
+            if title == "":
+                title = self.tabWidget().widget(tab).shortWindowTitle()
+            tabAction = custom_widgets.IndexAction(tab, title, self.tabsMenu)
             if tab == self.tabWidget().currentIndex():
                 tabAction.setCheckable(True)
                 tabAction.setChecked(True)
