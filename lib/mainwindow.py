@@ -55,7 +55,7 @@ class ExtensionButton(QToolButton):
     def __init__(self, name=None, script="", etype="python", shortcut=None, aboutText=None, parent=None):
         super(ExtensionButton, self).__init__(parent)
         self.name = "new-extension"
-        self.aboutText = "This is a %s extension." % common.app_name,
+        self.aboutText = "This is a %s extension." % (common.app_name,)
         if aboutText:
             self.aboutText = aboutText
         if name:
