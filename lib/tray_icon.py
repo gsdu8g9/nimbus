@@ -99,9 +99,7 @@ class SystemTrayIcon(QSystemTrayIcon):
         # Set context menu.
         self.menu = QMenu(None)
         self.setContextMenu(self.menu)
-
-        self.activated.connect(self.showMenu)
-
+        
         # New window action
         newWindowAction = QAction(common.complete_icon("window-new"), tr("&New Window"), self)
         newWindowAction.triggered.connect(self.newWindowRequested.emit)
@@ -170,14 +168,6 @@ class SystemTrayIcon(QSystemTrayIcon):
         else:
             self.toolBar.hide()
 
-    # Show menu.
-    def showMenu(self, reason=None):
-        self.menu.show()
-        if reason == QSystemTrayIcon.Trigger or not reason:
-            y = QDesktopWidget()
-            self.menu.move(min(QCursor.pos().x(), y.width() - self.menu.width()), min(QCursor.pos().y(), y.height() - self.menu.height()))
-            y.deleteLater()
-
     # About.
     def about(self):
         try: parent = browser.activeWindow()
@@ -190,6 +180,15 @@ class SystemTrayIcon(QSystemTrayIcon):
                           "</h3>" +\
                           tr("A Qt-based web browser made in Python.<br><br>%s is provided to you free of charge, with no promises of security or stability. By using this software, you agree not to sue me for anything that goes wrong with it.") % (common.app_name,))
         self.widget.hide()
+
+    def toggleWindows(self):
+        hidden = False
+        for window in browser.windows:
+            window.setVisible(not window.isVisible())
+        try:
+            if not browser.windows[0].isVisible():
+                self.showMessage(tr("All windows hidden"), tr("Click again to restore."))
+        except: pass
 
     # Reopen window.
     def reopenWindow(self):
