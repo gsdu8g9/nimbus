@@ -21,11 +21,11 @@ if not pyqt4:
     from PyQt5.QtCore import Qt, pyqtSignal, QPoint, QUrl, QSize, QTimer, QCoreApplication
     Signal = pyqtSignal
     from PyQt5.QtGui import QIcon, QPixmap
-    from PyQt5.QtWidgets import QMainWindow, QAction, QToolButton, QPushButton, QWidget, QComboBox, QHBoxLayout, QTabWidget, QTextEdit, QVBoxLayout, QLabel, QSizePolicy, QLineEdit, QSpinBox, QToolBar, QStyle, QStylePainter, QStyleOptionToolBar, QMenu, QTabBar, QWidgetAction, QListWidget
+    from PyQt5.QtWidgets import QMainWindow, QAction, QToolButton, QPushButton, QWidget, QComboBox, QHBoxLayout, QTabWidget, QTextEdit, QVBoxLayout, QLabel, QSizePolicy, QLineEdit, QSpinBox, QToolBar, QStyle, QStylePainter, QStyleOptionToolBar, QMenu, QTabBar, QWidgetAction, QListWidget, QListWidgetItem
 else:
     from PyQt4.QtCore import Qt, pyqtSignal, QPoint, QUrl, QSize, QTimer, QCoreApplication
     Signal = pyqtSignal
-    from PyQt4.QtGui import QPixmap, QMainWindow, QAction, QToolButton, QPushButton, QIcon, QWidget, QComboBox, QHBoxLayout, QTabWidget, QTextEdit, QVBoxLayout, QLabel, QSizePolicy, QLineEdit, QSpinBox, QToolBar, QStyle, QStylePainter, QStyleOptionToolBar, QMenu, QTabBar, QWidgetAction, QListWidget
+    from PyQt4.QtGui import QPixmap, QMainWindow, QAction, QToolButton, QPushButton, QIcon, QWidget, QComboBox, QHBoxLayout, QTabWidget, QTextEdit, QVBoxLayout, QLabel, QSizePolicy, QLineEdit, QSpinBox, QToolBar, QStyle, QStylePainter, QStyleOptionToolBar, QMenu, QTabBar, QWidgetAction, QListWidget, QListWidgetItem
 
 # Custom LineEdit class with delete button.
 if sys.platform.startswith("linux"):
@@ -417,3 +417,23 @@ class LicenseDialog(QMainWindow):
         self.closeButton.clicked.connect(self.close)
         self.toolBar.addWidget(self.closeButton)
         self.closeButton.setFocus()
+
+# DownloadManager class.
+class DownloadManager(QMainWindow):
+    def __init__(self, *args, **kwargs):
+        super(DownloadManager, self).__init__(*args, **kwargs)
+        closeWindowAction = QAction(self)
+        closeWindowAction.triggered.connect(self.hide)
+        closeWindowAction.setShortcuts(["Esc", "Ctrl+W", "Ctrl+J", "Ctrl+Shift+Y"])
+        self.addAction(closeWindowAction)
+        self.listWidget = QListWidget(self)
+        self.setCentralWidget(self.listWidget)
+    def addDownload(self, toolbar):
+        item = QListWidgetItem()
+        self.listWidget.addItem(item)
+        self.listWidget.setItemWidget(item, toolbar)
+        toolbar.setItem(item)
+        toolbar.requestDelete.connect(self.removeItem)
+    def removeItem(self, item):
+        self.listWidget.itemWidget(item).deleteLater()
+        self.listWidget.takeItem(self.listWidget.row(item))

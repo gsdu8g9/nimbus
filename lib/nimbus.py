@@ -214,12 +214,8 @@ def main(argv):
     app.setWindowIcon(common.app_icon)
 
     common.searchEditor = search_manager.SearchEditor()
-    common.downloadManager = QMainWindow(windowTitle=tr("Downloads"))
+    common.downloadManager = custom_widgets.DownloadManager(windowTitle=tr("Downloads"))
     common.downloadManager.resize(QSize(480, 320))
-    closeWindowAction = QAction(common.downloadManager)
-    closeWindowAction.triggered.connect(common.downloadManager.hide)
-    closeWindowAction.setShortcuts(["Esc", "Ctrl+W", "Ctrl+J", "Ctrl+Shift+Y"])
-    common.downloadManager.addAction(closeWindowAction)
 
     # Create tray icon.
     common.trayIcon = SystemTrayIcon(QCoreApplication.instance())

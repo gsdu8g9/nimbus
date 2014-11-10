@@ -126,6 +126,7 @@ class DownloadProgressBar(QProgressBar):
 # File download toolbar.
 # These are displayed at the bottom of a MainWindow.
 class DownloadBar(QToolBar):
+    requestDelete = pyqtSignal(QListWidgetItem)
     def __init__(self, reply, destination, parent=None):
         super(DownloadBar, self).__init__(parent)
         self.setMovable(False)
@@ -147,12 +148,17 @@ class DownloadBar(QToolBar):
         self.addAction(openFolderAction)
         abortAction = QAction(QIcon().fromTheme("process-stop", QIcon(common.icon("process-stop.png"))), tr("Abort/Remove"), self)
         abortAction.triggered.connect(self.progressBar.abort)
-        abortAction.triggered.connect(self.deleteLater)
+        abortAction.triggered.connect(lambda: self.requestDelete.emit(self.item()))
         self.addAction(abortAction)
+        self._listWidgetItem = None
     def openFile(self):
         QDesktopServices.openUrl(QUrl.fromUserInput(self.progressBar.destination))
     def openFolder(self):
         QDesktopServices.openUrl(QUrl.fromUserInput(os.path.split(self.progressBar.destination)[0]))
+    def setItem(self, item):
+        self._listWidgetItem = item
+    def item(self):
+        return self._listWidgetItem
 
 # Class for exposing fullscreen API to DOM.
 class FullScreenRequester(QObject):

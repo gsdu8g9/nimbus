@@ -1652,8 +1652,8 @@ class MainWindow(QMainWindow):
 
     # This method is used to add a DownloadBar to the window.
     def addDownloadToolBar(self, toolbar):
-        common.downloadManager.addToolBar(toolbar)
-        common.downloadManager.addToolBarBreak()
+        common.downloadManager.addDownload(toolbar)
+        #common.downloadManager.addToolBarBreak()
         common.downloadManager.show()
 
     # Method to update the location bar text.
