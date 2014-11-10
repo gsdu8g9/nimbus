@@ -1561,7 +1561,7 @@ class MainWindow(QMainWindow):
         count = self.tabWidget().count()
         for index in range(0, count):
             webView = self.tabWidget().widget(index)
-            ti = (("[%s] " % (str(index+1),) if index < 8 else ("[9] " if index == count-1 else "")) if settings.setting_to_bool("general/TabHotkeysVisible") else "") + webView.shortTitle()
+            ti = (("[%s] " % (str(index+1),) if index < 8 else ("[9] " if index == count-1 else "")) if settings.setting_to_bool("general/TabHotkeysVisible") else "") + webView.shortWindowTitle()
             title = (ti if not webView.shortTempTitle() else webView.shortTempTitle())
             longtitle = webView.windowTitle()
             self.tabWidget().setTabText(index, "\u26bf" if index < settings.setting_to_int("general/PinnedTabCount") else title)
