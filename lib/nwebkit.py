@@ -151,7 +151,7 @@ class DownloadBar(QToolBar):
         openFolderAction = QAction(common.complete_icon("document-open"), tr("Open containing folder"), self)
         openFolderAction.triggered.connect(self.openFolder)
         self.addAction(openFolderAction)
-        abortAction = QAction(QIcon().fromTheme("process-stop", QIcon(common.icon("process-stop.png"))), tr("Abort/Remove"), self)
+        abortAction = QAction(common.complete_icon("process-stop"), tr("Abort/Remove"), self)
         abortAction.triggered.connect(self.progressBar.abort)
         abortAction.triggered.connect(lambda: self.requestDelete.emit(self.item()))
         self.addAction(abortAction)
