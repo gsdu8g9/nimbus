@@ -3,7 +3,12 @@ settings.settings.setValue("general/FeedButtonVisible", True)
 settings.settings.sync()
 try: common.feeds
 except:
-    feeds = data.data.value("data/CompleterPriority")
+    old_bookmarks = data.data.value("data/Feeds")
+    if old_bookmarks:
+        feeds = old_bookmarks
+        data.data.deleteKey("data/Feeds")
+    else:
+        feeds = data.data.value("data/CompleterPriority")
     if not feeds:
         common.feeds = []
         data.data.setValue("data/CompleterPriority", json.dumps(common.feeds))

@@ -33,6 +33,9 @@ class QSettings(object):
         return os.path.join(self.fulldirname, self.fname)
     def setValue(self, key, value):
         self.tables[key] = value
+    def deleteKey(self, key):
+        try: del self.tables[key]
+        except: pass
     def value(self, key):
         try: return self.tables[key]
         except: return None
