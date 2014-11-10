@@ -236,8 +236,10 @@ class WebPage(QWebPage):
             try: url = option.url
             except: url = QUrl("about:blank")
             if network.isConnectedToNetwork():
+                output.baseUrl = url
                 output.content = QByteArray(network.errorPage(url))
             else:
+                output.baseUrl = url
                 output.content = QByteArray(network.errorPage(url, "No Internet connection.", "Your computer is not connected to the Internet.", suggestions=["Check your computer's network settings.", "If you have access to a wired Ethernet connection, make sure the cable is plugged in.", "If the problem persists, contact your network administrator."]))
             return True
         else:
