@@ -74,6 +74,7 @@ if sys.platform.startswith("win"):
         return percent
 elif sys.platform.startswith("darwin"):
     command = "pmset -g batt | egrep \"([0-9]+\%).*\" -o --colour=auto | cut -zmbfqx -d';'"
+    battery = True
     def get_battery_percentage():
         stdout_handle = os.popen(command.replace("zmbfqx", "f1"))
         value = stdout_handle.read().replace("%", "").replace("\n", "")
