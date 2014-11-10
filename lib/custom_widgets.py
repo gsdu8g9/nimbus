@@ -269,7 +269,7 @@ class LocationBar(QLineEdit):
         fw = self.style().pixelMetric(QStyle.PM_DefaultFrameWidth)
         self.icon.move(QPoint(self.rect().left() + (self.height() + 1 - sz.width())/2, (self.height() + 1 - sz.height())/2))
         if self.s == False:
-            self.setStyleSheet("QLineEdit { background: transparent; padding-left: %spx; }" % str(sz.width() + (self.height() + 1 - sz.width())/2))
+            self.setStyleSheet("QLineEdit { padding-left: %spx; }" % str(sz.width() + (self.height() + 1 - sz.width())/2))
             self.s = True
             self.redefResizeEvent()
 
