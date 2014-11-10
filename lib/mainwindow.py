@@ -348,7 +348,8 @@ class MainWindow(QMainWindow):
 
         # Load stored browser history.
         self.completer = QCompleter(self.locationBar)
-        self.completer.setFilterMode(Qt.MatchContains)
+        try: self.completer.setFilterMode(Qt.MatchContains)
+        except: pass
         self.updateCompleter()
         self.locationBar.setCompleter(self.completer)
 
