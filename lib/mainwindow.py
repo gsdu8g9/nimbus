@@ -1436,7 +1436,7 @@ class MainWindow(QMainWindow):
         self.tabsMenu.addAction(closeRightTabsAction)
         self.tabsMenu.addSeparator()
         for tab in range(self.tabWidget().count()):
-            tabAction = custom_widgets.IndexAction(tab, self.tabWidget().widget(tab).shortWindowTitle(), self.tabsMenu)
+            tabAction = custom_widgets.IndexAction(tab, self.tabWidget().widget(tab).shortTitle(), self.tabsMenu)
             if tab == self.tabWidget().currentIndex():
                 tabAction.setCheckable(True)
                 tabAction.setChecked(True)
@@ -1561,7 +1561,7 @@ class MainWindow(QMainWindow):
         count = self.tabWidget().count()
         for index in range(0, count):
             webView = self.tabWidget().widget(index)
-            ti = (("[%s] " % (str(index+1),) if index < 8 else ("[9] " if index == count-1 else "")) if settings.setting_to_bool("general/TabHotkeysVisible") else "") + webView.shortWindowTitle()
+            ti = (("[%s] " % (str(index+1),) if index < 8 else ("[9] " if index == count-1 else "")) if settings.setting_to_bool("general/TabHotkeysVisible") else "") + webView.shortTitle()
             title = (ti if not webView.shortTempTitle() else webView.shortTempTitle())
             longtitle = webView.windowTitle()
             self.tabWidget().setTabText(index, "\u26bf" if index < settings.setting_to_int("general/PinnedTabCount") else title)

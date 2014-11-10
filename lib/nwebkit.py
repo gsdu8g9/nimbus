@@ -847,6 +847,10 @@ class WebView(QWebView):
         else:
             super(WebView, self).contextMenuEvent(ev)
 
+    def shortTitle(self):
+        title = self.title()
+        return title[:24] + '...' if len(title) > 24 else title
+
     def shortWindowTitle(self):
         title = self.windowTitle()
         return title[:24] + '...' if len(title) > 24 else title
