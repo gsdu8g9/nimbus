@@ -428,6 +428,13 @@ class DownloadManager(QMainWindow):
         self.addAction(closeWindowAction)
         self.listWidget = QListWidget(self)
         self.setCentralWidget(self.listWidget)
+        self.toolBar = QToolBar(self)
+        self.toolBar.setMovable(False)
+        self.toolBar.setContextMenuPolicy(Qt.CustomContextMenu)
+        self.addToolBar(Qt.BottomToolBarArea, self.toolBar)
+        self.removeAllAction = QAction(tr("Remove all"), self)
+        self.removeAllAction.triggered.connect(self.removeAllItems)
+        self.toolBar.addAction(self.removeAllAction)
     def addDownload(self, toolbar):
         item = QListWidgetItem(self.listWidget)
         item.setSizeHint(QSize(item.sizeHint().width(), 32))
@@ -438,3 +445,6 @@ class DownloadManager(QMainWindow):
     def removeItem(self, item):
         self.listWidget.itemWidget(item).deleteLater()
         self.listWidget.takeItem(self.listWidget.row(item))
+    def removeAllItems(self):
+        for i in range(self.listWidget.count()):
+            self.removeItem(self.listWidget.item(0))
