@@ -240,7 +240,7 @@ class WebPage(QWebPage):
                 output.content = QByteArray(network.errorPage(url))
             else:
                 output.baseUrl = url
-                output.content = QByteArray(network.errorPage(url, "No Internet connection.", "Your computer is not connected to the Internet.", suggestions=["Check your computer's network settings.", "If you have access to a wired Ethernet connection, make sure the cable is plugged in.", "If the problem persists, contact your network administrator."]))
+                output.content = QByteArray(network.errorPage(url, "No Internet connection.", "Your computer is not connected to the Internet.", suggestions=["Check your computer's network settings.", "If you have access to a wired Ethernet connection, make sure the cable is plugged in.", "If the problem persists, contact your network administrator."]).encode("utf-8"))
             return True
         else:
             return QWebPage.extension(self, extension, option, output)
