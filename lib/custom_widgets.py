@@ -429,7 +429,7 @@ class DownloadManager(QMainWindow):
         self.listWidget = QListWidget(self)
         self.setCentralWidget(self.listWidget)
     def addDownload(self, toolbar):
-        item = QListWidgetItem()
+        item = QListWidgetItem(self.listWidget)
         self.listWidget.addItem(item)
         self.listWidget.setItemWidget(item, toolbar)
         toolbar.setItem(item)
