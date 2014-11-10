@@ -97,6 +97,7 @@ class DownloadProgressBar(QProgressBar):
         if self.networkReply:
             self.networkReply.downloadProgress.connect(self.updateProgress)
             self.networkReply.finished.connect(self.finishDownload)
+        self._text = "???"
 
     # Writes downloaded file to the disk.
     def finishDownload(self):
@@ -110,6 +111,12 @@ class DownloadProgressBar(QProgressBar):
             self.progress = [0, 0]
             common.trayIcon.showMessage(tr("Download complete"), os.path.split(self.destination)[1])
             
+
+    def text(self):
+        return self._text
+
+    def setText(self, text):
+        self._text = str(text)
 
     # Updates the progress bar.
     def updateProgress(self, received, total):
@@ -133,13 +140,11 @@ class DownloadBar(QToolBar):
         self.setIconSize(QSize(16, 16))
         self.setContextMenuPolicy(Qt.CustomContextMenu)
         self.setStyleSheet(common.blank_toolbar)
-        label = QLabel(self)
-        self.addWidget(label)
         self.progressBar = DownloadProgressBar(reply, destination, self)
         #self.progressBar.networkReply.finished.connect(self.close)
         #self.progressBar.networkReply.finished.connect(self.deleteLater)
         self.addWidget(self.progressBar)
-        label.setText(os.path.split(self.progressBar.destination)[1])
+        self.progressBar.setText(os.path.split(self.progressBar.destination)[1])
         openFileAction = QAction(common.complete_icon("media-playback-start"), tr("Open file"), self)
         openFileAction.triggered.connect(self.openFile)
         self.addAction(openFileAction)
