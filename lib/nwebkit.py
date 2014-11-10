@@ -153,9 +153,12 @@ class DownloadBar(QToolBar):
         self.addAction(openFolderAction)
         abortAction = QAction(common.complete_icon("process-stop"), tr("Abort/Remove"), self)
         abortAction.triggered.connect(self.progressBar.abort)
+        abortAction.triggered.connect(lambda: self.progressBar.setValue(self.progressBar.maximum()))
         abortAction.triggered.connect(lambda: self.requestDelete.emit(self.item()))
         self.addAction(abortAction)
         self._listWidgetItem = None
+    def inProgress(self):
+        return self.progressBar.value() != self.progressBar.maximum()
     def openFile(self):
         QDesktopServices.openUrl(QUrl.fromUserInput(self.progressBar.destination))
     def openFolder(self):
