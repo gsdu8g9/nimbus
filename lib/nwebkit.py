@@ -754,8 +754,6 @@ class WebView(QWebView):
     def disconnect(self, *args, **kwargs):
         super(WebView, self).disconnect(*args, **kwargs)
         self.init()
-        #self.disconnected = True
-        common.disconnected.append(self)
 
     def init(self):
         self.urlChanged.connect(self.setUrlText)

@@ -199,6 +199,3 @@ def shortenURL(url):
 
 # This stylesheet is applied to toolbars that are blank.
 blank_toolbar = "QToolBar { border: 0; background: transparent; }"
-
-# Stores WebView instances.
-disconnected = []
