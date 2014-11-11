@@ -8,17 +8,12 @@
 # Description: Contains a QObject providing geolocation capabilities, to be
 #              used by nwebkit.py.
 
-from common import pyqt4
 import urllib.request
 import json
 import time
 
-if not pyqt4:
-    from PyQt5.QtCore import QObject, pyqtSlot
-    Slot = pyqtSlot
-else:
-    from PyQt4.QtCore import QObject, pyqtSlot
-    Slot = pyqtSlot
+from PyQt5.QtCore import QObject, pyqtSlot
+Slot = pyqtSlot
 
 def geolocate():
     data = urllib.request.urlopen('http://freegeoip.net/json/').read().decode("utf-8")

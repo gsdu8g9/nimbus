@@ -29,23 +29,15 @@ import rss_parser
 
 # Extremely specific imports from PyQt5/PySide.
 # We give PyQt5 priority because it supports Qt5.
-if not common.pyqt4:
-    from PyQt5.QtCore import Qt, QSize, QObject, QCoreApplication, pyqtSignal, pyqtSlot, QUrl, QFile, QIODevice, QTimer, QByteArray, QDataStream, QDateTime, QPoint, QEventLoop
-    from PyQt5.QtGui import QIcon, QImage, QClipboard, QCursor, QDesktopServices
-    from PyQt5.QtWidgets import QApplication, QListWidget, QSpinBox, QListWidgetItem, QMessageBox, QAction, QToolBar, QLineEdit, QInputDialog, QFileDialog, QProgressBar, QLabel, QCalendarWidget, QSlider, QFontComboBox, QLCDNumber, QDateTimeEdit, QDial, QPushButton, QMenu, QDesktopWidget, QWidgetAction, QToolTip, QWidget, QToolButton, QVBoxLayout
-    from PyQt5.QtPrintSupport import QPrinter, QPrintDialog, QPrintPreviewDialog
-    from PyQt5.QtNetwork import QNetworkProxy, QNetworkRequest
-    from PyQt5.QtWebKit import QWebHistory
-    from PyQt5.QtWebKitWidgets import QWebView, QWebPage
-    Signal = pyqtSignal
-    Slot = pyqtSlot
-else:
-    from PyQt4.QtCore import Qt, QSize, QObject, QCoreApplication, pyqtSignal, pyqtSlot, QUrl, QFile, QIODevice, QTimer, QByteArray, QDataStream, QDateTime, QPoint, QEventLoop
-    from PyQt4.QtGui import QApplication, QListWidget, QSpinBox, QListWidgetItem, QMessageBox, QIcon, QAction, QToolBar, QLineEdit, QPrinter, QPrintDialog, QPrintPreviewDialog, QInputDialog, QFileDialog, QProgressBar, QLabel, QCalendarWidget, QSlider, QFontComboBox, QLCDNumber, QImage, QDateTimeEdit, QDial, QPushButton, QMenu, QDesktopWidget, QClipboard, QWidgetAction, QToolTip, QCursor, QWidget, QToolButton, QVBoxLayout, QDesktopServices
-    from PyQt4.QtNetwork import QNetworkProxy, QNetworkRequest
-    from PyQt4.QtWebKit import QWebView, QWebPage, QWebHistory
-    Signal = pyqtSignal
-    Slot = pyqtSlot
+from PyQt5.QtCore import Qt, QSize, QObject, QCoreApplication, pyqtSignal, pyqtSlot, QUrl, QFile, QIODevice, QTimer, QByteArray, QDataStream, QDateTime, QPoint, QEventLoop
+from PyQt5.QtGui import QIcon, QImage, QClipboard, QCursor, QDesktopServices
+from PyQt5.QtWidgets import QApplication, QListWidget, QSpinBox, QListWidgetItem, QMessageBox, QAction, QToolBar, QLineEdit, QInputDialog, QFileDialog, QProgressBar, QLabel, QCalendarWidget, QSlider, QFontComboBox, QLCDNumber, QDateTimeEdit, QDial, QPushButton, QMenu, QDesktopWidget, QWidgetAction, QToolTip, QWidget, QToolButton, QVBoxLayout
+from PyQt5.QtPrintSupport import QPrinter, QPrintDialog, QPrintPreviewDialog
+from PyQt5.QtNetwork import QNetworkProxy, QNetworkRequest
+from PyQt5.QtWebKit import QWebHistory
+from PyQt5.QtWebKitWidgets import QWebView, QWebPage
+Signal = pyqtSignal
+Slot = pyqtSlot
 
 # Add an item to the browser history.
 def addHistoryItem(url, title=None):

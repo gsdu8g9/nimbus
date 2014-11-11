@@ -9,12 +9,9 @@
 #              internationalization.
 
 import os.path
-from common import app_folder, app_locale, pyqt4
+from common import app_folder, app_locale
 
-if not pyqt4:
-    from PyQt5.QtCore import QCoreApplication, QLocale, QTranslator, QObject
-else:
-    from PyQt4.QtCore import QCoreApplication, QLocale, QTranslator, QObject
+from PyQt5.QtCore import QCoreApplication, QLocale, QTranslator, QObject
 
 # Translation.
 translations_folder = os.path.join(app_folder, "translations")

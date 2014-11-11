@@ -15,15 +15,10 @@ import os
 import json
 import custom_widgets
 from translate import tr
-if not common.pyqt4:
-    from PyQt5.QtCore import Qt, pyqtSignal, QSize
-    from PyQt5.QtGui import QCursor
-    from PyQt5.QtWidgets import QMainWindow, QAction, QMessageBox, QToolBar, QLabel, QToolButton, QListWidget, QInputDialog, QDesktopWidget
-    Signal = pyqtSignal
-else:
-    from PyQt4.QtCore import Qt, pyqtSignal, QSize
-    from PyQt4.QtGui import QMainWindow, QAction, QMessageBox, QToolBar, QLabel, QToolButton, QListWidget, QInputDialog, QCursor, QDesktopWidget
-    Signal = pyqtSignal
+from PyQt5.QtCore import Qt, pyqtSignal, QSize
+from PyQt5.QtGui import QCursor
+from PyQt5.QtWidgets import QMainWindow, QAction, QMessageBox, QToolBar, QLabel, QToolButton, QListWidget, QInputDialog, QDesktopWidget
+Signal = pyqtSignal
 
 def unicode(*args, **kwargs):
     return str(*args, **kwargs)

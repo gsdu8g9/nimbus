@@ -45,43 +45,24 @@ from mainwindow import *
 from tray_icon import *
 
 # Extremely specific imports from PyQt.
-if not common.pyqt4:
-    from PyQt5.QtCore import Qt, QCoreApplication, QUrl, QTimer
-    from PyQt5.QtGui import QPalette, QColor
-    from PyQt5.QtWidgets import QApplication, QAction, QDesktopWidget, QMessageBox
-    from PyQt5.QtWebKit import QWebSettings, QWebSecurityOrigin
-    from PyQt5.QtWebKitWidgets import QWebPage
-    import pdf_js
-    import viewerjs
+from PyQt5.QtCore import Qt, QCoreApplication, QUrl, QTimer
+from PyQt5.QtGui import QPalette, QColor
+from PyQt5.QtWidgets import QApplication, QAction, QDesktopWidget, QMessageBox
+from PyQt5.QtWebKit import QWebSettings, QWebSecurityOrigin
+from PyQt5.QtWebKitWidgets import QWebPage
+import pdf_js
+import viewerjs
 
-    # Python DBus
-    has_dbus = False
-    if not "-no-remote" in sys.argv:
-        try:
-            import dbus
-            import dbus.service
-            from dbus.mainloop.pyqt5 import DBusQtMainLoop
-            has_dbus = True
-        except ImportError:
-            pass
-else:
-    from PyQt4.QtCore import Qt, QCoreApplication, QUrl, QTimer
-    from PyQt4.QtGui import QApplication, QAction, QDesktopWidget, QMessageBox, QPalette, QColor
-    from PyQt4.QtWebKit import QWebPage, QWebSettings, QWebSecurityOrigin
-    import pdf_js_qt4
-    import viewerjs_qt4
-
-    # Python DBus
-    has_dbus = False
-    if not "-no-remote" in sys.argv:
-        try:
-            import dbus
-            import dbus.service
-            from dbus.mainloop.qt import DBusQtMainLoop
-            has_dbus = True
-        except:
-            pass
-
+# Python DBus
+has_dbus = False
+if not "-no-remote" in sys.argv:
+    try:
+        import dbus
+        import dbus.service
+        from dbus.mainloop.pyqt5 import DBusQtMainLoop
+        has_dbus = True
+    except ImportError:
+        pass
 
 # chdir to the app folder. This way, we won't have issues related to
 # relative paths.

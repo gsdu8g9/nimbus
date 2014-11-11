@@ -12,15 +12,10 @@ import os
 import pickle
 import settings
 import browser
-from settings import pyqt4
 from translate import tr
 from mainwindow import MainWindow
-if not pyqt4:
-    from PyQt5.QtCore import Qt
-    from PyQt5.QtWidgets import QAction, QMainWindow, QPushButton, QInputDialog, QListWidget, QToolBar
-else:
-    from PyQt4.QtCore import Qt
-    from PyQt4.QtGui import QAction, QMainWindow, QPushButton, QInputDialog, QListWidget, QToolBar
+from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import QAction, QMainWindow, QPushButton, QInputDialog, QListWidget, QToolBar
 
 class SessionManager(QMainWindow):
     def __init__(self, parent=None):

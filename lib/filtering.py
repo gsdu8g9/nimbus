@@ -9,14 +9,11 @@
 
 import os.path
 import abpy
-import common
+import paths
 import settings
 import traceback
 import urllib.request
-if not common.pyqt4:
-    from PyQt5.QtCore import QThread, QCoreApplication
-else:
-    from PyQt4.QtCore import QThread, QCoreApplication
+from PyQt5.QtCore import QThread, QCoreApplication
 
 # Dummy adblock filter class.
 class Filter(object):
@@ -116,7 +113,7 @@ class AdblockFilterLoader(QThread):
 adblock_filter_loader = AdblockFilterLoader(QCoreApplication.instance())
 
 # Host filter.
-hosts_file = os.path.join(common.app_folder, "hosts")
+hosts_file = os.path.join(paths.app_folder, "hosts")
 host_rules = []
 
 def load_host_rules():

@@ -23,32 +23,18 @@ from nwebkit import *
 import traceback
 
 # Extremely specific imports from PyQt5.
-if not common.pyqt4:
-    from PyQt5.QtCore import Qt, QCoreApplication, QUrl, QTimer, QSize,\
-                             QDateTime, QPoint, QStringListModel
-    from PyQt5.QtGui import QKeySequence, QIcon, QCursor
-    from PyQt5.QtWidgets import QApplication, QDockWidget, QWidget, QHBoxLayout,\
-                            QVBoxLayout,\
-                            QMessageBox, QSizePolicy,\
-                            QMenu, QAction, QMainWindow, QToolBar,\
-                            QToolButton, QComboBox, QButtonGroup,\
-                            QLabel, QCalendarWidget, QInputDialog,\
-                            QLineEdit, QStatusBar, QProgressBar, QCompleter
-    from PyQt5.QtNetwork import QNetworkRequest
-    from PyQt5.QtWebKitWidgets import QWebPage
-else:
-    from PyQt4.QtCore import Qt, QCoreApplication, QUrl, QTimer, QSize,\
-                                 QDateTime, QPoint
-    from PyQt4.QtGui import QApplication, QDockWidget, QWidget, QHBoxLayout,\
-                            QVBoxLayout,\
-                            QKeySequence, QMessageBox, QSizePolicy, QIcon,\
-                            QMenu, QAction, QMainWindow, QToolBar,\
-                            QToolButton, QComboBox, QButtonGroup,\
-                            QLabel, QCalendarWidget, QCursor, QInputDialog,\
-                            QLineEdit, QStatusBar, QProgressBar, QCompleter,\
-                            QStringListModel
-    from PyQt4.QtNetwork import QNetworkRequest
-    from PyQt4.QtWebKit import QWebPage
+from PyQt5.QtCore import Qt, QCoreApplication, QUrl, QTimer, QSize,\
+                         QDateTime, QPoint, QStringListModel
+from PyQt5.QtGui import QKeySequence, QIcon, QCursor
+from PyQt5.QtWidgets import QApplication, QDockWidget, QWidget, QHBoxLayout,\
+                        QVBoxLayout,\
+                        QMessageBox, QSizePolicy,\
+                        QMenu, QAction, QMainWindow, QToolBar,\
+                        QToolButton, QComboBox, QButtonGroup,\
+                        QLabel, QCalendarWidget, QInputDialog,\
+                        QLineEdit, QStatusBar, QProgressBar, QCompleter
+from PyQt5.QtNetwork import QNetworkRequest
+from PyQt5.QtWebKitWidgets import QWebPage
 
 # Extension button class.
 class ExtensionButton(QToolButton):

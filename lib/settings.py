@@ -16,9 +16,6 @@ import paths
 from qsettings import QSettings
 
 pyqt4 = False
-for arg in ("-4", "--pyqt4"):
-    if arg in sys.argv:
-        pyqt4 = True
 
 settings = QSettings("nimbus", "config", portable=paths.portable)
 settings_folder = os.path.dirname(settings.fileName())
@@ -121,8 +118,6 @@ def setting_to_list(value=""):
     else:
         try: return json.loads(settings.value(value))
         except: return []
-
-pyqt4 = setting_to_bool("general/ForcePyQt4")
 
 js_exceptions = setting_to_list("content/JavaScriptExceptions")
 

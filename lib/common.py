@@ -17,23 +17,11 @@ import locale
 import stringfunctions
 import paths
 import settings
-pyqt4 = settings.pyqt4
-if not settings.pyqt4:
-    try:
-        from PyQt5.QtCore import qVersion, QLocale, QUrl, QEvent, QCoreApplication
-        from PyQt5.QtGui import QIcon
-        from PyQt5.QtWidgets import QApplication
-        from PyQt5.QtWebKit import qWebKitVersion, QWebSettings
-    except ImportError:
-        from PyQt4.QtCore import qVersion, QLocale, QUrl, QEvent, QCoreApplication
-        from PyQt4.QtGui import QIcon, QApplication
-        from PyQt4.QtWebKit import qWebKitVersion, QWebSettings
-        pyqt4 = True
-else:
-    from PyQt4.QtCore import qVersion, QLocale, QUrl, QEvent, QCoreApplication
-    from PyQt4.QtGui import QIcon, QApplication
-    from PyQt4.QtWebKit import qWebKitVersion, QWebSettings
-    pyqt4 = True
+from PyQt5.QtCore import qVersion, QLocale, QUrl, QEvent, QCoreApplication
+from PyQt5.QtGui import QIcon
+from PyQt5.QtWidgets import QApplication
+from PyQt5.QtWebKit import qWebKitVersion, QWebSettings
+pyqt4 = False
 
 def rm(fname):
     subprocess.Popen(["rm", fname])

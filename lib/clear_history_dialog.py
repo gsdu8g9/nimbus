@@ -16,14 +16,9 @@ import settings
 import network
 import data
 from translate import tr
-if not common.pyqt4:
-    from PyQt5.QtCore import Qt
-    from PyQt5.QtWidgets import QWidget, QVBoxLayout, QLabel, QMainWindow, QAction, QToolBar, QComboBox, QPushButton
-    from PyQt5.QtWebKit import QWebSettings
-else:
-    from PyQt4.QtCore import Qt
-    from PyQt4.QtGui import QWidget, QVBoxLayout, QLabel, QMainWindow, QAction, QToolBar, QComboBox, QPushButton
-    from PyQt4.QtWebKit import QWebSettings
+from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import QWidget, QVBoxLayout, QLabel, QMainWindow, QAction, QToolBar, QComboBox, QPushButton
+from PyQt5.QtWebKit import QWebSettings
 
 class ClearHistoryDialog(QMainWindow):
     def __init__(self, parent=None):
