@@ -438,6 +438,8 @@ class DownloadManager(QMainWindow):
         toolbar.setItem(item)
         toolbar.requestDelete.connect(self.removeItem)
     def removeItem(self, item):
+        try: self.listWidget.itemWidget(item).inProgress()
+        except: self.listWidget.takeItem(self.listWidget.row(item))
         if self.listWidget.itemWidget(item).inProgress():
             return
         self.listWidget.itemWidget(item).deleteLater()
