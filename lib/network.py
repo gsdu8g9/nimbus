@@ -66,6 +66,8 @@ class NetworkReply(QNetworkReply):
 
 # Error page generator.
 def errorPage(url="about:blank", error="Whoops...", errorString="Nimbus could not load the requested page.", suggestions=["Make sure the URL was entered properly. For example, <b>www.google.com</b> instead of <b>ww.google.com</b>", "Ensure that your computer is connected to the Internet.", "The page you requested might no longer exist. Try loading it on Wayback Machine."]):
+    if type(error) is int:
+        error = tr("Error %s" % error,)
     if type(url) is QUrl:
         url = url.toString()
     errorString = str(errorString)
