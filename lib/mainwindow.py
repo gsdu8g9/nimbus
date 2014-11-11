@@ -104,6 +104,9 @@ class MainWindow(QMainWindow):
         # List of sidebars.
         # Sidebars are part of the (incomplete) extensions API.
         self.sideBars = {}
+        
+        # Sidebar tabs should be vertical.
+        self.setDockOptions(QMainWindow.VerticalTabs)
 
         # Main toolbar.
         self.toolBar = custom_widgets.MenuToolBar(movable=False,\
