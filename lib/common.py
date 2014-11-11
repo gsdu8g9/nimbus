@@ -14,7 +14,7 @@ import platform
 import os
 import subprocess
 import locale
-import base64
+import stringfunctions
 import paths
 import settings
 pyqt4 = settings.pyqt4
@@ -54,21 +54,10 @@ else:
     def cpr(fname, dest):
         subprocess.Popen(["cp", "-r", fname, dest])
 
-def chop(thestring, beginning):
-  if thestring.startswith(beginning):
-    return thestring[len(beginning):]
-  return thestring
-
-def rchop(thestring, ending):
-  if thestring.endswith(ending):
-    return thestring[:-len(ending)]
-  return thestring
-
-def htmlToBase64(html):
-    return "data:text/html;charset=utf-8;base64," + base64.b64encode((html.replace('\n', '')).encode('utf-8')).decode('utf-8')
-
-def cssToBase64(css):
-    return "data:text/css;charset=utf-8;base64," + base64.b64encode((css.replace('\n', '')).encode('utf-8')).decode('utf-8')
+chop = stringfunctions.chop
+rchop = stringfunctions.rchop
+htmlToBase64 = stringfunctions.htmlToBase64
+cssToBase64 = stringfunctions.cssToBase64
 
 # Copy to clipboard.
 # http://stackoverflow.com/questions/1073550/pyqt-clipboard-doesnt-copy-to-system-clipboard

@@ -175,7 +175,7 @@ class FullScreenRequester(QObject):
     def setFullScreen(self, fullscreen=False):
         self.fullScreenRequested.emit(fullscreen)
 
-isOnlineTimer = QTimer()
+isOnlineTimer = QTimer(QCoreApplication.instance())
 
 # Custom WebPage class with support for filesystem.
 class WebPage(QWebPage):

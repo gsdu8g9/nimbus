@@ -8,13 +8,13 @@
 # Description: This module contains data related to browser history, cookies,
 #              etc.
 
-import common
 import network
 import traceback
 import json
 import settings
 from qsettings import QSettings
-if not common.pyqt4:
+import paths
+if not settings.pyqt4:
     from PyQt5.QtCore import QCoreApplication, QByteArray, QUrl
     from PyQt5.QtNetwork import QNetworkCookie
 else:
@@ -24,7 +24,7 @@ else:
 # Global list to store history.
 history = {}
 
-data = QSettings(settings.settings.dirname[1:], "data", portable=common.portable)
+data = QSettings(settings.settings.dirname[1:], "data", portable=paths.portable)
 
 # These store the geolocation whitelist and blacklist.
 geolocation_whitelist = []

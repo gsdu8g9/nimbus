@@ -14,9 +14,9 @@ import settings
 import traceback
 import urllib.request
 if not common.pyqt4:
-    from PyQt5.QtCore import QThread
+    from PyQt5.QtCore import QThread, QCoreApplication
 else:
-    from PyQt4.QtCore import QThread
+    from PyQt4.QtCore import QThread, QCoreApplication
 
 # Dummy adblock filter class.
 class Filter(object):
@@ -64,7 +64,7 @@ class FilterUpdater(QThread):
         load_host_rules()
         print("All filters are up to date.")
 
-filter_updater = FilterUpdater()
+filter_updater = FilterUpdater(QCoreApplication.instance())
 
 # Convenience function.
 def update_filters():
@@ -113,7 +113,7 @@ class AdblockFilterLoader(QThread):
         self.quit()
 
 # Create thread to load adblock filters.
-adblock_filter_loader = AdblockFilterLoader()
+adblock_filter_loader = AdblockFilterLoader(QCoreApplication.instance())
 
 # Host filter.
 hosts_file = os.path.join(common.app_folder, "hosts")

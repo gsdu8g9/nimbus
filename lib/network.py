@@ -12,13 +12,13 @@
 
 import sys
 import os
-import common
 import settings
 import filtering
+import stringfunctions
 import random
 import settings
 from translate import tr
-if not common.pyqt4:
+if not settings.pyqt4:
     from PyQt5.QtCore import QCoreApplication, QUrl, QTimer
     from PyQt5.QtGui import QDesktopServices
     from PyQt5.QtWidgets import QInputDialog, QLineEdit
@@ -123,16 +123,16 @@ class NetworkAccessManager(QNetworkAccessManager):
                 html = directoryView % {"title": urlString, "heading": url.path(), "links": tr("The contents of this directory could not be loaded.")}
             return NetworkReply(self, url, self.GetOperation, html)
         if url.scheme() == "nimbus-extension":
-            request.setUrl(QUrl("http://127.0.0.1:8133/" + common.chop(url.toString(QUrl.RemoveScheme), "//")))
+            request.setUrl(QUrl("http://127.0.0.1:8133/" + stringfunctions.chop(url.toString(QUrl.RemoveScheme), "//")))
             return QNetworkAccessManager.createRequest(self, op, request, device)
         if url.scheme() == "nimbus":
-            request.setUrl(QUrl("file://%s/" % (common.app_folder,) + common.chop(url.toString(QUrl.RemoveScheme), "//")))
+            request.setUrl(QUrl("file://%s/" % (paths.app_folder,) + stringfunctions.chop(url.toString(QUrl.RemoveScheme), "//")))
             return self.createRequest(op, request, device)
         if url.scheme() == "nimbus-settings":
-            request.setUrl(QUrl("file://%s/" % (settings.settings_folder,) + common.chop(url.toString(QUrl.RemoveScheme), "//")))
+            request.setUrl(QUrl("file://%s/" % (settings.settings_folder,) + stringfunctions.chop(url.toString(QUrl.RemoveScheme), "//")))
             return self.createRequest(op, request, device)
         if url.scheme() == "apt":
-            os.system("xterm -e \"sudo apt-get install %s\" &" % (common.chop(url.toString(QUrl.RemoveScheme), "//").split("&")[0],))
+            os.system("xterm -e \"sudo apt-get install %s\" &" % (stringfunctions.chop(url.toString(QUrl.RemoveScheme), "//").split("&")[0],))
             return QNetworkAccessManager.createRequest(self, self.GetOperation, QNetworkRequest(QUrl("")))
         if url.scheme() == "mailto":
             QDesktopServices.openUrl(url)
@@ -152,7 +152,7 @@ def apply_proxy():
         proxyType = "No"
     port = settings.settings.value("proxy/Port")
     if port == None:
-        port = common.default_port
+        port = 8080
     user = str(settings.settings.value("proxy/User"))
     if user == "":
         user = None
@@ -164,7 +164,7 @@ def apply_proxy():
 
 # Clear cache.
 def clear_cache():
-    common.trayIcon.showMessage("What cache?", "%s doesn't have a cache." % (common.app_name,))
+    pass
 
 # This function checks whether the system is connected to a network interface.
 # It is used by Nimbus to determine whether the system is connected to the
