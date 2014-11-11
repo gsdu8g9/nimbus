@@ -12,13 +12,14 @@
 
 import sys
 import os
+from common import pyqt4
 import settings
 import filtering
 import stringfunctions
 import random
 import settings
 from translate import tr
-if not settings.pyqt4:
+if not pyqt4:
     from PyQt5.QtCore import QCoreApplication, QUrl, QTimer
     from PyQt5.QtGui import QDesktopServices
     from PyQt5.QtWidgets import QInputDialog, QLineEdit
