@@ -12,7 +12,7 @@ import os
 import pickle
 import settings
 import browser
-from common import pyqt4
+from settings import pyqt4
 from translate import tr
 from mainwindow import MainWindow
 if not pyqt4:
