@@ -94,7 +94,6 @@ class MainWindow(QMainWindow):
 
         # List of closed tabs.
         self.closedTabs = []
-        self.tabWidgetStack = None
 
         # Extension list
         self._extensions = []
@@ -235,7 +234,6 @@ class MainWindow(QMainWindow):
         self.timer = QTimer(timeout=self.toggleActions, parent=self)
         isOnlineTimer.timeout.connect(self.updateNetworkStatus)
         self.timer.timeout.connect(self.updateDateTime)
-        self.timer.timeout.connect(self.reconnectWebViews)
         
         """closeTabsToolBar = QToolBar(movable=False,\
                            contextMenuPolicy=Qt.CustomContextMenu,\
@@ -848,8 +846,6 @@ class MainWindow(QMainWindow):
             try: self.sideBars[key]["sideBar"].setVisible(self.sideBars[key]["sideBar"].isVisible())
             except: removeKeys.append(key)
         for key in removeKeys:
-            try: self.sideBars[key]["webView"].disconnect()
-            except: pass
             del self.sideBars[key]
         #print(self.sideBars)
 
@@ -859,7 +855,7 @@ class MainWindow(QMainWindow):
             index = self.tabWidget().currentIndex()
         webView = self.tabWidget().widget(index)
         self.tabWidget().removeTab(index)
-        name = webView.windowTitle()
+        name = webView.shortWindowTitle()
         if self.hasSideBar(name):
             x = 0
             while self.hasSideBar(name + (" (%s)" % (x,))):
@@ -1334,35 +1330,6 @@ class MainWindow(QMainWindow):
                                                   value("general/Search")\
                                                   % (url,)))
 
-    def reconnectWebViews(self):
-        mine = []
-        killitwithfire = []
-        #print(common.disconnected)
-        for webview in common.disconnected:
-            try:
-                if webview.parent() is self.tabWidgetStack:
-                    webview.loadProgress.connect(self.setProgress)
-                    webview.statusBarMessage.connect(self.setStatusBarMessage)
-                    webview.page().linkHovered.connect(self.setStatusBarMessage)
-                    webview.titleChanged.connect(self.updateTabTitles)
-                    webview.page().fullScreenRequested.connect(self.setFullScreen)
-                    webview.urlChanged.connect(self.updateLocationText)
-                    webview.urlChanged.connect(self.updateCompleter)
-                    webview.urlChanged2.connect(self.updateLocationText)
-                    webview.iconChanged.connect(self.updateTabIcons)
-                    webview.iconChanged.connect(self.updateLocationIcon)
-                    webview.windowCreated.connect(self.addTab2)
-                    webview.downloadStarted.connect(self.addDownloadToolBar)
-                    mine.append(webview)
-                    #webview.disconnected = False
-            except:
-                killitwithfire.append(webview)
-        #print(mine)
-        for webview in mine:
-            common.disconnected.remove(webview)
-        for webview in killitwithfire:
-            common.disconnected.remove(webview)
-
     # Status bar related methods.
     def setStatusBarMessage(self, message):
         try: self.statusBar.showMessage(message)
@@ -1478,55 +1445,53 @@ class MainWindow(QMainWindow):
     def addTab(self, webView=None, index=None, focus=True, incognito=None, **kwargs):
         # If a WebView object is specified, use it.
         forceBlankPage = False
+        title = tr("New Tab")
         if "forceBlankPage" in kwargs:
             forceBlankPage = kwargs["forceBlankPage"]
-        if webView != None:
+        if not webView:
+            if incognito == True:
+                webView = WebView(incognito=True, forceBlankPage=forceBlankPage, parent=self)
+            elif incognito == False:
+                webView = WebView(incognito=False, forceBlankPage=forceBlankPage, parent=self)
+            else:
+                webView = WebView(incognito=not settings.setting_to_bool("data/RememberHistory"), forceBlankPage=forceBlankPage, parent=self)
+            webView.tabRequested.connect(self.addTab)
+        else:
+            webView.setParent(self.tabWidget())
             try: webView.disconnect()
             except: pass
-            webview = webView
-        else:
-            if incognito == True:
-                webview = WebView(incognito=True, forceBlankPage=forceBlankPage, parent=self)
-            elif incognito == False:
-                webview = WebView(incognito=False, forceBlankPage=forceBlankPage, parent=self)
-            else:
-                webview = WebView(incognito=not settings.setting_to_bool("data/RememberHistory"), forceBlankPage=forceBlankPage, parent=self)
-            webview.tabRequested.connect(self.addTab)
+            title = webView.shortTitle()
 
         if "url" in kwargs:
             url = kwargs["url"]
-            webview.load(QUrl.fromUserInput(url))
+            webView.load(QUrl.fromUserInput(url))
         elif self.appMode == True:
             url = settings.settings.value("general/Homepage")
-            webview.load(QUrl.fromUserInput(url))
+            webView.load(QUrl.fromUserInput(url))
 
         # Connect signals
-        webview.setUserAgent()
-        webview.loadProgress.connect(self.setProgress)
-        webview.statusBarMessage.connect(self.setStatusBarMessage)
-        webview.page().linkHovered.connect(self.setStatusBarMessage)
-        webview.titleChanged.connect(self.updateTabTitles)
-        webview.page().fullScreenRequested.connect(self.setFullScreen)
-        webview.urlChanged.connect(self.updateLocationText)
-        webview.urlChanged.connect(self.updateCompleter)
-        webview.urlChanged2.connect(self.updateLocationText)
-        webview.iconChanged.connect(self.updateTabIcons)
-        webview.iconChanged.connect(self.updateLocationIcon)
-        webview.windowCreated.connect(self.addTab2)
-        webview.downloadStarted.connect(self.addDownloadToolBar)
+        webView.setUserAgent()
+        webView.loadProgress.connect(self.setProgress)
+        webView.statusBarMessage.connect(self.setStatusBarMessage)
+        webView.page().linkHovered.connect(self.setStatusBarMessage)
+        webView.titleChanged.connect(self.updateTabTitles)
+        webView.page().fullScreenRequested.connect(self.setFullScreen)
+        webView.urlChanged.connect(self.updateLocationText)
+        webView.urlChanged.connect(self.updateCompleter)
+        webView.urlChanged2.connect(self.updateLocationText)
+        webView.iconChanged.connect(self.updateTabIcons)
+        webView.iconChanged.connect(self.updateLocationIcon)
+        webView.windowCreated.connect(self.addTab2)
+        webView.downloadStarted.connect(self.addDownloadToolBar)
 
         # Add tab
         if type(index) is not int:
-            self.tabWidget().addTab(webview, tr("New Tab"))
-            if not self.tabWidgetStack:
-                self.tabWidgetStack = webview.parent()
+            self.tabWidget().addTab(webView, title)
         else:
             ptc = settings.setting_to_int("general/PinnedTabCount")
             if index < ptc:
                 index = ptc
-            self.tabWidget().insertTab(index, webview, tr("New Tab"))
-            if not self.tabWidgetStack:
-                self.tabWidgetStack = webview.parent()
+            self.tabWidget().insertTab(index, webView, title)
 
         # Switch to new tab
         if focus:
@@ -1558,7 +1523,8 @@ class MainWindow(QMainWindow):
                                              currentIndex() - 1)
 
     def updateTitle(self):
-        self.setWindowTitle(self.currentWidget().windowTitle() + " - " + common.app_name)
+        try: self.setWindowTitle(self.currentWidget().windowTitle() + " - " + common.app_name)
+        except: pass
 
     # Update the titles on every single tab.
     def updateTabTitles(self):
