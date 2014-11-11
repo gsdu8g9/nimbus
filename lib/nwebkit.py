@@ -923,6 +923,8 @@ class WebView(QWebView):
         try: self.page().networkAccessManager().finished.disconnect(self.ready)
         except: pass
         self.page().deleteLater()
+        try: self.disconnect()
+        except: pass
         QWebView.deleteLater(self)
 
     def paintEvent(self, ev):
