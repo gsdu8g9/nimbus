@@ -747,9 +747,10 @@ class WebView(QWebView):
         super(WebView, self).reload()
         self.clearJavaScriptBars()
 
-    def resizeEvent(self, *args, **kwargs):
-        super(WebView, self).resizeEvent(*args, **kwargs)
-        self.setStyleSheet(self.baseStyleSheet % (self.size().width(), self.size().width(), self.size().height(), self.size().height()))
+    if not sys.platform.startswith("win"):
+        def resizeEvent(self, *args, **kwargs):
+            super(WebView, self).resizeEvent(*args, **kwargs)
+            self.setStyleSheet(self.baseStyleSheet % (self.size().width(), self.size().width(), self.size().height(), self.size().height()))
 
     def wheelEvent(self, *args, **kwargs):
         super(WebView, self).wheelEvent(*args, **kwargs)
