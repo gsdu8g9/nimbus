@@ -76,8 +76,21 @@ class NetworkReply(QNetworkReply):
             self.offset = end
             return bytes(data)
 
+errors = {"No Internet connection": ["Check your computer's network settings.", "If you have access to a wired Ethernet connection, make sure the cable is plugged in.", "If the problem persists, contact your network administrator."],
+          3: ["Make sure the URL was entered properly. For example, <b>www.google.com</b> instead of <b>ww.google.com</b>.", "Ensure that your computer is connected to the Internet.", "The page you requested might no longer exist. Try loading it on Wayback Machine."],
+          401: ["If the site requires a login, make sure you are properly signed in.", "If you cannot sign in, ensure you have typed your credentials in correctly."],
+          403: ["You do not have permission to access that resource."],
+          404: ["Try refreshing the page at a later time.", "The page you requested might no longer exist. Try loading it on Wayback Machine."],
+          408: ["If you are connected to Wi-Fi, ensure that you have a good signal.", "Try refreshing the page at a later time."],
+          500: ["Try refreshing the page at a later time."],
+          503: ["Try refreshing the page at a later time."],
+          504: ["Try refreshing the page at a later time."]}
+
 # Error page generator.
-def errorPage(url="about:blank", error="Whoops...", errorString="Nimbus could not load the requested page.", suggestions=["Make sure the URL was entered properly. For example, <b>www.google.com</b> instead of <b>ww.google.com</b>", "Ensure that your computer is connected to the Internet.", "The page you requested might no longer exist. Try loading it on Wayback Machine."]):
+def errorPage(url="about:blank", error="Whoops...", errorString="Nimbus could not load the requested page."):
+    suggestions = errors[3]
+    if error in errors:
+        suggestions = errors[error]
     if type(error) is int:
         error = tr("Error %s" % error,)
     if type(url) is QUrl:
