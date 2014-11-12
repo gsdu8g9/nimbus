@@ -930,13 +930,14 @@ class WebView(QWebView):
         except: pass
         QWebView.deleteLater(self)
 
-    def paintEvent(self, ev):
-        if self._historyToBeLoaded:
-            self.page().loadHistory(self._historyToBeLoaded)
-            self._historyToBeLoaded = None
-            self._tempTitle = None
-        QWebView.paintEvent(self, ev)
-        self.paintEvent = self.shortPaintEvent
+    if not sys.platform.startswith("win"):
+        def paintEvent(self, ev):
+            if self._historyToBeLoaded:
+                self.page().loadHistory(self._historyToBeLoaded)
+                self._historyToBeLoaded = None
+                self._tempTitle = None
+            QWebView.paintEvent(self, ev)
+            self.paintEvent = self.shortPaintEvent
 
     def shortPaintEvent(self, *args, **kwargs):
         QWebView.paintEvent(self, *args, **kwargs)
