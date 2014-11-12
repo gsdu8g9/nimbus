@@ -167,8 +167,6 @@ class FullScreenRequester(QObject):
     def setFullScreen(self, fullscreen=False):
         self.fullScreenRequested.emit(fullscreen)
 
-isOnlineTimer = QTimer(QCoreApplication.instance())
-
 # Custom WebPage class with support for filesystem.
 class WebPage(QWebPage):
     plugins = (("qcalendarwidget", QCalendarWidget),
@@ -183,6 +181,8 @@ class WebPage(QWebPage):
 
     fullScreenRequested = Signal(bool)
     javaScriptBar = Signal(QWidget)
+    
+    isOnlineTimer = QTimer(QCoreApplication.instance())
     
     def __init__(self, *args, **kwargs):
         super(WebPage, self).__init__(*args, **kwargs)
@@ -216,9 +216,9 @@ class WebPage(QWebPage):
         self._userAgent = ""
 
         # Start self.isOnlineTimer.
-        isOnlineTimer.timeout.connect(self.setNavigatorOnline)
-        if not isOnlineTimer.isActive():
-            isOnlineTimer.start(5000)
+        self.isOnlineTimer.timeout.connect(self.setNavigatorOnline)
+        if not self.isOnlineTimer.isActive():
+            self.isOnlineTimer.start(5000)
 
         # Set user agent to default value.
         self.setUserAgent()
@@ -256,7 +256,7 @@ class WebPage(QWebPage):
             return QWebPage.extension(self, extension, option, output)
 
     def deleteLater(self):
-        try: isOnlineTimer.timeout.disconnect(self.setNavigatorOnline)
+        try: self.isOnlineTimer.timeout.disconnect(self.setNavigatorOnline)
         except: pass
         QWebPage.deleteLater(self)
 

@@ -25,10 +25,22 @@ from PyQt5.QtNetwork import QNetworkInterface, QNetworkCookieJar, QNetworkAccess
 
 # Global cookiejar to store cookies.
 # All nimbus.WebView instances use this.
-cookie_jar = QNetworkCookieJar(QCoreApplication.instance())
+cookie_jar = None
 
 # All incognito nimbus.WebView instances use this one instead.
-incognito_cookie_jar = QNetworkCookieJar(QCoreApplication.instance())
+incognito_cookie_jar = None
+
+def setup():
+    global incognito_cookie_jar
+    global cookie_jar
+    global network_access_manager
+    global incognito_network_access_manager
+    cookie_jar = QNetworkCookieJar(QCoreApplication.instance())
+    incognito_cookie_jar = QNetworkCookieJar(QCoreApplication.instance())
+    network_access_manager = NetworkAccessManager()
+    network_access_manager.setCookieJar(cookie_jar)
+    incognito_network_access_manager = NetworkAccessManager(nocache=True)
+    incognito_network_access_manager.setCookieJar(incognito_cookie_jar)
 
 # Subclass of QNetworkReply that loads a local folder.
 class NetworkReply(QNetworkReply):
@@ -139,12 +151,6 @@ class NetworkAccessManager(QNetworkAccessManager):
             return QNetworkAccessManager.createRequest(self, self.GetOperation, QNetworkRequest(QUrl("")))
         else:
             return QNetworkAccessManager.createRequest(self, op, request, device)
-
-# Create global instance of NetworkAccessManager.
-network_access_manager = NetworkAccessManager()
-network_access_manager.setCookieJar(cookie_jar)
-incognito_network_access_manager = NetworkAccessManager(nocache=True)
-incognito_network_access_manager.setCookieJar(incognito_cookie_jar)
 
 def apply_proxy():
     proxyType = str(settings.settings.value("proxy/Type"))

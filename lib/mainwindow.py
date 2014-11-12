@@ -235,7 +235,7 @@ class MainWindow(QMainWindow):
         # Regularly and forcibly enable and disable navigation actions
         # every few milliseconds.
         self.timer = QTimer(timeout=self.toggleActions, parent=self)
-        isOnlineTimer.timeout.connect(self.updateNetworkStatus)
+        WebPage.isOnlineTimer.timeout.connect(self.updateNetworkStatus)
         self.timer.timeout.connect(self.updateDateTime)
         
         """closeTabsToolBar = QToolBar(movable=False,\
@@ -975,7 +975,7 @@ class MainWindow(QMainWindow):
     def deleteLater(self):
         try: browser.windows.remove(self)
         except: pass
-        try: isOnlineTimer.disconnect(self.updateNetworkStatus)
+        try: WebPage.isOnlineTimer.disconnect(self.updateNetworkStatus)
         except: pass
         QMainWindow.deleteLater(self)
 

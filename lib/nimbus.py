@@ -68,9 +68,6 @@ if not "-no-remote" in sys.argv:
 # relative paths.
 os.chdir(common.app_folder)
 
-# Create extension server.
-server_thread = extension_server.ExtensionServerThread()
-
 # Redundancy is redundant.
 def addWindow(url=None):
     win = MainWindow()
@@ -129,6 +126,7 @@ if has_dbus:
 
 # Main function to load everything.
 def main(argv):
+    global server_thread
     print("Starting %s %s..." % (common.app_name, common.app_version))
     print("""         __
         /  \_
@@ -138,6 +136,12 @@ def main(argv):
 (__________________)
 """)
     app = QApplication(argv)
+    
+    network.setup()
+    filtering.setup()
+    
+    # Create extension server.
+    server_thread = extension_server.ExtensionServerThread(QCoreApplication.instance())
     
     # Start DBus loop
     if has_dbus:

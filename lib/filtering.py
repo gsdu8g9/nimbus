@@ -61,7 +61,7 @@ class FilterUpdater(QThread):
         load_host_rules()
         print("All filters are up to date.")
 
-filter_updater = FilterUpdater(QCoreApplication.instance())
+filter_updater = None
 
 # Convenience function.
 def update_filters():
@@ -110,7 +110,7 @@ class AdblockFilterLoader(QThread):
         self.quit()
 
 # Create thread to load adblock filters.
-adblock_filter_loader = AdblockFilterLoader(QCoreApplication.instance())
+adblock_filter_loader = None
 
 # Host filter.
 hosts_file = os.path.join(paths.app_folder, "hosts")
@@ -131,3 +131,9 @@ def load_host_rules():
                 except:
                     traceback.print_exc()
                 f.close()
+
+def setup():
+    global filter_updater
+    global adblock_filter_loader
+    filter_updater = FilterUpdater(QCoreApplication.instance())
+    adblock_filter_loader = AdblockFilterLoader(QCoreApplication.instance())
