@@ -17,6 +17,7 @@ import filtering
 import stringfunctions
 import random
 import settings
+import paths
 from translate import tr
 from PyQt5.QtCore import QCoreApplication, QUrl, QTimer
 from PyQt5.QtGui import QDesktopServices
