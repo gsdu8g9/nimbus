@@ -89,7 +89,7 @@ errors = {"No Internet connection": ["Check your computer's network settings.", 
 
 # Error page generator.
 def errorPage(url="about:blank", error="Whoops...", errorString="Nimbus could not load the requested page."):
-    suggestions = errors[3]
+    suggestions = []
     if error in errors:
         suggestions = errors[error]
     if type(error) is int:
