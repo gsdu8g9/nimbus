@@ -15,9 +15,13 @@ import os
 import json
 import custom_widgets
 from translate import tr
-from PyQt5.QtCore import Qt, pyqtSignal, QSize
-from PyQt5.QtGui import QCursor
-from PyQt5.QtWidgets import QMainWindow, QAction, QMessageBox, QToolBar, QLabel, QToolButton, QListWidget, QInputDialog, QDesktopWidget
+try:
+    from PyQt5.QtCore import Qt, pyqtSignal, QSize
+    from PyQt5.QtGui import QCursor
+    from PyQt5.QtWidgets import QMainWindow, QAction, QMessageBox, QToolBar, QLabel, QToolButton, QListWidget, QInputDialog, QDesktopWidget
+except ImportError:
+    from PyQt4.QtCore import Qt, pyqtSignal, QSize
+    from PyQt4.QtGui import QCursor, QMainWindow, QAction, QMessageBox, QToolBar, QLabel, QToolButton, QListWidget, QInputDialog, QDesktopWidget
 Signal = pyqtSignal
 
 def unicode(*args, **kwargs):

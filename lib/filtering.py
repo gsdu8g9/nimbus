@@ -13,7 +13,10 @@ import paths
 import settings
 import traceback
 import urllib.request
-from PyQt5.QtCore import QThread, QCoreApplication
+try:
+    from PyQt5.QtCore import QThread, QCoreApplication
+except ImportError:
+    from PyQt4.QtCore import QThread, QCoreApplication
 
 # Dummy adblock filter class.
 class Filter(object):

@@ -20,10 +20,14 @@ from translate import tr
 
 # Extremely specific imports from PyQt5/PySide.
 # We give PyQt5 priority because it supports Qt5.
-from PyQt5.QtCore import pyqtSignal, Qt, QTimer, QSize
+try:
+    from PyQt5.QtCore import pyqtSignal, Qt, QTimer, QSize
+    from PyQt5.QtGui import QCursor
+    from PyQt5.QtWidgets import QWidget, QApplication, QMenu, QAction, QSystemTrayIcon, QDesktopWidget, QMessageBox, QToolButton, QToolBar, QLabel
+except:
+    from PyQt4.QtCore import pyqtSignal, Qt, QTimer, QSize
+    from PyQt4.QtGui import QCursor, QWidget, QApplication, QMenu, QAction, QSystemTrayIcon, QDesktopWidget, QMessageBox, QToolButton, QToolBar, QLabel
 Signal = pyqtSignal
-from PyQt5.QtGui import QCursor
-from PyQt5.QtWidgets import QWidget, QApplication, QMenu, QAction, QSystemTrayIcon, QDesktopWidget, QMessageBox, QToolButton, QToolBar, QLabel
 
 class BackgroundToolBar(QToolBar):
     def __init__(self, *args, **kwargs):

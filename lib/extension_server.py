@@ -14,7 +14,10 @@ import os
 from http.server import SimpleHTTPRequestHandler
 import http.server
 import time
-from PyQt5.QtCore import QThread
+try:
+    from PyQt5.QtCore import QThread
+except ImportError:
+    from PyQt4.QtCore import QThread
 from settings import extensions_folder
 
 class ExtensionServerThread(QThread):

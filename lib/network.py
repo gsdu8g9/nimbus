@@ -19,10 +19,15 @@ import random
 import settings
 import paths
 from translate import tr
-from PyQt5.QtCore import QCoreApplication, QUrl, QTimer
-from PyQt5.QtGui import QDesktopServices
-from PyQt5.QtWidgets import QInputDialog, QLineEdit
-from PyQt5.QtNetwork import QNetworkInterface, QNetworkCookieJar, QNetworkAccessManager, QNetworkDiskCache, QNetworkRequest, QNetworkReply
+try:
+    from PyQt5.QtCore import QCoreApplication, QUrl, QTimer
+    from PyQt5.QtGui import QDesktopServices
+    from PyQt5.QtWidgets import QInputDialog, QLineEdit
+    from PyQt5.QtNetwork import QNetworkInterface, QNetworkCookieJar, QNetworkAccessManager, QNetworkDiskCache, QNetworkRequest, QNetworkReply
+except ImportError:
+    from PyQt4.QtCore import QCoreApplication, QUrl, QTimer
+    from PyQt4.QtGui import QDesktopServices, QInputDialog, QLineEdit
+    from PyQt4.QtNetwork import QNetworkInterface, QNetworkCookieJar, QNetworkAccessManager, QNetworkDiskCache, QNetworkRequest, QNetworkReply
 
 # Global cookiejar to store cookies.
 # All nimbus.WebView instances use this.

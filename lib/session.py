@@ -14,8 +14,12 @@ import settings
 import browser
 from translate import tr
 from mainwindow import MainWindow
-from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QAction, QMainWindow, QPushButton, QInputDialog, QListWidget, QToolBar
+try:
+    from PyQt5.QtCore import Qt
+    from PyQt5.QtWidgets import QAction, QMainWindow, QPushButton, QInputDialog, QListWidget, QToolBar
+except ImportError:
+    from PyQt4.QtCore import Qt
+    from PyQt4.QtGui import QAction, QMainWindow, QPushButton, QInputDialog, QListWidget, QToolBar
 
 class SessionManager(QMainWindow):
     def __init__(self, parent=None):

@@ -12,7 +12,10 @@ import urllib.request
 import json
 import time
 
-from PyQt5.QtCore import QObject, pyqtSlot
+try:
+    from PyQt5.QtCore import QObject, pyqtSlot
+except ImportError:
+    from PyQt4.QtCore import QObject, pyqtSlot
 Slot = pyqtSlot
 
 def geolocate():

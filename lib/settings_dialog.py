@@ -19,10 +19,15 @@ import filtering
 import data
 import clear_history_dialog
 from translate import tr
-from PyQt5.QtCore import Qt, QUrl
-from PyQt5.QtGui import QKeySequence, QIcon
-from PyQt5.QtWidgets import QWidget, QLabel, QMainWindow, QCheckBox, QGroupBox, QTabWidget, QToolBar, QToolButton, QLineEdit, QVBoxLayout, QComboBox, QSizePolicy, QAction, QPushButton, QListWidget, QTextEdit
-from PyQt5.QtWebKit import QWebSettings
+try:
+    from PyQt5.QtCore import Qt, QUrl
+    from PyQt5.QtGui import QKeySequence, QIcon
+    from PyQt5.QtWidgets import QWidget, QLabel, QMainWindow, QCheckBox, QGroupBox, QTabWidget, QToolBar, QToolButton, QLineEdit, QVBoxLayout, QComboBox, QSizePolicy, QAction, QPushButton, QListWidget, QTextEdit
+    from PyQt5.QtWebKit import QWebSettings
+except ImportError:
+    from PyQt4.QtCore import Qt, QUrl
+    from PyQt4.QtGui import QKeySequence, QIcon, QWidget, QLabel, QMainWindow, QCheckBox, QGroupBox, QTabWidget, QToolBar, QToolButton, QLineEdit, QVBoxLayout, QComboBox, QSizePolicy, QAction, QPushButton, QListWidget, QTextEdit
+    from PyQt4.QtWebKit import QWebSettings
 
 # Basic settings panel.
 class SettingsPanel(QWidget):

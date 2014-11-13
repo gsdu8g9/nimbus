@@ -17,10 +17,14 @@ from common import app_folder, blank_toolbar, complete_icon
 from translate import tr
 import system
 
-from PyQt5.QtCore import Qt, pyqtSignal, QPoint, QUrl, QSize, QTimer, QCoreApplication
+try:
+    from PyQt5.QtCore import Qt, pyqtSignal, QPoint, QUrl, QSize, QTimer, QCoreApplication
+    from PyQt5.QtGui import QIcon, QPixmap
+    from PyQt5.QtWidgets import QMainWindow, QAction, QToolButton, QPushButton, QWidget, QComboBox, QHBoxLayout, QTabWidget, QTextEdit, QVBoxLayout, QLabel, QSizePolicy, QLineEdit, QSpinBox, QToolBar, QStyle, QStylePainter, QStyleOptionToolBar, QMenu, QTabBar, QWidgetAction, QListWidget, QListWidgetItem
+except ImportError:
+    from PyQt4.QtCore import Qt, pyqtSignal, QPoint, QUrl, QSize, QTimer, QCoreApplication
+    from PyQt4.QtGui import QIcon, QPixmap, QMainWindow, QAction, QToolButton, QPushButton, QWidget, QComboBox, QHBoxLayout, QTabWidget, QTextEdit, QVBoxLayout, QLabel, QSizePolicy, QLineEdit, QSpinBox, QToolBar, QStyle, QStylePainter, QStyleOptionToolBar, QMenu, QTabBar, QWidgetAction, QListWidget, QListWidgetItem
 Signal = pyqtSignal
-from PyQt5.QtGui import QIcon, QPixmap
-from PyQt5.QtWidgets import QMainWindow, QAction, QToolButton, QPushButton, QWidget, QComboBox, QHBoxLayout, QTabWidget, QTextEdit, QVBoxLayout, QLabel, QSizePolicy, QLineEdit, QSpinBox, QToolBar, QStyle, QStylePainter, QStyleOptionToolBar, QMenu, QTabBar, QWidgetAction, QListWidget, QListWidgetItem
 
 # Custom LineEdit class with delete button.
 if sys.platform.startswith("linux"):

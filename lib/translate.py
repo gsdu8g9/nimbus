@@ -11,7 +11,10 @@
 import os.path
 from common import app_folder, app_locale
 
-from PyQt5.QtCore import QCoreApplication, QLocale, QTranslator, QObject
+try:
+    from PyQt5.QtCore import QCoreApplication, QLocale, QTranslator, QObject
+except ImportError:
+    from PyQt4.QtCore import QCoreApplication, QLocale, QTranslator, QObject
 
 # Translation.
 translations_folder = os.path.join(app_folder, "translations")

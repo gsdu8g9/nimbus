@@ -14,8 +14,12 @@ import json
 import settings
 from qsettings import QSettings
 import paths
-from PyQt5.QtCore import QCoreApplication, QByteArray, QUrl
-from PyQt5.QtNetwork import QNetworkCookie
+try:
+    from PyQt5.QtCore import QCoreApplication, QByteArray, QUrl
+    from PyQt5.QtNetwork import QNetworkCookie
+except ImportError:
+    from PyQt4.QtCore import QCoreApplication, QByteArray, QUrl
+    from PyQt4.QtNetwork import QNetworkCookie
 
 # Global list to store history.
 history = {}

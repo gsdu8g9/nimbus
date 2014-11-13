@@ -29,13 +29,19 @@ import rss_parser
 
 # Extremely specific imports from PyQt5/PySide.
 # We give PyQt5 priority because it supports Qt5.
-from PyQt5.QtCore import Qt, QSize, QObject, QCoreApplication, pyqtSignal, pyqtSlot, QUrl, QFile, QIODevice, QTimer, QByteArray, QDataStream, QDateTime, QPoint, QEventLoop
-from PyQt5.QtGui import QIcon, QImage, QClipboard, QCursor, QDesktopServices
-from PyQt5.QtWidgets import QApplication, QListWidget, QSpinBox, QListWidgetItem, QMessageBox, QAction, QToolBar, QLineEdit, QInputDialog, QFileDialog, QProgressBar, QLabel, QCalendarWidget, QSlider, QFontComboBox, QLCDNumber, QDateTimeEdit, QDial, QPushButton, QMenu, QDesktopWidget, QWidgetAction, QToolTip, QWidget, QToolButton, QVBoxLayout
-from PyQt5.QtPrintSupport import QPrinter, QPrintDialog, QPrintPreviewDialog
-from PyQt5.QtNetwork import QNetworkProxy, QNetworkRequest
-from PyQt5.QtWebKit import QWebHistory
-from PyQt5.QtWebKitWidgets import QWebView, QWebPage
+try:
+    from PyQt5.QtCore import Qt, QSize, QObject, QCoreApplication, pyqtSignal, pyqtSlot, QUrl, QFile, QIODevice, QTimer, QByteArray, QDataStream, QDateTime, QPoint, QEventLoop
+    from PyQt5.QtGui import QIcon, QImage, QClipboard, QCursor, QDesktopServices
+    from PyQt5.QtWidgets import QApplication, QListWidget, QSpinBox, QListWidgetItem, QMessageBox, QAction, QToolBar, QLineEdit, QInputDialog, QFileDialog, QProgressBar, QLabel, QCalendarWidget, QSlider, QFontComboBox, QLCDNumber, QDateTimeEdit, QDial, QPushButton, QMenu, QDesktopWidget, QWidgetAction, QToolTip, QWidget, QToolButton, QVBoxLayout
+    from PyQt5.QtPrintSupport import QPrinter, QPrintDialog, QPrintPreviewDialog
+    from PyQt5.QtNetwork import QNetworkProxy, QNetworkRequest
+    from PyQt5.QtWebKit import QWebHistory
+    from PyQt5.QtWebKitWidgets import QWebView, QWebPage
+except ImportError:
+    from PyQt4.QtCore import Qt, QSize, QObject, QCoreApplication, pyqtSignal, pyqtSlot, QUrl, QFile, QIODevice, QTimer, QByteArray, QDataStream, QDateTime, QPoint, QEventLoop
+    from PyQt4.QtGui import QIcon, QImage, QClipboard, QCursor, QDesktopServices, QApplication, QListWidget, QSpinBox, QListWidgetItem, QMessageBox, QAction, QToolBar, QLineEdit, QInputDialog, QFileDialog, QProgressBar, QLabel, QCalendarWidget, QSlider, QFontComboBox, QLCDNumber, QDateTimeEdit, QDial, QPushButton, QMenu, QDesktopWidget, QWidgetAction, QToolTip, QWidget, QToolButton, QVBoxLayout, QPrinter, QPrintDialog, QPrintPreviewDialog
+    from PyQt4.QtNetwork import QNetworkProxy, QNetworkRequest
+    from PyQt4.QtWebKit import QWebHistory, QWebView, QWebPage
 Signal = pyqtSignal
 Slot = pyqtSlot
 

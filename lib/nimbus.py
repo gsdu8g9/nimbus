@@ -45,13 +45,18 @@ from mainwindow import *
 from tray_icon import *
 
 # Extremely specific imports from PyQt.
-from PyQt5.QtCore import Qt, QCoreApplication, QUrl, QTimer
-from PyQt5.QtGui import QPalette, QColor
-from PyQt5.QtWidgets import QApplication, QAction, QDesktopWidget, QMessageBox
-from PyQt5.QtWebKit import QWebSettings, QWebSecurityOrigin
-from PyQt5.QtWebKitWidgets import QWebPage
-import pdf_js
-import viewerjs
+try:
+    from PyQt5.QtCore import Qt, QCoreApplication, QUrl, QTimer
+    from PyQt5.QtGui import QPalette, QColor
+    from PyQt5.QtWidgets import QApplication, QAction, QDesktopWidget, QMessageBox
+    from PyQt5.QtWebKit import QWebSettings, QWebSecurityOrigin
+    from PyQt5.QtWebKitWidgets import QWebPage
+    import pdf_js
+    import viewerjs
+except ImportError:
+    from PyQt4.QtCore import Qt, QCoreApplication, QUrl, QTimer
+    from PyQt4.QtGui import QPalette, QColor, QApplication, QAction, QDesktopWidget, QMessageBox
+    from PyQt4.QtWebKit import QWebSettings, QWebSecurityOrigin, QWebPage
 
 # Python DBus
 has_dbus = False
