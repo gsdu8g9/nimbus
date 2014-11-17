@@ -14,6 +14,7 @@ import getopt
 import copy
 import common
 import browser
+import system
 import translate
 from translate import tr
 import custom_widgets
@@ -539,11 +540,16 @@ class MainWindow(QMainWindow):
         self.addAction(self.networkManagerAction)
         if sys.platform.startswith("linux"):
             self.networkManagerMenu = QMenu(self)
-            self.connectAction = QAction(tr("Connect to Wi-Fi Network..."), self)
+            self.networkManagerMenu.aboutToShow.connect(self.aboutToShowNetworkManagerMenu)
+            self.connectedToAction = QAction(self.networkManagerMenu)
+            self.connectedToAction.setDisabled(True)
+            self.networkManagerMenu.addAction(self.connectedToAction)
+            
+            self.connectAction = QAction(tr("Connect to Wi-Fi Network..."), self.networkManagerMenu)
             self.connectAction.triggered.connect(lambda: os.system("qdbus org.gnome.network_manager_applet /org/gnome/network_manager_applet ConnectToHiddenNetwork &"))
             self.networkManagerMenu.addAction(self.connectAction)
         
-            self.connectionEditAction = QAction(tr("Edit Connections..."), self)
+            self.connectionEditAction = QAction(tr("Edit Connections..."), self.networkManagerMenu)
             self.connectionEditAction.triggered.connect(lambda: os.system("nm-connection-editor &"))
             self.networkManagerMenu.addAction(self.connectionEditAction)
         
@@ -752,6 +758,9 @@ class MainWindow(QMainWindow):
         tabNineAction.triggered.connect(lambda: self.tabWidget().setCurrentIndex(self.tabWidget().count()-1))
         self.addAction(tabNineAction)
         self.applySettings()
+
+    def aboutToShowNetworkManagerMenu(self):
+        self.connectedToAction.setText(tr("Connected to %s") % system.get_ssid())
 
     def updateCompleter(self):
         try: self.completer

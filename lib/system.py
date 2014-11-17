@@ -12,6 +12,12 @@ def is_on_ac():
     return False
 def get_battery_percentage():
     return 100
+def get_ssid():
+    return "None"
+def read_cli(command):
+    stdout_handle = os.popen(command)
+    value = stdout_handle.read()
+    return value
 
 # Based on http://stackoverflow.com/questions/6153860/in-python-how-can-i-detect-whether-the-computer-is-on-battery-power
 if sys.platform.startswith("win"):
@@ -124,3 +130,6 @@ else:
             except: pass
             f.close()
             return bool(online)
+
+    def get_ssid():
+        return read_cli("nmcli -t -f active,ssid dev wifi | egrep '^yes' | cut -d\\' -f2").split(":")[-1]
