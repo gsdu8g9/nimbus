@@ -92,19 +92,31 @@ errors = {"No Internet connection": ["Check your computer's network settings.", 
           503: ["Try refreshing the page at a later time."],
           504: ["Try refreshing the page at a later time."]}
 
+auto_reload = [500]
+
 # Error page generator.
 def errorPage(url="about:blank", error="Whoops...", errorString="Nimbus could not load the requested page."):
+    if type(url) is QUrl:
+        url = url.toString()
+    if error in auto_reload:
+        if "?" in url:
+            recoveryTag = "&nimbuserror=%s" % (error,)
+        elif "#" in url:
+            recoveryTag = ""
+        else:
+            recoveryTag = "#nimbuserror%s" % (error,)
+        script = "<script>window.location.href = \"%s%s\";</script>" % (url,recoveryTag,)
+    else:
+        script = ""
     suggestions = []
     if error in errors:
         suggestions = errors[error]
     if type(error) is int:
         error = tr("Error %s" % error,)
-    if type(url) is QUrl:
-        url = url.toString()
     errorString = str(errorString)
     if not errorString.endswith("."):
         errorString += "."
-    return "<!DOCTYPE html><html><title>%(title)s</title><style type='text/css'>html{font-family:sans-serif;}</style><body><h1>%(heading)s</h1><p>%(error)s</p><ul>%(suggestions)s</ul><p><a href=\"%(url)s\">%(tryagain)s</a><br><a href=\"http://web.archive.org/web/*/%(url)s\">%(trywayback)s</a></p></body></html>" % {"title": tr("Problem loading page"), "heading": tr(str(error)), "error": tr(errorString), "url": str(url), "suggestions": "".join(["<li>%s</li>" % tr(suggestion) for suggestion in suggestions]), "tryagain": tr("Try again"), "trywayback": tr("Try on Wayback Machine")}
+    return "<!DOCTYPE html><html><title>%(title)s</title>%(script)s<style type='text/css'>html{font-family:sans-serif;}</style><body><h1>%(heading)s</h1><p>%(error)s</p><ul>%(suggestions)s</ul><p><a href=\"%(url)s\">%(tryagain)s</a><br><a href=\"http://web.archive.org/web/*/%(url)s\">%(trywayback)s</a></p></body></html>" % {"title": tr("Problem loading page"), "heading": tr(str(error)), "error": tr(errorString), "url": str(url), "suggestions": "".join(["<li>%s</li>" % tr(suggestion) for suggestion in suggestions]), "tryagain": tr("Try again"), "trywayback": tr("Try on Wayback Machine"), "script": script}
 
 directoryView = """<!DOCTYPE html>
 <html>
