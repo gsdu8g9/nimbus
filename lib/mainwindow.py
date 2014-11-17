@@ -760,7 +760,10 @@ class MainWindow(QMainWindow):
         self.applySettings()
 
     def aboutToShowNetworkManagerMenu(self):
-        self.connectedToAction.setText(tr("Connected to %s") % system.get_ssid())
+        if network.isConnectedToNetwork():
+            self.connectedToAction.setText(tr("Connected to %s") % system.get_ssid())
+        else:
+            self.connectedToAction.setText(tr("No Internet connection"))
 
     def updateCompleter(self):
         try: self.completer
