@@ -753,7 +753,9 @@ class WebView(QWebView):
         super(WebView, self).reload()
         self.clearJavaScriptBars()
 
-    if not sys.platform.startswith("win"):
+    if sys.platform.startswith("win") and common.qt_version_info[0] == 5:
+        pass
+    else:
         def resizeEvent(self, *args, **kwargs):
             super(WebView, self).resizeEvent(*args, **kwargs)
             self.setStyleSheet(self.baseStyleSheet % (self.size().width(), self.size().width(), self.size().height(), self.size().height()))
@@ -936,7 +938,9 @@ class WebView(QWebView):
         except: pass
         QWebView.deleteLater(self)
 
-    if not sys.platform.startswith("win"):
+    if sys.platform.startswith("win") and common.qt_version_info[0] == 5:
+        pass
+    else:
         def paintEvent(self, ev):
             if self._historyToBeLoaded:
                 self.page().loadHistory(self._historyToBeLoaded)
