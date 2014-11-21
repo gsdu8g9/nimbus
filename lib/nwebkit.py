@@ -244,11 +244,11 @@ class WebPage(QWebPage):
             return QWebPage.supportsExtension(self, extension)
 
     def extension(self, extension, option=None, output=None):
-        if extension == QWebPage.ErrorPageExtension and option != None:
+        try: error = option.error
+        except: error = 0
+        if extension == QWebPage.ErrorPageExtension and option != None and not error in network.ignore:
             try: url = option.url
             except: url = QUrl("about:blank")
-            try: error = option.error
-            except: error = 0
             try: errorString = option.errorString
             except: errorString = "Whoops."
             if network.isConnectedToNetwork():
@@ -259,6 +259,8 @@ class WebPage(QWebPage):
                 output.content = QByteArray(network.errorPage(url, "No Internet connection", "Your computer is not connected to the Internet").encode("utf-8"))
             return True
         else:
+            if error in network.ignore:
+                print("Ignoring %s error." % error)
             return QWebPage.extension(self, extension, option, output)
 
     def deleteLater(self):

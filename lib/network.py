@@ -82,6 +82,8 @@ class NetworkReply(QNetworkReply):
             self.offset = end
             return bytes(data)
 
+ignore = [8]
+
 errors = {"No Internet connection": ["Check your computer's network settings.", "If you have access to a wired Ethernet connection, make sure the cable is plugged in.", "If the problem persists, contact your network administrator."],
           3: ["Make sure the URL was entered properly. For example, <b>www.google.com</b> instead of <b>ww.google.com</b>.", "Ensure that your computer is connected to the Internet.", "The page you requested might no longer exist. Try loading it on Wayback Machine."],
           401: ["If the site requires a login, make sure you are properly signed in.", "If you cannot sign in, ensure you have typed your credentials in correctly."],
