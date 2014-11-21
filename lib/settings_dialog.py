@@ -300,7 +300,7 @@ class ContentSettingsPanel(SettingsPanel):
         filtering.filter_updater.finished.connect(self.notifyFinish)
 
     def notifyFinish(self):
-        common.trayIcon.showMessage(tr("Filters updated"), tr("All filters are up to date."))
+        common.trayIcon.showMessage(tr("Content filters downloaded"), tr("All content filters are up to date."))
 
     def updateFilters(self):
         filtering.update_filters()

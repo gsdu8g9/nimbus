@@ -348,7 +348,7 @@ def main(argv):
 
     # Load filtering stuff.
     if not os.path.isdir(filtering.hosts_folder):
-        common.trayIcon.showMessage(tr("Downloading content filters"), ("Adblocking will not work until this completes."))
+        common.trayIcon.showMessage(tr("Downloading content filters"), ("Ad blocking and host filtering will not work until this completes."))
         filtering.update_filters()
     else:
         filtering.load_host_rules()
