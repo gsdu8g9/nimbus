@@ -296,6 +296,11 @@ class ContentSettingsPanel(SettingsPanel):
         self.layout().addWidget(self.siteSpecificQuirksToggle)
 
         self.layout().addWidget(custom_widgets.Expander(self))
+        
+        filtering.filter_updater.finished.connect(self.notifyFinish)
+
+    def notifyFinish(self):
+        common.trayIcon.showMessage(tr("Filters updated"), tr("All filters are up to date."))
 
     def updateFilters(self):
         filtering.update_filters()

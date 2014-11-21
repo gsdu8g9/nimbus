@@ -348,8 +348,9 @@ def main(argv):
 
     # Load filtering stuff.
     if not os.path.isdir(filtering.hosts_folder):
-        filtering.download_rules()
-    filtering.load_host_rules()
+        filtering.update_filters()
+    else:
+        filtering.load_host_rules()
 
     # Start app.
     print("Kon~!")
