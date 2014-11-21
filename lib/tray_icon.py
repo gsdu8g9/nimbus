@@ -161,6 +161,9 @@ class SystemTrayIcon(QSystemTrayIcon):
             timer = QTimer(timeout=self.toggleButton, parent=self)
             timer.start(500)"""
 
+    def dontBeImpatient(self):
+        self.showMessage(tr("You already clicked this button"), tr("Don't be impatient."))
+
     def toggleButton(self):
         if len(browser.windows) == 0:
             self.toolBar.show()

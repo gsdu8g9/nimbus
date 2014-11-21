@@ -20,12 +20,12 @@ import data
 import clear_history_dialog
 from translate import tr
 try:
-    from PyQt5.QtCore import Qt, QUrl
+    from PyQt5.QtCore import Qt, QUrl, QThread
     from PyQt5.QtGui import QKeySequence, QIcon
     from PyQt5.QtWidgets import QWidget, QLabel, QMainWindow, QCheckBox, QGroupBox, QTabWidget, QToolBar, QToolButton, QLineEdit, QVBoxLayout, QComboBox, QSizePolicy, QAction, QPushButton, QListWidget, QTextEdit
     from PyQt5.QtWebKit import QWebSettings
 except ImportError:
-    from PyQt4.QtCore import Qt, QUrl
+    from PyQt4.QtCore import Qt, QUrl, QThread
     from PyQt4.QtGui import QKeySequence, QIcon, QWidget, QLabel, QMainWindow, QCheckBox, QGroupBox, QTabWidget, QToolBar, QToolButton, QLineEdit, QVBoxLayout, QComboBox, QSizePolicy, QAction, QPushButton, QListWidget, QTextEdit
     from PyQt4.QtWebKit import QWebSettings
 
@@ -303,7 +303,11 @@ class ContentSettingsPanel(SettingsPanel):
         common.trayIcon.showMessage(tr("Content filters downloaded"), tr("All content filters are up to date."))
 
     def updateFilters(self):
-        filtering.update_filters()
+        if not filtering.filter_updater.isRunning():
+            common.trayIcon.showMessage(tr("Updating content filters"), tr("This may take some time."))
+            filtering.update_filters()
+        else:
+            common.trayIcon.dontBeImpatient()
 
     def loadSettings(self):
         self.jsExceptionsPanel.loadSettings()
@@ -665,10 +669,31 @@ class NetworkSettingsPanel(SettingsPanel):
         common.applyWebSettings()
         settings.settings.sync()
 
+class ExtensionsUpdateThread(QThread):
+    def __init__(self, *args, **kwargs):
+        super(ExtensionsUpdateThread, self).__init__(*args, **kwargs)
+    def run(self):
+        extensions = os.listdir(common.extensions_folder)
+        for extension in extensions:
+            newext = os.path.join(common.extensions_folder, extension)
+            oldext = os.path.join(settings.extensions_folder, extension)
+            if os.path.isfile(oldext):
+                common.rm(oldext)
+            elif os.path.isdir(oldext):
+                common.rmr(oldext)
+            if os.path.isfile(newext):
+                common.cp(newext, oldext)
+            else:
+                common.cpr(newext, oldext)
+
 # Extension configuration panel
 class ExtensionsSettingsPanel(SettingsPanel):
     def __init__(self, parent=None):
         super(ExtensionsSettingsPanel, self).__init__(parent)
+
+        self.thread = ExtensionsUpdateThread(self)
+        self.thread.finished.connect(self.notifyFinish)
+        self.thread.finished.connect(self.loadSettings)
 
         # List row
         listRow = custom_widgets.Row(self)
@@ -725,20 +750,15 @@ class ExtensionsSettingsPanel(SettingsPanel):
         self.blacklist.takeItem(self.blacklist.row(item))
         self.blacklist.sortItems(Qt.AscendingOrder)
 
+    def notifyFinish(self):
+        common.trayIcon.showMessage(tr("Extensions updated"), tr("All extensions are up to date."))
+
     def updateExtensions(self):
-        extensions = os.listdir(common.extensions_folder)
-        for extension in extensions:
-            newext = os.path.join(common.extensions_folder, extension)
-            oldext = os.path.join(settings.extensions_folder, extension)
-            if os.path.isfile(oldext):
-                common.rm(oldext)
-            elif os.path.isdir(oldext):
-                common.rmr(oldext)
-            if os.path.isfile(newext):
-                common.cp(newext, oldext)
-            else:
-                common.cpr(newext, oldext)
-        self.loadSettings()
+        if not self.thread.isRunning():
+            common.trayIcon.showMessage(tr("Updating extensions"), tr("This may take some time."))
+            self.thread.start()
+        else:
+            common.trayIcon.dontBeImpatient()
 
     def loadSettings(self):
         settings.reload_extensions()
