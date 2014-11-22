@@ -1479,7 +1479,7 @@ class MainWindow(QMainWindow):
         common.trayIcon.reopenWindow()
 
     def duplicateTab(self):
-        self.addTab(duplicate=True)
+        self.addTab(duplicate=True, incognito=self.currentWidget().incognito)
 
     def addTab(self, webView=None, index=None, focus=True, incognito=None, **kwargs):
         # If a WebView object is specified, use it.
