@@ -18,14 +18,14 @@ import data
 from translate import tr
 try:
     from PyQt5.QtCore import Qt
-    from PyQt5.QtWidgets import QWidget, QVBoxLayout, QLabel, QMainWindow, QAction, QToolBar, QComboBox, QPushButton
+    from PyQt5.QtWidgets import QDialog, QWidget, QVBoxLayout, QLabel, QMainWindow, QAction, QToolBar, QComboBox, QPushButton
     from PyQt5.QtWebKit import QWebSettings
 except ImportError:
     from PyQt4.QtCore import Qt
-    from PyQt4.QtGui import QWidget, QVBoxLayout, QLabel, QMainWindow, QAction, QToolBar, QComboBox, QPushButton
+    from PyQt4.QtGui import QDialog, QWidget, QVBoxLayout, QLabel, QMainWindow, QAction, QToolBar, QComboBox, QPushButton
     from PyQt4.QtWebKit import QWebSettings
 
-class ClearHistoryDialog(QMainWindow):
+class ClearHistoryDialog(QDialog):
     def __init__(self, parent=None):
         super(ClearHistoryDialog, self).__init__(parent)
 
@@ -38,10 +38,8 @@ class ClearHistoryDialog(QMainWindow):
         closeWindowAction.triggered.connect(self.close)
         self.addAction(closeWindowAction)
 
-        self.contents = QWidget()
         self.layout = QVBoxLayout()
-        self.contents.setLayout(self.layout)
-        self.setCentralWidget(self.contents)
+        self.setLayout(self.layout)
         label = QLabel(tr("What to clear:"), self)
         self.layout.addWidget(label)
         self.dataType = QComboBox(self)
@@ -55,16 +53,13 @@ class ClearHistoryDialog(QMainWindow):
         self.toolBar.setStyleSheet(common.blank_toolbar)
         self.toolBar.setMovable(False)
         self.toolBar.setContextMenuPolicy(Qt.CustomContextMenu)
-        self.addToolBar(Qt.BottomToolBarArea, self.toolBar)
+        self.layout.addWidget(self.toolBar)
         self.clearHistoryButton = QPushButton(tr("Clear"), self)
         self.clearHistoryButton.clicked.connect(self.clearHistory)
         self.toolBar.addWidget(self.clearHistoryButton)
         self.closeButton = QPushButton(tr("Close"), self)
         self.closeButton.clicked.connect(self.close)
         self.toolBar.addWidget(self.closeButton)
-
-    def show(self):
-        self.setVisible(True)
 
     def display(self):
         self.show()

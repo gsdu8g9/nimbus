@@ -426,7 +426,7 @@ class DataSettingsPanel(SettingsPanel):
         self.clearHistoryDialog.hide()
 
         self.showClearHistoryDialogButton = QPushButton(tr("Clear Data"), self)
-        self.showClearHistoryDialogButton.clicked.connect(self.clearHistoryDialog.show)
+        self.showClearHistoryDialogButton.clicked.connect(self.clearHistoryDialog.exec_)
         self.layout().addWidget(self.showClearHistoryDialogButton)
 
         # Remember history checkbox.
