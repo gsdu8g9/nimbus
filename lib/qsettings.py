@@ -50,6 +50,6 @@ class QSettings(object):
         try: f = open(self.fileName(), "w")
         except: pass
         else:
-            try: json.dump(self.tables, f)
+            try: f.write(json.dumps(self.tables, sort_keys=True, indent=2))
             except: pass
             f.close()

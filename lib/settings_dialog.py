@@ -74,6 +74,9 @@ class GeneralSettingsPanel(SettingsPanel):
         self.tabHotkeysToggle = QCheckBox(tr("E&nable tab hotkeys"), self)
         self.layout().addWidget(self.tabHotkeysToggle)
         
+        self.retainHistoryToggle = QCheckBox(tr("New ta&bs retain history"), self)
+        self.layout().addWidget(self.retainHistoryToggle)
+        
         self.duplicateTabsToggle = QCheckBox(tr("Duplicate current tab &in new tabs"), self)
         self.layout().addWidget(self.duplicateTabsToggle)
 
@@ -101,6 +104,7 @@ class GeneralSettingsPanel(SettingsPanel):
         self.reopenableWindowCount.setValue(settings.setting_to_int("general/ReopenableWindowCount"))
         self.pinnedTabCount.setValue(settings.setting_to_int("general/PinnedTabCount"))
         self.tabHotkeysToggle.setChecked(settings.setting_to_bool("general/TabHotkeysVisible"))
+        self.retainHistoryToggle.setChecked(settings.setting_to_bool("general/NewTabsRetainHistory"))
         self.duplicateTabsToggle.setChecked(settings.setting_to_bool("general/DuplicateTabs"))
         self.navBarVisibleToggle.setChecked(settings.setting_to_bool("general/NavigationToolBarVisible"))
         self.statusBarVisibleToggle.setChecked(settings.setting_to_bool("general/StatusBarVisible"))
@@ -115,6 +119,7 @@ class GeneralSettingsPanel(SettingsPanel):
         settings.settings.setValue("general/ReopenableTabCount", self.reopenableTabCount.text())
         settings.settings.setValue("general/PinnedTabCount", self.pinnedTabCount.text())
         settings.settings.setValue("general/TabHotkeysVisible", self.tabHotkeysToggle.isChecked())
+        settings.settings.setValue("general/NewTabsRetainHistory", self.retainHistoryToggle.isChecked())
         settings.settings.setValue("general/DuplicateTabs", self.duplicateTabsToggle.isChecked())
         settings.settings.setValue("general/NavigationToolBarVisible", self.navBarVisibleToggle.isChecked())
         settings.settings.setValue("general/StatusBarVisible", self.statusBarVisibleToggle.isChecked())

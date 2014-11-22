@@ -1394,8 +1394,11 @@ class WebView(QWebView):
     # can utilize the newly-created WebView instance.
     def createWindow(self, type):
         webview = WebView(incognito=self.incognito)
-        try: webview.page().loadHistory(self.page().saveHistory())
-        except: print("Failed to copy history.")
+        if settings.setting_to_bool("general/NewTabsRetainHistory"):
+            try:
+                webview.page().loadHistory(self.page().saveHistory())
+            except:
+                print("Failed to copy history.")
         self.webViews.append(webview)
         #webview.show()
         self.windowCreated.emit(webview)
