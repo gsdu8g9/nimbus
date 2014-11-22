@@ -173,24 +173,6 @@ class FullScreenRequester(QObject):
     def setFullScreen(self, fullscreen=False):
         self.fullScreenRequested.emit(fullscreen)
 
-class PDFView(QWebView):
-    def __init__(self, *args, url=None, incognito=True, **kwargs):
-        super(PDFView, self).__init__(*args, **kwargs)
-        if incognito:
-            self.page().setNetworkAccessManager(network.incognito_network_access_manager)
-            print("PDF plugin loaded in incognito mode.")
-        else:
-            self.page().setNetworkAccessManager(network.network_access_manager)
-            print("PDF plugin loaded in normal mode.")
-        if url:
-            self.loadPDF(url)
-    def loadPDF(self, url):
-        if type(url) is QUrl:
-            url = url.toString()
-        url = url.split("#")[0]
-        url = "qrc:///pdf.js/viewer.html?file=%s#disableWorker=true" % (url,)
-        self.load(QUrl(url))
-
 # Custom plugin for PDF support.
 class PDFFactory(QWebPluginFactory):
     def __init__(self, parent=None, incognito=True):
@@ -1472,6 +1454,47 @@ class WebView(QWebView):
         printDialog.paintRequested.connect(lambda: self.print(printer))
         printDialog.exec_()
         printDialog.deleteLater()
+
+class PDFView(WebView):
+    def __init__(self, *args, url=None, **kwargs):
+        super(PDFView, self).__init__(*args, **kwargs)
+        self._pdfLocation = None
+        self._url = None
+        if url:
+            self.loadPDF(url)
+    def pdfLocation(self):
+        return self._pdfLocation
+    def url2(self):
+        return self._url
+    def loadPDF(self, url):
+        self._url = url
+        if type(url) is QUrl:
+            url = url.toString()
+        url = url.split("#")[0]
+        url = "qrc:///pdf.js/viewer.html?file=%s#disableWorker=true" % (url,)
+        self._pdfLocation = url
+        self.load(QUrl(url))
+    def downloadFile(self, request, contentType=None):
+        request.setUrl(self.url2())
+        fileName = self.pdfLocation().split("/")[-1].split("#")[0]
+        fname = QFileDialog.getSaveFileName(None, tr("Save As..."), os.path.join(self.saveDirectory, fileName), tr("All files (*)"))
+        if type(fname) is tuple:
+            fname = fname[0]
+        if fname:
+            self.saveDirectory = os.path.split(fname)[0]
+            reply = self.page().networkAccessManager().get(request)
+            
+            # Create a DownloadBar instance and append it to list of
+            # downloads.
+            downloadDialog = DownloadBar(reply, fname, None)
+            self.downloads.append(downloadDialog)
+
+            # Emit signal.
+            try:
+                common.downloadManager.show()
+                common.downloadManager.addDownload(downloadDialog)
+            except:
+                self.downloadStarted.emit(downloadDialog)
 
 class WebViewAction(QWidgetAction):
     def __init__(self, *args, incognito=False, **kwargs):
