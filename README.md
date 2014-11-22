@@ -1,7 +1,7 @@
 nimbus
 ======
 
-Nimbus is a somewhat hacky Web browser coded in Python 3, using PyQt5. It is
+Nimbus is a somewhat hacky Qt-based Web browser coded in Python 3. It is
 tailored specifically for my use case, but I have open-sourced it due to 1)
 personal ideology, and 2) personal convenience. Maybe someone will find it
 useful for something. Be warned that there are no claims of stability,
@@ -25,10 +25,9 @@ may have.
 Dependencies
 ======
 
-Nimbus depends on Python >=3.2 and PyQt5, with python3-dbus and feedparser
-as optional dependencies. It is possible that it will work in versions of
-Python 3 below 3.2 as well, but this has not been tested before. Support
-for PyQt4 was dropped as of November 11, 2014.
+Nimbus depends on Python >=3.2 and either PyQt5 or PyQt4, with python3-dbus
+and feedparser as optional dependencies. It is possible that it will work in
+versions of Python 3 below 3.2 as well, but this has not been tested before.
 
 Nimbus does not work in Python 2.x and I have no plans to support it.
 
