@@ -22,11 +22,11 @@ from translate import tr
 try:
     from PyQt5.QtCore import Qt, QUrl, QThread
     from PyQt5.QtGui import QKeySequence, QIcon
-    from PyQt5.QtWidgets import QWidget, QLabel, QMainWindow, QCheckBox, QGroupBox, QTabWidget, QToolBar, QToolButton, QLineEdit, QVBoxLayout, QComboBox, QSizePolicy, QAction, QPushButton, QListWidget, QTextEdit
+    from PyQt5.QtWidgets import QDialog, QWidget, QLabel, QMainWindow, QCheckBox, QGroupBox, QTabWidget, QToolBar, QToolButton, QLineEdit, QVBoxLayout, QComboBox, QSizePolicy, QAction, QPushButton, QListWidget, QTextEdit
     from PyQt5.QtWebKit import QWebSettings
 except ImportError:
     from PyQt4.QtCore import Qt, QUrl, QThread
-    from PyQt4.QtGui import QKeySequence, QIcon, QWidget, QLabel, QMainWindow, QCheckBox, QGroupBox, QTabWidget, QToolBar, QToolButton, QLineEdit, QVBoxLayout, QComboBox, QSizePolicy, QAction, QPushButton, QListWidget, QTextEdit
+    from PyQt4.QtGui import QDialog, QKeySequence, QIcon, QWidget, QLabel, QMainWindow, QCheckBox, QGroupBox, QTabWidget, QToolBar, QToolButton, QLineEdit, QVBoxLayout, QComboBox, QSizePolicy, QAction, QPushButton, QListWidget, QTextEdit
     from PyQt4.QtWebKit import QWebSettings
 
 # Basic settings panel.
@@ -163,6 +163,19 @@ class JavaScriptExceptionsPanel(SettingsPanel):
         settings.settings.setValue("content/JavaScriptExceptions", settings.js_exceptions)
         settings.settings.sync()
 
+class JavaScriptExceptionsDialog(QDialog):
+    def __init__(self, *args, **kwargs):
+        super(QDialog, self).__init__(*args, **kwargs)
+        newLayout = QVBoxLayout()
+        self.setLayout(newLayout)
+        self.layout().setContentsMargins(0,0,0,0)
+        self.panel = JavaScriptExceptionsPanel(self)
+        self.layout().addWidget(self.panel)
+    def loadSettings(self):
+        return self.panel.loadSettings()
+    def saveSettings(self):
+        return self.panel.saveSettings()
+
 # Content settings panel
 class ContentSettingsPanel(SettingsPanel):
     def __init__(self, parent=None):
@@ -175,7 +188,7 @@ class ContentSettingsPanel(SettingsPanel):
         self.imagesToggle = QCheckBox(tr("Automatically load &images"), self)
         backgroundsRow.addWidget(self.imagesToggle)
 
-        self.jsExceptionsPanel = JavaScriptExceptionsPanel()
+        self.jsExceptionsPanel = JavaScriptExceptionsDialog(self)
         self.jsExceptionsPanel.setWindowTitle(tr("JavaScript Exceptions"))
         self.jsExceptionsPanel.setWindowFlags(Qt.Dialog)
         closeJSDialogAction = QAction(self.jsExceptionsPanel)
@@ -225,7 +238,7 @@ class ContentSettingsPanel(SettingsPanel):
 
         self.exceptionsButton = QPushButton(tr("Excep&tions..."))
         self.javascriptGroupBox.layout().addWidget(self.exceptionsButton)
-        self.exceptionsButton.clicked.connect(self.jsExceptionsPanel.show)
+        self.exceptionsButton.clicked.connect(self.jsExceptionsPanel.exec_)
 
         self.pluginsGroupBox = QGroupBox(tr("Plugin Options"), self)
         self.layout().addWidget(self.pluginsGroupBox)
@@ -777,7 +790,7 @@ class ExtensionsSettingsPanel(SettingsPanel):
         settings.settings.sync()
 
 # Main settings dialog
-class SettingsDialog(QWidget):
+class SettingsDialog(QDialog):
     def __init__(self, parent=None):
         super(SettingsDialog, self).__init__(parent)
 

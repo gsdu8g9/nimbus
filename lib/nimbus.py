@@ -48,14 +48,14 @@ from tray_icon import *
 try:
     from PyQt5.QtCore import Qt, QCoreApplication, QUrl, QTimer
     from PyQt5.QtGui import QPalette, QColor
-    from PyQt5.QtWidgets import QApplication, QAction, QDesktopWidget, QMessageBox
+    from PyQt5.QtWidgets import QApplication, QAction, QDesktopWidget, QMessageBox, QPushButton
     from PyQt5.QtWebKit import QWebSettings, QWebSecurityOrigin
     from PyQt5.QtWebKitWidgets import QWebPage
     import pdf_js
     import viewerjs
 except ImportError:
     from PyQt4.QtCore import Qt, QCoreApplication, QUrl, QTimer
-    from PyQt4.QtGui import QPalette, QColor, QApplication, QAction, QDesktopWidget, QMessageBox
+    from PyQt4.QtGui import QPalette, QColor, QApplication, QAction, QDesktopWidget, QMessageBox, QPushButton
     from PyQt4.QtWebKit import QWebSettings, QWebSecurityOrigin, QWebPage
 
 # Python DBus
@@ -298,6 +298,7 @@ def main(argv):
 
     common.desktop = QDesktopWidget()
 
+    changeSettings = False
     if os.path.isfile(settings.crash_file):
         print("Crash file detected.", end="")
         if not has_dbus:
@@ -308,10 +309,18 @@ def main(argv):
                 return
         else:
             print()
-        clearCache = QMessageBox.question(None, tr("Ow."), tr("%(app_name)s seems to have crashed during your last session. Fortunately, your tabs were saved up to 30 seconds beforehand. Would you like to restore them?") % {"app_name": common.app_name}, QMessageBox.Yes | QMessageBox.No)
-        if clearCache == QMessageBox.No:
+        clearCache = QMessageBox()
+        clearCache.setWindowTitle(tr("Ow."))
+        clearCache.setText(tr("%(app_name)s seems to have crashed during your last session. Fortunately, your tabs were saved up to 30 seconds beforehand. Would you like to restore them?") % {"app_name": common.app_name})
+        clearCache.addButton(QMessageBox.Yes)
+        clearCache.addButton(QMessageBox.No)
+        clearCache.addButton(QPushButton(tr("Yes and change settings")), QMessageBox.YesRole)
+        returnValue = clearCache.exec_()
+        if returnValue == QMessageBox.No:
             try: os.remove(settings.session_file)
             except: pass
+        if returnValue == 0:
+            changeSettings = True
     else:
         f = open(settings.crash_file, "w")
         f.write("")
@@ -319,6 +328,8 @@ def main(argv):
 
     if not "--daemon" in argv and os.path.exists(settings.session_file):
         print("Loading previous session...", end=" ")
+        if changeSettings:
+            settings.settingsDialog.exec_()
         loadSession()
         print("done.")
     if not "--daemon" in argv and len(argv[1:]) > 0:
