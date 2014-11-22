@@ -82,7 +82,8 @@ class NetworkReply(QNetworkReply):
             self.offset = end
             return bytes(data)
 
-ignore = [8]
+# This contains error types to be ignored.
+ignore = []
 
 errors = {"No Internet connection": ["Check your computer's network settings.", "If you have access to a wired Ethernet connection, make sure the cable is plugged in.", "If the problem persists, contact your network administrator."],
           3: ["Make sure the URL was entered properly. For example, <b>www.google.com</b> instead of <b>ww.google.com</b>.", "Ensure that your computer is connected to the Internet.", "The page you requested might no longer exist. Try loading it on Wayback Machine."],
