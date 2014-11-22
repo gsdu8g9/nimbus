@@ -35,13 +35,13 @@ try:
     from PyQt5.QtWidgets import QApplication, QListWidget, QSpinBox, QListWidgetItem, QMessageBox, QAction, QToolBar, QLineEdit, QInputDialog, QFileDialog, QProgressBar, QLabel, QCalendarWidget, QSlider, QFontComboBox, QLCDNumber, QDateTimeEdit, QDial, QPushButton, QMenu, QDesktopWidget, QWidgetAction, QToolTip, QWidget, QToolButton, QVBoxLayout
     from PyQt5.QtPrintSupport import QPrinter, QPrintDialog, QPrintPreviewDialog
     from PyQt5.QtNetwork import QNetworkProxy, QNetworkRequest
-    from PyQt5.QtWebKit import QWebHistory
+    from PyQt5.QtWebKit import QWebHistory, QWebPluginFactory
     from PyQt5.QtWebKitWidgets import QWebView, QWebPage
 except ImportError:
     from PyQt4.QtCore import Qt, QSize, QObject, QCoreApplication, pyqtSignal, pyqtSlot, QUrl, QFile, QIODevice, QTimer, QByteArray, QDataStream, QDateTime, QPoint, QEventLoop
     from PyQt4.QtGui import QIcon, QImage, QClipboard, QCursor, QDesktopServices, QApplication, QListWidget, QSpinBox, QListWidgetItem, QMessageBox, QAction, QToolBar, QLineEdit, QInputDialog, QFileDialog, QProgressBar, QLabel, QCalendarWidget, QSlider, QFontComboBox, QLCDNumber, QDateTimeEdit, QDial, QPushButton, QMenu, QDesktopWidget, QWidgetAction, QToolTip, QWidget, QToolButton, QVBoxLayout, QPrinter, QPrintDialog, QPrintPreviewDialog
     from PyQt4.QtNetwork import QNetworkProxy, QNetworkRequest
-    from PyQt4.QtWebKit import QWebHistory, QWebView, QWebPage
+    from PyQt4.QtWebKit import QWebHistory, QWebView, QWebPage, QWebPluginFactory
 Signal = pyqtSignal
 Slot = pyqtSlot
 
@@ -173,6 +173,51 @@ class FullScreenRequester(QObject):
     def setFullScreen(self, fullscreen=False):
         self.fullScreenRequested.emit(fullscreen)
 
+class PDFView(QWebView):
+    def __init__(self, *args, url=None, incognito=True, **kwargs):
+        super(PDFView, self).__init__(*args, **kwargs)
+        if incognito:
+            self.page().setNetworkAccessManager(network.incognito_network_access_manager)
+            print("PDF plugin loaded in incognito mode.")
+        else:
+            self.page().setNetworkAccessManager(network.network_access_manager)
+            print("PDF plugin loaded in normal mode.")
+        if url:
+            self.loadPDF(url)
+    def loadPDF(self, url):
+        if type(url) is QUrl:
+            url = common.rchop(url.toString(), "#")
+        url = "qrc:///pdf.js/viewer.html?file=%s#disableWorker=true" % (url,)
+        self.load(QUrl(url))
+
+# Custom plugin for PDF support.
+class PDFFactory(QWebPluginFactory):
+    def __init__(self, parent=None, incognito=True):
+        super(PDFFactory, self).__init__(parent)
+        self._incognito = incognito
+    def incognito(self):
+        return self._incognito
+    def create(self, mimeType, url, argumentNames, argumentValues):
+        
+        if "pdf" not in mimeType:
+            return
+        pdfView = PDFView(url=url, incognito=self.incognito())
+        
+        return pdfView
+        
+    def plugins(self):
+        mimeType = self.MimeType()
+        mimeType.name = "application/pdf"
+        mimeType.description = "Portable Document Format"
+        mimeType.fileExtensions = ["pdf"]
+        
+        plugin = self.Plugin()
+        plugin.name = "PDF viewer"
+        plugin.description = "A PDF Web plugin"
+        plugin.mimeTypes = [mimeType]
+
+        return [plugin]
+
 # Custom WebPage class with support for filesystem.
 class WebPage(QWebPage):
     plugins = (("qcalendarwidget", QCalendarWidget),
@@ -187,11 +232,20 @@ class WebPage(QWebPage):
 
     fullScreenRequested = Signal(bool)
     javaScriptBar = Signal(QWidget)
+    factory = PDFFactory(incognito=False)
+    incognito_factory = PDFFactory()
     
     isOnlineTimer = QTimer(QCoreApplication.instance())
     
     def __init__(self, *args, **kwargs):
         super(WebPage, self).__init__(*args, **kwargs)
+        try: incognito = self.parent().incognito
+        except: pass
+        else:
+            if incognito:
+                self.setPluginFactory(self.incognito_factory)
+            else:
+                self.setPluginFactory(self.factory)
 
         # Connect this so that permissions for geolocation and stuff work.
         self.featurePermissionRequested.connect(self.permissionRequested)
