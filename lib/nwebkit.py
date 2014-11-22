@@ -742,12 +742,6 @@ class WebView(QWebView):
 
         self.init()
 
-        if os.path.exists(settings.new_tab_page) and not forceBlankPage:
-            if sys.platform.startswith("win"):
-                self.load(QUrl.fromUserInput(settings.new_tab_page))
-            else:
-                self.load(QUrl.fromUserInput(settings.new_tab_page_short))
-
     def toggleCaretBrowsing(self):
         websettings = self.settings().globalSettings()
         try: book = websettings.testAttribute(websettings.CaretBrowsingEnabled)
@@ -1275,19 +1269,22 @@ class WebView(QWebView):
         print(content_type)
         if "pdf" in str(content_type):
             if not common.pyqt4:
-                self.load(QUrl("qrc:///pdf.js/viewer.html?file=%s#disableWorker=true" % url,))
+                pdfView = self.createWindow(QWebPage.WebBrowserWindow)
+                pdfView.load(QUrl("qrc:///pdf.js/viewer.html?file=%s#disableWorker=true" % url,))
                 reply.deleteLater()
             else:
-                self.load(QUrl("about:blank"))
+                pdfView = self.createWindow(QWebPage.WebBrowserWindow)
+                pdfView.load(QUrl("about:blank"))
                 stream = QFile(':/pdf.js/viewer.html')
                 stream.open(QIODevice.ReadOnly)
                 data = stream.readAll().data().decode("utf-8")
-                self.setHtml(data, QUrl("qrc:///pdf.js/viewer.html?file=%s#disableWorker=true" % url,))
+                pdfView.setHtml(data, QUrl("qrc:///pdf.js/viewer.html?file=%s#disableWorker=true" % url,))
                 stream.close()
                 reply.deleteLater()
             return
         elif "opendocument" in str(content_type) and not common.pyqt4:
-            self.load(QUrl("qrc:///ViewerJS/index.html#%s" % url,))
+            pdfView = self.createWindow(QWebPage.WebBrowserWindow)
+            pdfView.load(QUrl("qrc:///ViewerJS/index.html#%s" % url,))
             reply.deleteLater()
             return
         if not url2.scheme() == "file" and settings.setting_to_bool("content/UseOnlineContentViewers") and not self.incognito and not self.isUsingContentViewer():
@@ -1397,6 +1394,8 @@ class WebView(QWebView):
     # can utilize the newly-created WebView instance.
     def createWindow(self, type):
         webview = WebView(incognito=self.incognito)
+        try: webview.page().loadHistory(self.page().saveHistory())
+        except: print("Failed to copy history.")
         self.webViews.append(webview)
         #webview.show()
         self.windowCreated.emit(webview)

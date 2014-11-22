@@ -192,6 +192,11 @@ class MainWindow(QMainWindow):
         newTabAction.setShortcut("Ctrl+T")
         newTabAction.triggered.connect(lambda: self.addTab())
 
+        duplicateTabAction = QAction(common.complete_icon("edit-copy"), tr("&Duplicate Tab"), self)
+        duplicateTabAction.setShortcut("Ctrl+D")
+        duplicateTabAction.triggered.connect(self.duplicateTab)
+        self.addAction(duplicateTabAction)
+
         # New private browsing tab action.
         newIncognitoTabAction = QAction(common.complete_icon("face-devilish"), tr("New &Incognito Tab"), self)
         newIncognitoTabAction.setShortcut("Ctrl+Shift+I")
@@ -418,6 +423,7 @@ class MainWindow(QMainWindow):
         self.mainMenu.addAction(self.tabMenuToolBar)
 
         self.tabMenuToolBar.addAction(newTabAction)
+        self.tabMenuToolBar.addAction(duplicateTabAction)
         self.tabMenuToolBar.addAction(newIncognitoTabAction)
         self.tabMenuToolBar.addAction(newWindowAction)
 
@@ -1472,6 +1478,9 @@ class MainWindow(QMainWindow):
     def reopenWindow(self):
         common.trayIcon.reopenWindow()
 
+    def duplicateTab(self):
+        self.addTab(duplicate=True)
+
     def addTab(self, webView=None, index=None, focus=True, incognito=None, **kwargs):
         # If a WebView object is specified, use it.
         forceBlankPage = False
@@ -1492,12 +1501,19 @@ class MainWindow(QMainWindow):
             except: pass
             title = webView.shortTitle()
 
+        if "duplicate" in kwargs:
+            duplicate = kwargs["duplicate"]
+        else:
+            duplicate = False
+
         if "url" in kwargs:
             url = kwargs["url"]
             webView.load(QUrl.fromUserInput(url))
         elif self.appMode == True:
             url = settings.settings.value("general/Homepage")
             webView.load(QUrl.fromUserInput(url))
+        else:
+            url = None
 
         # Connect signals
         webView.setUserAgent()
@@ -1522,6 +1538,15 @@ class MainWindow(QMainWindow):
             if index < ptc:
                 index = ptc
             self.tabWidget().insertTab(index, webView, title)
+
+        if not forceBlankPage and not url:
+            if settings.setting_to_bool("general/DuplicateTabs") or duplicate:
+                webView.page().loadHistory(self.currentWidget().page().saveHistory())
+            elif os.path.exists(settings.new_tab_page):
+                if sys.platform.startswith("win"):
+                    webView.load(QUrl.fromUserInput(settings.new_tab_page))
+                else:
+                    webView.load(QUrl.fromUserInput(settings.new_tab_page_short))
 
         # Switch to new tab
         if focus:
