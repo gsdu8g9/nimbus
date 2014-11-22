@@ -312,9 +312,9 @@ def main(argv):
         clearCache = QMessageBox()
         clearCache.setWindowTitle(tr("Ow."))
         clearCache.setText(tr("%(app_name)s seems to have crashed during your last session. Fortunately, your tabs were saved up to 30 seconds beforehand. Would you like to restore them?") % {"app_name": common.app_name})
+        clearCache.addButton(QPushButton(tr("Yes and change &settings")), QMessageBox.YesRole)
         clearCache.addButton(QMessageBox.Yes)
         clearCache.addButton(QMessageBox.No)
-        clearCache.addButton(QPushButton(tr("Yes and change settings")), QMessageBox.YesRole)
         returnValue = clearCache.exec_()
         if returnValue == QMessageBox.No:
             try: os.remove(settings.session_file)
