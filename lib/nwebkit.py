@@ -186,7 +186,8 @@ class PDFView(QWebView):
             self.loadPDF(url)
     def loadPDF(self, url):
         if type(url) is QUrl:
-            url = common.rchop(url.toString(), "#")
+            url = url.toString()
+        url = url.split("#")[0]
         url = "qrc:///pdf.js/viewer.html?file=%s#disableWorker=true" % (url,)
         self.load(QUrl(url))
 
