@@ -1654,7 +1654,7 @@ class MainWindow(QMainWindow):
             except: incognito = False
             self.addTab(index=index, incognito=incognito, forceBlankPage=True)
             self.tabWidget().setCurrentIndex(index)
-            self.tabWidget().widget(index).loadHistory(self.closedTabs[-1][0])
+            self.tabWidget().widget(index).page().loadHistory(self.closedTabs[-1][0])
             del self.closedTabs[-1]
 
     # This method is used to add a DownloadBar to the window.
