@@ -538,7 +538,8 @@ class MainWindow(QMainWindow):
         self.batteryAction.setVisible(False)
         
         # Add stuff for linux
-        self.networkManagerAction = QAction(common.complete_icon("network-idle"), tr("Network Management"), self)
+        self.networkManagerAction = QAction(common.complete_icon("network-idle"), "N/A", self)
+        self.networkManagerAction.setToolTip(tr("Network Management"))
         self.networkManagerAction.setShortcut("Alt+N")
         self.tabsToolBar.addAction(self.networkManagerAction)
         self.networkManagerButton = self.tabsToolBar.widgetForAction(self.networkManagerAction)
