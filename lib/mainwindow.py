@@ -542,6 +542,7 @@ class MainWindow(QMainWindow):
         self.networkManagerAction.setShortcut("Alt+N")
         self.tabsToolBar.addAction(self.networkManagerAction)
         self.networkManagerButton = self.tabsToolBar.widgetForAction(self.networkManagerAction)
+        self.networkManagerButton.setToolButtonStyle(Qt.ToolButtonTextBesideIcon)
         self.networkManagerAction.setVisible(False)
         self.addAction(self.networkManagerAction)
         if sys.platform.startswith("linux"):
@@ -1093,6 +1094,7 @@ class MainWindow(QMainWindow):
     # Updates the network status:
     def updateNetworkStatus(self):
         self.networkManagerAction.setIcon(common.complete_icon("network-idle") if network.isConnectedToNetwork(self.currentWidget().url().toString()) else common.complete_icon("network-offline"))
+        self.networkManagerAction.setText(system.get_signal_strength())
 
     # Updates the time.
     def updateDateTime(self):

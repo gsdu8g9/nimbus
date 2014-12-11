@@ -12,6 +12,8 @@ def is_on_ac():
     return False
 def get_battery_percentage():
     return 100
+def get_signal_strength():
+    return "N/A"
 def get_ssid():
     return "None"
 def read_cli(command):
@@ -133,3 +135,6 @@ else:
 
     def get_ssid():
         return read_cli("nmcli -t -f active,ssid dev wifi | egrep '^yes' | cut -d\\' -f2").split(":")[-1]
+
+    def get_signal_strength():
+        return read_cli("""awk 'NR==3 {printf("%.0f%%",$3*10/7)}' /proc/net/wireless""")
