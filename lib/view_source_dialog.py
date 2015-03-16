@@ -60,12 +60,12 @@ class ViewSourceDialogTabber(QMainWindow):
     def addTab(self, title="New Tab", data=""):
         vsd = ViewSourceDialog(self, str(title))
         vsd.setPlainText(data)
-        self.tabs.addTab(vsd, "Source of " + title)
+        self.tabs.addTab(vsd, tr("Source of %s") % (title,))
         self.tabs.setCurrentIndex(self.tabs.count()-1)
         self.raise_()
         self.activateWindow()
     def updateWindowTitle(self):
-        try: self.setWindowTitle("Source of " + self.tabs.currentWidget().windowTitle())
+        try: self.setWindowTitle(tr("Source of %s") % (self.tabs.currentWidget().windowTitle(),))
         except: pass
         if self.tabs.count() == 0:
             self.hide()
