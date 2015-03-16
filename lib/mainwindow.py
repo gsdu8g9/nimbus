@@ -216,7 +216,7 @@ class MainWindow(QMainWindow):
         closeTabButton = QAction(self)
         closeTabButton.setText(tr("Close Tab"))
         closeTabButton.triggered.connect(self.removeTab)
-        closeTabButton.setIcon(style.standardIcon(style.SP_DialogCloseButton))
+        closeTabButton.setIcon(QIcon.fromTheme("window-close", style.standardIcon(style.SP_DialogCloseButton)))
         self.tabsToolBar.addAction(closeTabButton)
 
         tabsMenuButton = QToolButton(self)
@@ -273,7 +273,7 @@ class MainWindow(QMainWindow):
         self.tabs.setCornerWidget(closeTabsToolBar, Qt.TopLeftCorner)"""
 
         # Set up navigation actions.
-        self.backAction = QAction(self, icon=style.standardIcon(style.SP_ArrowBack), text=tr("Go Back"))
+        self.backAction = QAction(self, icon=QIcon.fromTheme("go-previous", style.standardIcon(style.SP_ArrowBack)), text=tr("Go Back"))
         self.backAction.setShortcut("Alt+Left")
         self.backAction.triggered.connect(self.back)
         self.addAction(self.backAction)
@@ -285,7 +285,7 @@ class MainWindow(QMainWindow):
         self.backHistoryMenu = QMenu(aboutToShow=self.aboutToShowBackHistoryMenu, parent=self)
         self.backAction.setMenu(self.backHistoryMenu)
 
-        self.forwardAction = QAction(self, icon=style.standardIcon(style.SP_ArrowForward), text=tr("Go Forward"))
+        self.forwardAction = QAction(self, icon=QIcon.fromTheme("go-next", style.standardIcon(style.SP_ArrowForward)), text=tr("Go Forward"))
         self.forwardAction.setShortcut("Alt+Right")
         self.forwardAction.triggered.connect(self.forward)
         self.addAction(self.forwardAction)
@@ -297,7 +297,7 @@ class MainWindow(QMainWindow):
         self.forwardHistoryMenu = QMenu(aboutToShow=self.aboutToShowForwardHistoryMenu, parent=self)
         self.forwardAction.setMenu(self.forwardHistoryMenu)
 
-        self.upAction = QAction(self, triggered=self.up, icon=style.standardIcon(style.SP_ArrowUp), text=tr("Go Up"))
+        self.upAction = QAction(self, triggered=self.up, icon=QIcon.fromTheme("go-up", style.standardIcon(style.SP_ArrowUp)), text=tr("Go Up"))
         self.addAction(self.upAction)
         self.toolBar.addAction(self.upAction)
         self.toolBar.widgetForAction(self.upAction).setPopupMode(QToolButton.MenuButtonPopup)
@@ -309,11 +309,11 @@ class MainWindow(QMainWindow):
         self.upMenu = QMenu(aboutToShow=self.aboutToShowUpMenu, parent=self)
         self.upAction.setMenu(self.upMenu)
 
-        self.nextAction = QAction(self, triggered=self.next, icon=style.standardIcon(style.SP_MediaSkipForward), text=tr("Go Next"))
+        self.nextAction = QAction(self, triggered=self.next, icon=QIcon.fromTheme("media-skip-forward", style.standardIcon(style.SP_MediaSkipForward)), text=tr("Go Next"))
         self.addAction(self.nextAction)
         self.toolBar.addAction(self.nextAction)
 
-        self.stopAction = QAction(self, icon=style.standardIcon(style.SP_BrowserStop), text=tr("Stop"))
+        self.stopAction = QAction(self, icon=QIcon.fromTheme("process-stop", style.standardIcon(style.SP_BrowserStop)), text=tr("Stop"))
         self.stopAction.triggered.connect(self.stop)
         self.stopAction.triggered.connect(lambda: self.stopAction.setEnabled(True))
         self.stopAction.triggered.connect(lambda: self.reloadAction.setEnabled(True))
@@ -323,7 +323,7 @@ class MainWindow(QMainWindow):
         self.stopAction2 = QAction(self, triggered=self.toggleFindToolBar, shortcut="Esc")
         self.addAction(self.stopAction2)
 
-        self.reloadAction = QAction(self, icon=style.standardIcon(style.SP_BrowserReload), text=tr("Reload"))
+        self.reloadAction = QAction(self, icon=QIcon.fromTheme("view-refresh", style.standardIcon(style.SP_BrowserReload)), text=tr("Reload"))
         self.reloadAction.triggered.connect(self.reload)
         self.reloadAction.triggered.connect(lambda: self.stopAction.setEnabled(True))
         self.reloadAction.triggered.connect(lambda: self.reloadAction.setEnabled(True))
@@ -335,7 +335,7 @@ class MainWindow(QMainWindow):
         self.addAction(self.reloadAction2)
 
         # Go home button.
-        self.homeAction = QAction(self, triggered=self.goHome, icon=style.standardIcon(style.SP_DirHomeIcon), text=tr("Go Home"))
+        self.homeAction = QAction(self, triggered=self.goHome, icon=QIcon.fromTheme("go-home", style.standardIcon(style.SP_DirHomeIcon)), text=tr("Go Home"))
         self.addAction(self.homeAction)
         self.toolBar.addAction(self.homeAction)
         self.homeAction.setVisible(False)
@@ -481,13 +481,13 @@ class MainWindow(QMainWindow):
         viewMenu.addAction(findAction)
 
         # Add find previous action.
-        findPreviousAction = QAction(style.standardIcon(style.SP_MediaSkipBackward), tr("Find Pre&vious"), self)
+        findPreviousAction = QAction(QIcon.fromTheme("media-skip-backward", style.standardIcon(style.SP_MediaSkipBackward)), tr("Find Pre&vious"), self)
         findPreviousAction.setShortcut("Ctrl+Shift+G")
         findPreviousAction.triggered.connect(self.findPrevious)
         viewMenu.addAction(findPreviousAction)
 
         # Add find next action.
-        findNextAction = QAction(style.standardIcon(style.SP_MediaSkipForward), tr("Find Ne&xt"), self)
+        findNextAction = QAction(QIcon.fromTheme("media-skip-forward", style.standardIcon(style.SP_MediaSkipForward)), tr("Find Ne&xt"), self)
         findNextAction.setShortcut("Ctrl+G")
         findNextAction.triggered.connect(self.findNext)
         viewMenu.addAction(findNextAction)
@@ -605,7 +605,7 @@ class MainWindow(QMainWindow):
 
         historyMenu.addSeparator()
 
-        downloadAction = QAction(style.standardIcon(style.SP_ArrowDown), tr("&Downloads"), self)
+        downloadAction = QAction(QIcon.fromTheme("go-down", style.standardIcon(style.SP_ArrowDown)), tr("&Downloads"), self)
         downloadAction.setShortcuts(["Ctrl+J", "Ctrl+Shift+Y"])
         downloadAction.triggered.connect(common.downloadManager.show)
         self.addAction(downloadAction)
@@ -730,7 +730,7 @@ class MainWindow(QMainWindow):
 
         hideFindToolBarAction = QAction(self)
         hideFindToolBarAction.triggered.connect(self.findToolBar.hide)
-        hideFindToolBarAction.setIcon(style.standardIcon(style.SP_DialogCloseButton))
+        hideFindToolBarAction.setIcon(QIcon.fromTheme("window-close", style.standardIcon(style.SP_DialogCloseButton)))
 
         self.findToolBar.addWidget(self.findBar)
         self.findToolBar.addAction(findPreviousAction)

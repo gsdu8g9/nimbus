@@ -76,6 +76,11 @@ class ViewSourceDialog(QMainWindow):
         super(ViewSourceDialog, self).__init__()
         self.setParent(parent)
         self.menuBar = QMenuBar(self)
+        self.menuBar.setStyleSheet("""QMenuBar { background: transparent; border: 0; }
+                                      QMenuBar::item { background: transparent;
+                                                       color: palette(window-text); }
+                                      QMenuBar::item:pressed { background: palette(highlight);
+                                                               color: palette(highlighted-text); }""")
         self.setMenuBar(self.menuBar)
 
         self.text = ""
