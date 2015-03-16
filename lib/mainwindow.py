@@ -1006,6 +1006,9 @@ class MainWindow(QMainWindow):
                settings.setting_to_int("general/ReopenableWindowCount"):
             browser.closedWindows.pop(0)
         self.deleteLater()
+        if len(browser.windows) == 0 and not settings.setting_to_bool("general/FirstTotalClose"):
+            common.trayIcon.showMessage(tr("Nimbus is still running in the background"), tr("Right-click the status icon for more options..."))
+            settings.settings.setValue("general/FirstTotalClose", True)
 
     def deleteLater(self):
         try: browser.windows.remove(self)
