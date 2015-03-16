@@ -65,7 +65,7 @@ class ViewSourceDialogTabber(QMainWindow):
         self.raise_()
         self.activateWindow()
     def updateWindowTitle(self):
-        try: self.setWindowTitle(self.tabs.currentWidget().windowTitle())
+        try: self.setWindowTitle("Source of " + self.tabs.currentWidget().windowTitle())
         except: pass
         if self.tabs.count() == 0:
             self.hide()
