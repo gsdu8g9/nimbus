@@ -30,7 +30,7 @@ for fname in files_to_copy:
 if len(sys.argv) > 1:
     setup(name='nimbus',
           version=version,
-          description='Qt4 Web browser coded in Python 3, compatible with both',
+          description='A Qt Web browser coded in Python 3',
           author='Daniel Sim',
           url='https://github.com/foxhead128/nimbus',
           packages=['nimbus'],
