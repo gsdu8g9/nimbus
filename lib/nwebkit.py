@@ -600,7 +600,6 @@ class WebView(QWebView):
 
     # This is used to store references to webViews so that they don't
     # automatically get cleaned up.
-    webViews = []
 
     # Downloads
     downloads = []
@@ -1380,7 +1379,6 @@ class WebView(QWebView):
                 webview.page().loadHistory(self.page().saveHistory())
             except:
                 print("Failed to copy history.")
-        self.webViews.append(webview)
         #webview.show()
         self.windowCreated.emit(webview)
         return webview
