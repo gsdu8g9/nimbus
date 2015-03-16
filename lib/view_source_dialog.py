@@ -14,18 +14,18 @@ from __future__ import print_function
 from common import pyqt4
 import os.path, sys
 if not pyqt4:
-    from PyQt5.QtCore import pyqtSignal, QObject
+    from PyQt5.QtCore import Qt, QCoreApplication, pyqtSignal, QObject, QSize
     Signal = pyqtSignal
     from PyQt5.QtGui import QTextDocument
-    from PyQt5.QtWidgets import QMainWindow, QMenuBar, QMenu, QAction, QTextEdit, QFileDialog, QInputDialog, QLineEdit
+    from PyQt5.QtWidgets import QMainWindow, QMenuBar, QMenu, QAction, QTextEdit, QFileDialog, QInputDialog, QLineEdit, QTabWidget
 else:
     try:
-        from PyQt4.QtCore import pyqtSignal, QObject
+        from PyQt4.QtCore import Qt, QCoreApplication, pyqtSignal, QObject, QSize
         Signal = pyqtSignal
-        from PyQt4.QtGui import QMainWindow, QMenuBar, QMenu, QAction, QTextEdit, QTextDocument, QFileDialog, QInputDialog, QLineEdit
+        from PyQt4.QtGui import QMainWindow, QMenuBar, QMenu, QAction, QTextEdit, QTextDocument, QFileDialog, QInputDialog, QLineEdit, QTabWidget
     except ImportError:
-        from PySide.QtCore import Signal, QObject
-        from PySide.QtGui import QMainWindow, QMenuBar, QMenu, QAction, QTextEdit, QTextDocument, QFileDialog, QInputDialog, QLineEdit
+        from PySide.QtCore import Qt, QCoreApplication, Signal, QObject, QSize
+        from PySide.QtGui import QMainWindow, QMenuBar, QMenu, QAction, QTextEdit, QTextDocument, QFileDialog, QInputDialog, QLineEdit, QTabWidget
 try:
     __file__
 except:
@@ -33,6 +33,36 @@ except:
 app_lib = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(app_lib)
 from translate import tr
+
+class SourceView(QTextEdit):
+    def __init__(self, *args, **kwargs):
+        super(SourceView, self).__init__(*args, **kwargs)
+    def wheelEvent(self, e):
+        if QCoreApplication.instance().keyboardModifiers() != Qt.NoModifier:
+            return
+        else:
+            QTextEdit.wheelEvent(self, e)
+
+class ViewSourceDialogTabber(QMainWindow):
+    def __init__(self, parent=None, title="Source"):
+        super(ViewSourceDialogTabber, self).__init__(parent)
+        self.setWindowTitle(title)
+        self.tabs = QTabWidget(self)
+        self.tabs.setElideMode(Qt.ElideRight)
+        self.tabs.setTabsClosable(True)
+        self.tabs.tabCloseRequested.connect(self.removeTab)
+        self.setCentralWidget(self.tabs)
+        self.tabs.currentChanged.connect(self.updateWindowTitle)
+    def sizeHint(self):
+        return QSize(640, 480)
+    def removeTab(self):
+        self.tabWidget().removeTab(index)
+    def addTab(self, title="New Tab", data=""):
+        vsd = ViewSourceDialog(self, str(title))
+        vsd.setPlainText(data)
+        self.tabs.addTab(vsd, "Source of " + title)
+    def updateWindowTitle(self):
+        self.setWindowTitle(self.tabs.currentWidget().windowTitle())
 
 class ViewSourceDialog(QMainWindow):
     closed = pyqtSignal(QObject)
@@ -75,12 +105,12 @@ class ViewSourceDialog(QMainWindow):
         self.addAction(self.findPreviousAction)
         self.viewMenu.addAction(self.findPreviousAction)
 
-        self.sourceView = QTextEdit(self)
+        self.sourceView = SourceView(self)
         self.sourceView.setReadOnly(True)
         self.sourceView.setFontFamily("monospace")
         self.setCentralWidget(self.sourceView)
         closeWindowAction = QAction(self)
-        closeWindowAction.setShortcuts(["Esc", "Ctrl+W"])
+        closeWindowAction.setShortcut("Ctrl+W")
         closeWindowAction.triggered.connect(self.close)
         self.addAction(closeWindowAction)
         self.setWindowTitle(title)
@@ -92,7 +122,7 @@ class ViewSourceDialog(QMainWindow):
         self.deleteLater()
 
     def saveAs(self):
-        fname = QFileDialog.getSaveFileName(None, tr("Save As..."), "", tr("Text files (*.txt)"))
+        fname = QFileDialog.getSaveFileName(None, tr("Save As..."), self.windowTitle() + ".txt", tr("Text files (*.txt)"))
         if type(fname) is tuple:
             fname = fname[0]
         if fname:

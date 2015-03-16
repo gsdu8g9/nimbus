@@ -41,6 +41,7 @@ import extension_server
 import data
 import search_manager
 from nwebkit import *
+from view_source_dialog import *
 from mainwindow import *
 from tray_icon import *
 
@@ -287,6 +288,10 @@ def main(argv):
     # Load settings.
     data.loadData()
 
+    # View source dialog.
+    common.viewSourceDialog = ViewSourceDialogTabber()
+    #common.viewSourceDialog.show()
+    
     # This is a baaad name.
     common.sessionSaver = QTimer(QCoreApplication.instance())
     common.sessionSaver.timeout.connect(saveSession)

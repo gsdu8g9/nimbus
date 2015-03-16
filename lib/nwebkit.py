@@ -914,28 +914,9 @@ class WebView(QWebView):
         return title[:24] + '...' if len(title) > 24 else title
 
     def viewSource(self):
-        sview = self.createWindow(QWebPage.WebBrowserWindow)
-        sview.setHtml("""<!DOCTYPE html>
-<html>
-    <head>
-        <title>""" + (tr("Source of %s") % self.url().toString()) + """</title>
-        <link rel="stylesheet" href="http://127.0.0.1:8133/highlight-style.css">
-        <script src="http://127.0.0.1:8133/highlight.pack.js"></script>
-    </head>
-    <body>
-        <pre>
-            <code style="position: fixed; top: 0; left: 0; bottom: 0; right: 0; width: auto; height: auto; overflow-x: auto; overflow-y: auto;">""" + self.page().mainFrame().toHtml().replace("<", "&lt;").replace(">", "&gt;") + """</code>
-        </pre>
-        <script>hljs.initHighlightingOnLoad();</script>
-    </body>
-</html>""", QUrl("nimbus://view-source"))
-        #sourceDialog = view_source_dialog.ViewSourceDialog(None)
-        #for sd in self.sourceDialogs:
-            #try: sd.doNothing()
-            #except: self.sourceDialogs.remove(sd)
-        #self.sourceDialogs.append(sourceDialog)
-        #sourceDialog.setPlainText(self.page().mainFrame().toHtml())
-        #sourceDialog.show()
+        data = self.page().mainFrame().toHtml()
+        common.viewSourceDialog.addTab(self.title(), data)
+        common.viewSourceDialog.show()
 
     # Enables fullscreen in web app mode.
     def enableWebAppMode(self):
