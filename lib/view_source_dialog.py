@@ -56,7 +56,7 @@ class ViewSourceDialogTabber(QMainWindow):
     def sizeHint(self):
         return QSize(640, 480)
     def removeTab(self):
-        self.tabWidget().removeTab(index)
+        self.tabs.removeTab(self.tabs.currentIndex())
     def addTab(self, title="New Tab", data=""):
         vsd = ViewSourceDialog(self, str(title))
         vsd.setPlainText(data)
