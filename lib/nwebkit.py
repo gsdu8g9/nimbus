@@ -32,14 +32,14 @@ import rss_parser
 try:
     from PyQt5.QtCore import Qt, QSize, QObject, QCoreApplication, pyqtSignal, pyqtSlot, QUrl, QFile, QIODevice, QTimer, QByteArray, QDataStream, QDateTime, QPoint, QEventLoop
     from PyQt5.QtGui import QIcon, QImage, QClipboard, QCursor, QDesktopServices
-    from PyQt5.QtWidgets import QApplication, QListWidget, QSpinBox, QListWidgetItem, QMessageBox, QAction, QToolBar, QLineEdit, QInputDialog, QFileDialog, QProgressBar, QLabel, QCalendarWidget, QSlider, QFontComboBox, QLCDNumber, QDateTimeEdit, QDial, QPushButton, QMenu, QDesktopWidget, QWidgetAction, QToolTip, QWidget, QToolButton, QVBoxLayout
+    from PyQt5.QtWidgets import QApplication, QListWidget, QSpinBox, QListWidgetItem, QMessageBox, QAction, QToolBar, QLineEdit, QInputDialog, QFileDialog, QProgressBar, QLabel, QCalendarWidget, QSlider, QFontComboBox, QLCDNumber, QDateTimeEdit, QDial, QPushButton, QMenu, QDesktopWidget, QWidgetAction, QToolTip, QWidget, QToolButton, QVBoxLayout, QMainWindow
     from PyQt5.QtPrintSupport import QPrinter, QPrintDialog, QPrintPreviewDialog
     from PyQt5.QtNetwork import QNetworkProxy, QNetworkRequest
     from PyQt5.QtWebKit import QWebHistory, QWebPluginFactory
     from PyQt5.QtWebKitWidgets import QWebView, QWebPage
 except ImportError:
     from PyQt4.QtCore import Qt, QSize, QObject, QCoreApplication, pyqtSignal, pyqtSlot, QUrl, QFile, QIODevice, QTimer, QByteArray, QDataStream, QDateTime, QPoint, QEventLoop
-    from PyQt4.QtGui import QIcon, QImage, QClipboard, QCursor, QDesktopServices, QApplication, QListWidget, QSpinBox, QListWidgetItem, QMessageBox, QAction, QToolBar, QLineEdit, QInputDialog, QFileDialog, QProgressBar, QLabel, QCalendarWidget, QSlider, QFontComboBox, QLCDNumber, QDateTimeEdit, QDial, QPushButton, QMenu, QDesktopWidget, QWidgetAction, QToolTip, QWidget, QToolButton, QVBoxLayout, QPrinter, QPrintDialog, QPrintPreviewDialog
+    from PyQt4.QtGui import QIcon, QImage, QClipboard, QCursor, QDesktopServices, QApplication, QListWidget, QSpinBox, QListWidgetItem, QMessageBox, QAction, QToolBar, QLineEdit, QInputDialog, QFileDialog, QProgressBar, QLabel, QCalendarWidget, QSlider, QFontComboBox, QLCDNumber, QDateTimeEdit, QDial, QPushButton, QMenu, QDesktopWidget, QWidgetAction, QToolTip, QWidget, QToolButton, QVBoxLayout, QPrinter, QPrintDialog, QPrintPreviewDialog, QMainWindow
     from PyQt4.QtNetwork import QNetworkProxy, QNetworkRequest
     from PyQt4.QtWebKit import QWebHistory, QWebView, QWebPage, QWebPluginFactory
 Signal = pyqtSignal
@@ -88,7 +88,8 @@ class DownloadProgressBar(QProgressBar):
     # Initialize class.
     def __init__(self, reply=False, destination=os.path.expanduser("~"), parent=None):
         super(DownloadProgressBar, self).__init__(parent)
-        self.setWindowTitle(reply.request().url().toString().split("/")[-1])
+        try: self.setWindowTitle(reply.request().url().toString().split("/")[-1])
+        except: pass
         self.networkReply = reply
         self.destination = destination
         self.progress = [0, 0]
@@ -1476,6 +1477,58 @@ class PDFView(WebView):
                 common.downloadManager.addDownload(downloadDialog)
             except:
                 self.downloadStarted.emit(downloadDialog)
+
+# DownloadManager class.
+class DownloadManager(QMainWindow):
+    def __init__(self, *args, **kwargs):
+        super(DownloadManager, self).__init__(*args, **kwargs)
+        closeWindowAction = QAction(self)
+        closeWindowAction.triggered.connect(self.hide)
+        closeWindowAction.setShortcuts(["Esc", "Ctrl+W", "Ctrl+J", "Ctrl+Shift+Y"])
+        self.addAction(closeWindowAction)
+        self.listWidget = QListWidget(self)
+        self.setCentralWidget(self.listWidget)
+        self.toolBar = QToolBar(self)
+        self.toolBar.setMovable(False)
+        self.toolBar.setContextMenuPolicy(Qt.CustomContextMenu)
+        self.addToolBar(Qt.BottomToolBarArea, self.toolBar)
+        self.removeAllAction = QAction(tr("Remove all"), self)
+        self.removeAllAction.triggered.connect(self.removeAllItems)
+        self.toolBar.addAction(self.removeAllAction)
+    def loadSession(self):
+        session = data.data.settingToList("data/Download")
+        for item in session:
+            bar = DownloadBar(None, item, self)
+            bar.progressBar.setValue(100)
+            self.addDownload(bar)
+    def saveSession(self):
+        destinations = []
+        for item in range(0, self.listWidget.count()):
+            destinations.append(self.listWidget.itemWidget(self.listWidget.item(item)).progressBar.destination)
+        data.data.setValue("data/Download", destinations)
+        data.data.hardSync()
+    def addDownload(self, toolbar):
+        item = QListWidgetItem(self.listWidget)
+        item.setSizeHint(QSize(item.sizeHint().width(), 32))
+        self.listWidget.addItem(item)
+        self.listWidget.setItemWidget(item, toolbar)
+        toolbar.setItem(item)
+        toolbar.requestDelete.connect(self.removeItem)
+    def removeItem(self, item):
+        try: self.listWidget.itemWidget(item).inProgress()
+        except: self.listWidget.takeItem(self.listWidget.row(item))
+        if self.listWidget.itemWidget(item).inProgress():
+            return
+        self.listWidget.itemWidget(item).deleteLater()
+        self.listWidget.takeItem(self.listWidget.row(item))
+    def removeAllItems(self):
+        counter = 0
+        for i in range(self.listWidget.count()):
+            item = self.listWidget.item(counter)
+            if self.listWidget.itemWidget(item).inProgress():
+                counter += 1
+                continue
+            self.removeItem(item)
 
 class WebViewAction(QWidgetAction):
     def __init__(self, *args, incognito=False, **kwargs):

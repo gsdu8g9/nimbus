@@ -53,3 +53,19 @@ class QSettings(object):
             try: f.write(json.dumps(self.tables, sort_keys=True, indent=2))
             except: pass
             f.close()
+    
+    # Convenience bits.
+    def settingToBool(self, value=""):
+        try: return bool(eval(str(self.value(value)).title()))
+        except: return False
+
+    def settingToInt(self, value=""):
+        try: return int(self.value(value))
+        except: return 0
+
+    def settingToList(self, value=""):
+        if type(self.value(value)) is list:
+            return self.value(value)
+        else:
+            try: return json.loads(self.value(value))
+            except: return []

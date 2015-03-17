@@ -87,6 +87,7 @@ def addWindow(url=None):
 def prepareQuit():
     try: os.remove(settings.crash_file)
     except: pass
+    common.downloadManager.saveSession()
     saveSession()
     settings.settings.hardSync()
     data.saveData()
@@ -205,8 +206,9 @@ def main(argv):
     app.setWindowIcon(common.app_icon)
 
     common.searchEditor = search_manager.SearchEditor()
-    common.downloadManager = custom_widgets.DownloadManager(windowTitle=tr("Downloads"))
+    common.downloadManager = DownloadManager(windowTitle=tr("Downloads"))
     common.downloadManager.resize(QSize(480, 320))
+    common.downloadManager.loadSession()
 
     # Create tray icon.
     common.trayIcon = SystemTrayIcon(QCoreApplication.instance())
