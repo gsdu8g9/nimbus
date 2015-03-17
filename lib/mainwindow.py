@@ -1632,10 +1632,10 @@ class MainWindow(QMainWindow):
                 while len(self.closedTabs) >\
                 settings.setting_to_int("general/ReopenableTabCount"):
                     self.closedTabs.pop(0)
-            webView.deleteLater()
         except:
             pass
         self.tabWidget().removeTab(index)
+        webView.deleteLater()
         if self.tabWidget().count() == 0 and\
         not settings.setting_to_bool("general/CloseWindowWithLastTab"):
             self.addTab(url="about:blank")
