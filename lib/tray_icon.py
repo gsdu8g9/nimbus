@@ -85,7 +85,7 @@ self.origY + ev.globalY() - self.mouseY)
 class SystemTrayIcon(QSystemTrayIcon):
     newWindowRequested = Signal()
     windowReopenRequested = Signal()
-    def __init__(self, parent):
+    def __init__(self, parent=None):
         super(SystemTrayIcon, self).__init__(common.app_icon, parent)
 
         # Set tooltip.

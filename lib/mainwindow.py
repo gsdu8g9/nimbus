@@ -191,7 +191,7 @@ class MainWindow(QMainWindow):
         # New tab action.
         newTabAction = QAction(common.complete_icon("tab-new"), tr("New &Tab"), self)
         newTabAction.setShortcut("Ctrl+T")
-        newTabAction.triggered.connect(lambda: self.addTab())
+        newTabAction.triggered.connect(lambda: self.addTab(forceBlankPage=False))
 
         duplicateTabAction = QAction(common.complete_icon("edit-copy"), tr("&Duplicate Tab"), self)
         duplicateTabAction.setShortcut("Ctrl+D")
@@ -1496,7 +1496,7 @@ class MainWindow(QMainWindow):
 
     def addTab(self, webView=None, index=None, focus=True, incognito=None, **kwargs):
         # If a WebView object is specified, use it.
-        forceBlankPage = False
+        forceBlankPage = True
         title = tr("New Tab")
         if "forceBlankPage" in kwargs:
             forceBlankPage = kwargs["forceBlankPage"]
