@@ -134,6 +134,7 @@ class DownloadProgressBar(QProgressBar):
 class DownloadBar(QToolBar):
     requestDelete = pyqtSignal(QListWidgetItem)
     def __init__(self, reply, destination, parent=None):
+        style = QApplication.style()
         super(DownloadBar, self).__init__(parent)
         self.setMovable(False)
         self.setIconSize(QSize(16, 16))
@@ -150,7 +151,7 @@ class DownloadBar(QToolBar):
         openFolderAction = QAction(common.complete_icon("document-open"), tr("Open containing folder"), self)
         openFolderAction.triggered.connect(self.openFolder)
         self.addAction(openFolderAction)
-        abortAction = QAction(common.complete_icon("process-stop"), tr("Abort/Remove"), self)
+        abortAction = QAction(QIcon.fromTheme("window-close", style.standardIcon(style.SP_DialogCloseButton)), tr("Abort/Remove"), self)
         abortAction.triggered.connect(self.progressBar.abort)
         abortAction.triggered.connect(lambda: self.progressBar.setValue(self.progressBar.maximum()))
         abortAction.triggered.connect(lambda: self.requestDelete.emit(self.item()))
