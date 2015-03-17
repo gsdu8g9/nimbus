@@ -106,7 +106,8 @@ class MainWindow(QMainWindow):
         browser.windows.append(self)
 
         # Set window icon.
-        self.setWindowIcon(common.app_icon)
+        try: self.setWindowIcon(common.app_icon)
+        except: pass
 
         # List of closed tabs.
         self.closedTabs = []
@@ -607,7 +608,8 @@ class MainWindow(QMainWindow):
 
         downloadAction = QAction(QIcon.fromTheme("go-down", style.standardIcon(style.SP_ArrowDown)), tr("&Downloads"), self)
         downloadAction.setShortcuts(["Ctrl+J", "Ctrl+Shift+Y"])
-        downloadAction.triggered.connect(common.downloadManager.show)
+        try: downloadAction.triggered.connect(common.downloadManager.show)
+        except: pass
         self.addAction(downloadAction)
         historyMenu.addAction(downloadAction)
 
@@ -653,12 +655,14 @@ class MainWindow(QMainWindow):
 
         # About Nimbus action.
         aboutAction = QAction(common.complete_icon("help-about"), tr("A&bout %s") % (common.app_name,), self)
-        aboutAction.triggered.connect(common.trayIcon.about)
+        try: aboutAction.triggered.connect(common.trayIcon.about)
+        except: pass
         self.mainMenu.addAction(aboutAction)
 
         # Licensing information.
         licenseAction = QAction(tr("Credits && &Licensing"), self)
-        licenseAction.triggered.connect(common.licenseDialog.show)
+        try: licenseAction.triggered.connect(common.licenseDialog.show)
+        except: pass
         self.mainMenu.addAction(licenseAction)
 
         self.mainMenu.addSeparator()
@@ -1345,19 +1349,22 @@ class MainWindow(QMainWindow):
     def load(self, url=False):
         if not url:
             url = self.locationBar.currentText()
-        for keyword in common.search_engines.values():
-            if type(url) is str:
-                url3 = url
-            else:
-                try: url3 = url.toString()
-                except: url3 = ""
-            fkey = keyword[0] + " "
-            if url3.startswith(fkey):
-                self.tabWidget().currentWidget().load(QUrl(keyword[1]\
-                                                           % (url3.\
-                                                           replace(fkey,\
-                                                           ""),)))
-                return
+        try:
+            for keyword in common.search_engines.values():
+                if type(url) is str:
+                    url3 = url
+                else:
+                    try: url3 = url.toString()
+                    except: url3 = ""
+                fkey = keyword[0] + " "
+                if url3.startswith(fkey):
+                    self.tabWidget().currentWidget().load(QUrl(keyword[1]\
+                                                               % (url3.\
+                                                               replace(fkey,\
+                                                               ""),)))
+                    return
+        except:
+            pass
         url2 = QUrl.fromUserInput(url)
         valid_url = (":" in url or os.path.exists(url) or url.count(".") > 2)
         this_tld = url2.topLevelDomain().upper()

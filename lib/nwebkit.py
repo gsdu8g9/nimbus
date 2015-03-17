@@ -687,11 +687,16 @@ class WebView(QWebView):
 
         # Create a NetworkAccessmanager that supports ad-blocking and set it.
         if not self.incognito:
-            self.nAM = network.network_access_manager
+            try: self.nAM = network.network_access_manager
+            except: pass
         else:
-            self.nAM = network.incognito_network_access_manager
-        self.page().setNetworkAccessManager(self.nAM)
-        self.nAM.setParent(QCoreApplication.instance())
+            try: self.nAM = network.incognito_network_access_manager
+            except: pass
+        try:
+            self.page().setNetworkAccessManager(self.nAM)
+            self.nAM.setParent(QCoreApplication.instance())
+        except:
+            pass
 
         #self.updateProxy()
         
@@ -709,8 +714,10 @@ class WebView(QWebView):
         if self.incognito:
             # Global incognito cookie jar, so that logins are preserved
             # between incognito tabs.
-            network.incognito_cookie_jar.setParent(QCoreApplication.instance())
-
+            try:
+                network.incognito_cookie_jar.setParent(QCoreApplication.instance())
+            except:
+                pass
             # Enable private browsing for QWebSettings.
             websettings = self.settings()
             websettings.setAttribute(websettings.PrivateBrowsingEnabled, True)
