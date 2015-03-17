@@ -1646,6 +1646,7 @@ class MainWindow(QMainWindow):
         if self.tabWidget().count() == 0 and\
         not settings.setting_to_bool("general/CloseWindowWithLastTab"):
             self.addTab(url="about:blank")
+        self.updateTabTitles()
     
     # Closes the tabs on the left.
     def closeLeftTabs(self):
