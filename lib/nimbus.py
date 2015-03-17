@@ -211,7 +211,7 @@ def main(argv):
     common.downloadManager.loadSession()
 
     # Create tray icon.
-    common.trayIcon = SystemTrayIcon(QCoreApplication.instance())
+    common.trayIcon = SystemTrayIcon()
     common.trayIcon.newWindowRequested.connect(addWindow)
     #common.trayIcon.windowReopenRequested.connect(reopenWindow)
     common.trayIcon.show()
