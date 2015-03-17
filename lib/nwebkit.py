@@ -127,7 +127,8 @@ class DownloadProgressBar(QProgressBar):
 
     # Abort download.
     def abort(self):
-        self.networkReply.abort()
+        try: self.networkReply.abort()
+        except: pass
 
 # File download toolbar.
 # These are displayed at the bottom of a MainWindow.
@@ -1503,6 +1504,11 @@ class DownloadManager(QMainWindow):
         self.removeAllAction = QAction(tr("Remove all"), self)
         self.removeAllAction.triggered.connect(self.removeAllItems)
         self.toolBar.addAction(self.removeAllAction)
+        expander = custom_widgets.Expander(parent=self.toolBar)
+        self.toolBar.addWidget(expander)
+        self.downloadFileAction = QAction(tr("Download file"), self)
+        self.downloadFileAction.triggered.connect(self.downloadFile)
+        self.toolBar.addAction(self.downloadFileAction)
     def loadSession(self):
         session = data.data.settingToList("data/Download")
         for item in session:
@@ -1515,6 +1521,20 @@ class DownloadManager(QMainWindow):
             destinations.append(self.listWidget.itemWidget(self.listWidget.item(item)).progressBar.destination)
         data.data.setValue("data/Download", destinations)
         data.data.hardSync()
+    def downloadFile(self):
+        url = QInputDialog.getText(self, tr("Download file"), tr("Enter the URL of the file to be downloaded:"))
+        if type(url) is tuple:
+            url = url[0]
+        if url:
+            guess = url.split("/")[-1]
+            fname = QFileDialog.getSaveFileName(None, tr("Save As..."), os.path.join(os.path.expanduser("~"), guess + (".html" if not "." in guess else "")), tr("All files (*)"))
+            if type(fname) is tuple:
+                fname = fname[0]
+            if fname:
+                nm = network.network_access_manager
+                reply = nm.get(QNetworkRequest(QUrl.fromUserInput(url)))
+                bar = DownloadBar(reply, fname, self)
+                self.addDownload(bar)
     def addDownload(self, toolbar):
         item = QListWidgetItem(self.listWidget)
         item.setSizeHint(QSize(item.sizeHint().width(), 32))
