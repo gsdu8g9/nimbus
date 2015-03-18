@@ -1332,7 +1332,15 @@ class WebView(QWebView):
         else:
             try: ext = "." + request.url().toString().split(".")[-1].split("#")[0].split("?")[0]
             except: ext = ".html"
-        fname = QFileDialog.getSaveFileName(None, tr("Save As..."), os.path.join(self.saveDirectory, fileName + (ext if not "." in fileName else "")), tr("All files (*)"))
+        if not "." in fileName:
+            fileName = fileName + ext
+        destination = os.path.join(self.saveDirectory, fileName)
+        counter = 1
+        while os.path.exists(destination):
+            rname = "_(" + str(counter) + ")" 
+            destination = os.path.join(self.saveDirectory, fileName.split(".")[0] + rname + "." + fileName.split(".")[-1])
+            counter += 1
+        fname = QFileDialog.getSaveFileName(None, tr("Save As..."), destination, tr("All files (*)"))
         if type(fname) is tuple:
             fname = fname[0]
         if fname:
