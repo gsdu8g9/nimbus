@@ -795,12 +795,9 @@ class WebView(QWebView):
         super(WebView, self).reload()
         self.clearJavaScriptBars()
 
-    if sys.platform.startswith("win") and common.qt_version_info[0] == 5:
-        pass
-    else:
-        def resizeEvent(self, *args, **kwargs):
-            super(WebView, self).resizeEvent(*args, **kwargs)
-            self.setStyleSheet(self.baseStyleSheet % (self.size().width(), self.size().width(), self.size().height(), self.size().height()))
+    def resizeEvent(self, *args, **kwargs):
+        super(WebView, self).resizeEvent(*args, **kwargs)
+        self.setStyleSheet(self.baseStyleSheet % (self.size().width(), self.size().width(), self.size().height(), self.size().height()))
 
     def wheelEvent(self, *args, **kwargs):
         super(WebView, self).wheelEvent(*args, **kwargs)
@@ -961,16 +958,13 @@ class WebView(QWebView):
         except: pass
         QWebView.deleteLater(self)
 
-    if sys.platform.startswith("win") and common.qt_version_info[0] == 5:
-        pass
-    else:
-        def paintEvent(self, ev):
-            if self._historyToBeLoaded:
-                self.page().loadHistory(self._historyToBeLoaded)
-                self._historyToBeLoaded = None
-                self._tempTitle = None
-            QWebView.paintEvent(self, ev)
-            self.paintEvent = self.shortPaintEvent
+    def paintEvent(self, ev):
+        if self._historyToBeLoaded:
+            self.page().loadHistory(self._historyToBeLoaded)
+            self._historyToBeLoaded = None
+            self._tempTitle = None
+        QWebView.paintEvent(self, ev)
+        self.paintEvent = self.shortPaintEvent
 
     def shortPaintEvent(self, *args, **kwargs):
         QWebView.paintEvent(self, *args, **kwargs)
