@@ -1503,20 +1503,18 @@ class DownloadManager(QMainWindow):
         self.toolBar.setMovable(False)
         self.toolBar.setContextMenuPolicy(Qt.CustomContextMenu)
         self.addToolBar(self.toolBar)
-        self.appIcon = QAction(tr("Nimbus"), self)
-        self.appIcon.setIcon(common.app_icon)
-        self.toolBar.addAction(self.appIcon)
-        self.toolBar.widgetForAction(self.appIcon).setStyleSheet("QToolButton { border: 0; }")
         expander = custom_widgets.Expander(parent=self.toolBar)
         self.toolBar.addWidget(expander)
-        self.downloadFileAction = QAction(tr("Download file"), self)
+        self.downloadFileAction = QAction(common.complete_icon("go-down"), tr("Download file"), self)
         self.downloadFileAction.triggered.connect(self.downloadFile)
         self.toolBar.addAction(self.downloadFileAction)
         self.toolBar.widgetForAction(self.downloadFileAction).setFocusPolicy(Qt.TabFocus)
-        self.removeAllAction = QAction(tr("Remove all"), self)
+        self.toolBar.widgetForAction(self.downloadFileAction).setToolButtonStyle(Qt.ToolButtonTextBesideIcon)
+        self.removeAllAction = QAction(common.complete_icon("edit-clear"), tr("Remove all"), self)
         self.removeAllAction.triggered.connect(self.removeAllItems)
         self.toolBar.addAction(self.removeAllAction)
         self.toolBar.widgetForAction(self.removeAllAction).setFocusPolicy(Qt.TabFocus)
+        self.toolBar.widgetForAction(self.removeAllAction).setToolButtonStyle(Qt.ToolButtonTextBesideIcon)
     def loadSession(self):
         session = data.data.settingToList("data/Download")
         for item in session:
@@ -1558,13 +1556,15 @@ class DownloadManager(QMainWindow):
         self.listWidget.itemWidget(item).deleteLater()
         self.listWidget.takeItem(self.listWidget.row(item))
     def removeAllItems(self):
-        counter = 0
-        for i in range(self.listWidget.count()):
-            item = self.listWidget.item(counter)
-            if self.listWidget.itemWidget(item).inProgress():
-                counter += 1
-                continue
-            self.removeItem(item)
+        confirm = QMessageBox.question(self, tr("Confirm"), tr("Are you sure you want to %s?") % (tr("clear the download history"),), QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+        if confirm == QMessageBox.Yes:
+            counter = 0
+            for i in range(self.listWidget.count()):
+                item = self.listWidget.item(counter)
+                if self.listWidget.itemWidget(item).inProgress():
+                    counter += 1
+                    continue
+                self.removeItem(item)
 
 class WebViewAction(QWidgetAction):
     def __init__(self, *args, incognito=False, **kwargs):
