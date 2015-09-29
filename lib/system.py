@@ -107,7 +107,12 @@ else:
                     energyFull = int(f.read())
                     f.close()
                 except:
-                    pass
+                    try:
+                        f = open(os.path.join(battery, "charge_full"))
+                        energyFull = int(f.read())
+                        f.close()
+                    except:
+                        pass
                 break
             if not battery:
                 hasBattery = False
@@ -119,9 +124,13 @@ else:
                 energyNow = int(f.read())
                 f.close()
             except:
-                pass
-            else:
-                percentage = round(energyNow/energyFull*100, 1)
+                try:
+                    f = open(os.path.join(battery, "charge_now"))
+                    energyNow = int(f.read())
+                    f.close()
+                except:
+                    return "N/A"
+        percentage = round(energyNow/energyFull*100, 1)
         return percentage
 
     def is_on_ac():
