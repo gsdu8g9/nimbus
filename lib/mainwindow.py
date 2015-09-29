@@ -707,9 +707,10 @@ class MainWindow(QMainWindow):
         self.searchEditButton = self.tabsToolBar.widgetForAction(self.searchEditAction)
         self.searchEditAction.triggered.connect(self.showSearchEditor)
         
-        self.mainMenuAction.setIcon(common.complete_icon("document-properties"))
+        #self.mainMenuAction.setIcon(common.complete_icon("document-properties"))
         self.tabsToolBar.addAction(self.mainMenuAction)
         self.mainMenuButton = self.tabsToolBar.widgetForAction(self.mainMenuAction)
+        self.mainMenuButton.setStyleSheet("QToolButton { border: 0; background: palette(highlight); color: palette(highlighted-text); }")
         self.mainMenuButton.setPopupMode(QToolButton.InstantPopup)
         """if self.appMode:
             self.mainMenuButton.setStyleSheet("QToolButton { border-radius: 4px; border-top-%(o)s-radius: 0; border-bottom-%(o)s-radius: 0; padding: 2px; background: palette(highlight); color: palette(highlighted-text); }" % {"o": "right" if self.layoutDirection() == Qt.LeftToRight else "left"})
@@ -1181,6 +1182,8 @@ class MainWindow(QMainWindow):
                 """self.mainMenuButton.setStyleSheet("QToolButton { border-radius: 4px; border-top-%(o)s-radius: 0; border-bottom-%(o)s-radius: 0; padding: 2px; background: palette(highlight); color: palette(highlighted-text); }" % {"o": "right" if self.layoutDirection() == Qt.LeftToRight else "left"})"""
                 self.mainMenuButton.setToolButtonStyle(Qt.ToolButtonTextBesideIcon)
                 self.searchEditButton = self.tabsToolBar.widgetForAction(self.searchEditAction)
+            self.mainMenuButton.setStyleSheet("QToolButton { border-radius: 4px; border: 1px solid palette(window-text); padding: 4px; } QToolButton:hover, QToolButton:pressed { border-radius: 4px; background: palette(highlight); color: palette(highlighted-text); border: 1px solid palette(highlight); padding: 4px; } QToolButton:pressed { border-bottom-left-radius: 0; border-bottom-right-radius: 0; }")
+            self.mainMenuButton.setText(tr("MENU"))
             self.mainMenuButton.setPopupMode(QToolButton.InstantPopup)
 
     def toggleActions2(self):
